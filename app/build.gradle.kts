@@ -1,19 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.a16adventure"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.a16adventure"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -44,22 +41,24 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // 1. Thư viện cho giao diện (CardView, RecyclerView, Chip)
-    implementation("com.google.android.material:material:1.11.0")
+    // Ensure Material library is at least 1.12.0 for itemActiveIndicatorEnabled
+    implementation("com.google.android.material:material:1.12.0")
 
-    // 2. Thư viện tải và hiển thị ảnh (Glide) - Cực kỳ quan trọng để app không bị crash khi load nhiều ảnh di tích
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
-    // 3. Google Maps & Vị trí (Phục vụ phần Bản đồ văn hóa)
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
 
-    // 4. MVVM Architecture Components (ViewModel & LiveData)
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata:2.7.0")
 
-    // 5. Retrofit & Gson (Phục vụ gọi API, đặc biệt là Gemini AI)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("com.github.yuyakaido:cardstackview:2.3.4")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-auth")
 }
