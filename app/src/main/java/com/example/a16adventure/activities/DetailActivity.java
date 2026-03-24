@@ -6,11 +6,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends BaseActivity {
 
     private ImageView imgDetail;
     private TextView tvDetailName, tvDetailDistrict, tvDetailDescription;
@@ -66,6 +65,8 @@ public class DetailActivity extends AppCompatActivity {
                     Toast.makeText(DetailActivity.this, "Máy của bạn chưa cài đặt ứng dụng Bản đồ (Google Maps)!", Toast.LENGTH_SHORT).show();
                 }
             });
+
+
         }
     }
 }
