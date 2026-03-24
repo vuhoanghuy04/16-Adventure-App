@@ -1,71 +1,70 @@
 package com.example.a16adventure.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import com.example.a16adventure.R;
+import com.example.a16adventure.models.Monument;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private List<Monument> monumentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        // 1. Tải bản đồ
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        // 1. Cấu hình Bottom Navigation (Tab Map sáng đỏ)
+        setupBottomNavigation(R.id.bottomNavigation, R.id.nav_map);
+
+        // 2. Khởi tạo dữ liệu di tích (Bạn có thể lấy từ Database sau này)
+        setupData();
+
+        // 3. Kết nối với Fragment bản đồ trong XML
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+    }
 
-        // 2. Cấu hình thanh Navigation y hệt MainActivity
-        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigationMap);
-
-        // Màu đỏ khi chọn tab
-        int[][] states = new int[][] {
-                new int[] { android.R.attr.state_checked},
-                new int[] {-android.R.attr.state_checked}
-        };
-        int[] colors = new int[] {
-                android.graphics.Color.parseColor("#FF4B4B"),
-                android.graphics.Color.parseColor("#808080")
-        };
-        android.content.res.ColorStateList colorStateList = new android.content.res.ColorStateList(states, colors);
-        bottomNavigation.setItemIconTintList(colorStateList);
-
-        // Cố định tab Map đang được chọn (Sáng màu đỏ)
-        bottomNavigation.setSelectedItemId(R.id.nav_map);
-
-        bottomNavigation.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.nav_home) {
-                // Quay về Trang chủ
-                Intent intent = new Intent(MapActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // Mẹo: Dùng lại MainActivity cũ thay vì tạo mới
-                startActivity(intent);
-                overridePendingTransition(0, 0); // Tắt hiệu ứng chuyển cảnh để giống chuyển tab
-                finish(); // Đóng trang Map này lại
-                return true;
-            }
-            return true;
-        });
+    private void setupData() {
+        monumentList = new ArrayList<>();
+        // Tọa độ thực tế tại Hải Phòng
+        monumentList.add(new Monument("1", "Nhà hát lớn Hải Phòng", "Hồng Bàng", "", "", 20.8601, 106.6823));
+        monumentList.add(new Monument("2", "Đền Nghè", "Lê Chân", "", "", 20.8550, 106.6780));
+        monumentList.add(new Monument("3", "Bãi biển Đồ Sơn", "Đồ Sơn", "", "", 20.7095, 106.7865));
+        monumentList.add(new Monument("4", "Chợ Tam Bạc", "Hồng Bàng", "", "", 20.8580, 106.6770));
     }
 
     @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
+    public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng haiPhong = new LatLng(20.8604, 106.6821);
-        mMap.addMarker(new MarkerOptions().position(haiPhong).title("Nhà Hát Lớn Hải Phòng"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(haiPhong, 15f));
+
+        // Tọa độ trung tâm Hải Phòng
+        LatLng haiPhong = new LatLng(20.8449, 106.6881);
+
+        // Duyệt danh sách di tích và cắm Marker
+        for (Monument m : monumentList) {
+            LatLng location = new LatLng(m.getLatitude(), m.getLongitude());
+            mMap.addMarker(new MarkerOptions()
+                    .position(location)
+                    .title(m.getName())
+                    .snippet(m.getDistrict()));
+        }
+
+        // Di chuyển camera đến Hải Phòng với độ phóng thu (Zoom) là 12
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(haiPhong, 12f));
+
+        // Cho phép hiện nút zoom
+        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 }
