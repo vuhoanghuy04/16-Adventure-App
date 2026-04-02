@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.widget.TextView;
 import java.util.Calendar;
+import com.google.android.material.card.MaterialCardView; // Import thêm thư viện này
 
 public class MainActivity extends BaseActivity {
 
@@ -41,6 +42,10 @@ public class MainActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setAdapter(adapter);
 
+        androidx.recyclerview.widget.SnapHelper snapHelper = new androidx.recyclerview.widget.PagerSnapHelper();
+        recyclerView.setOnFlingListener(null); // Xóa listener cũ (nếu có) để tránh lỗi crash khi reload
+        snapHelper.attachToRecyclerView(recyclerView);
+
         // 4. Xử lý sự kiện bấm nút Lọc (Chip)
         setupFilters();
 
@@ -48,6 +53,15 @@ public class MainActivity extends BaseActivity {
 
         // 5. CẤU HÌNH THANH ĐIỀU HƯỚNG CHỈ VỚI 1 DÒNG
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_home);
+
+        // 6. Xử lý sự kiện bấm Banner Quiz
+        MaterialCardView btnOpenQuizBanner = findViewById(R.id.btnOpenQuizBanner);
+        if (btnOpenQuizBanner != null) {
+            btnOpenQuizBanner.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, QuizActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 
     private void setupData() {

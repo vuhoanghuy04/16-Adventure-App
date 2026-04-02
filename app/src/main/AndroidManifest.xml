@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -35,6 +36,7 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.ExploreActivity" />
         <activity android:name=".activities.AiActivity" />
+        <activity android:name=".activities.QuizActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
