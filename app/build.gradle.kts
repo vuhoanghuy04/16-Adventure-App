@@ -41,9 +41,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Ensure Material library is at least 1.12.0 for itemActiveIndicatorEnabled
     implementation("com.google.android.material:material:1.12.0")
-
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
@@ -61,4 +59,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-storage")
+
+    // Cập nhật Google Gemini AI SDK lên 0.9.0
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 }
