@@ -25,7 +25,7 @@ public class BaseActivity extends AppCompatActivity {
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
         bottomNavigation.setItemIconTintList(colorStateList);
-        bottomNavigation.setItemTextColor(colorStateList); // Thêm dòng này để đổi cả màu chữ
+        bottomNavigation.setItemTextColor(colorStateList);
 
         // 2. Set tab đang được chọn
         if (selectedItemId != 0) {
@@ -34,42 +34,33 @@ public class BaseActivity extends AppCompatActivity {
             bottomNavigation.getMenu().setGroupCheckable(0, false, true);
         }
 
-        // 3. Xử lý chuyển trang (Đã bỏ FLAG_ACTIVITY_REORDER_TO_FRONT)
+        // 3. Xử lý chuyển trang tối ưu RAM
         bottomNavigation.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
-            // Nếu bấm vào chính tab đang mở thì bỏ qua
             if (itemId == selectedItemId) return true;
 
-            Intent intent = null;
+            Class<?> targetActivity = null;
 
-            if (itemId == R.id.nav_home) {
-                intent = new Intent(this, MainActivity.class);
-                // Xóa toàn bộ stack phía trên MainActivity để tránh đầy RAM
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            } else if (itemId == R.id.nav_explore) {
-                intent = new Intent(this, ExploreActivity.class);
-            } else if (itemId == R.id.nav_map) {
-                intent = new Intent(this, MapActivity.class);
-            } else if (itemId == R.id.nav_ai) {
-                intent = new Intent(this, AiActivity.class);
-            } else if (itemId == R.id.nav_profile) {
-                // Kiểm tra đăng nhập
+            if (itemId == R.id.nav_home) targetActivity = MainActivity.class;
+            else if (itemId == R.id.nav_explore) targetActivity = ExploreActivity.class;
+            else if (itemId == R.id.nav_map) targetActivity = MapActivity.class;
+            else if (itemId == R.id.nav_ai) targetActivity = AiActivity.class;
+            else if (itemId == R.id.nav_profile) {
                 if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    intent = new Intent(this, ProfileActivity.class);
+                    targetActivity = ProfileActivity.class;
                 } else {
-                    intent = new Intent(this, LoginActivity.class); // Thay đổi tên class Login của bạn nếu cần
+                    targetActivity = LoginActivity.class;
                 }
             }
 
-            if (intent != null) {
+            if (targetActivity != null) {
+                Intent intent = new Intent(this, targetActivity);
+                // FLAG_ACTIVITY_REORDER_TO_FRONT: Tái sử dụng Activity cũ nếu có, 
+                // giúp giảm thiểu việc khởi tạo lại và tiết kiệm RAM.
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
-                overridePendingTransition(0, 0); // TẮT HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ
-
-                // Đóng trang hiện tại để giải phóng RAM (trừ MainActivity)
-                if (!this.getClass().getSimpleName().equals("MainActivity")) {
-                    finish();
-                }
+                overridePendingTransition(0, 0);
+                return true;
             }
             return false;
         });

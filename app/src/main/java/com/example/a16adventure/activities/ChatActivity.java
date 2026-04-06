@@ -38,6 +38,7 @@ public class ChatActivity extends AppCompatActivity {
     private ImageButton btnBack;
 
     private GenerativeModelFutures model;
+    private final Executor chatExecutor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +70,10 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupGemini() {
-        // Sử dụng model gemini-1.5-flash-001 kèm API Key mới của bạn
+        // SỬ DỤNG MODEL MIỄN PHÍ: gemini-1.5-flash
+        // Đây là model chuẩn nhất của Free Tier trong Google AI Studio.
         String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
-        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash-001", apiKey);
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
 
@@ -79,14 +81,12 @@ public class ChatActivity extends AppCompatActivity {
         String query = edtMessage.getText().toString().trim();
         if (query.isEmpty()) return;
 
-        // 1. Hiển thị tin nhắn người dùng
         messageList.add(new Message("user", query));
         int userPos = messageList.size() - 1;
         chatAdapter.notifyItemInserted(userPos);
         chatRecyclerView.scrollToPosition(userPos);
         edtMessage.setText("");
 
-        // 2. Hiển thị trạng thái đang xử lý
         messageList.add(new Message("model", "..."));
         int aiLoadingPos = messageList.size() - 1;
         chatAdapter.notifyItemInserted(aiLoadingPos);
@@ -96,7 +96,6 @@ public class ChatActivity extends AppCompatActivity {
                 .addText(query)
                 .build();
 
-        Executor executor = Executors.newSingleThreadExecutor();
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
 
         Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
@@ -118,10 +117,11 @@ public class ChatActivity extends AppCompatActivity {
             public void onFailure(Throwable t) {
                 Log.e("GeminiError", "LỖI CHI TIẾT: ", t);
                 runOnUiThread(() -> {
-                    messageList.get(aiLoadingPos).setContent("Lỗi: " + t.getMessage());
+                    String errorMsg = t.getMessage();
+                    messageList.get(aiLoadingPos).setContent("Lỗi kết nối: " + errorMsg);
                     chatAdapter.notifyItemChanged(aiLoadingPos);
                 });
             }
-        }, executor);
+        }, chatExecutor);
     }
 }

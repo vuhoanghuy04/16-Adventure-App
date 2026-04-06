@@ -63,4 +63,7 @@ dependencies {
 
     // Cập nhật Google Gemini AI SDK lên 0.9.0
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    
+    // Thêm Guava hỗ trợ Java Futures
+    implementation("com.google.guava:guava:31.1-android")
 }

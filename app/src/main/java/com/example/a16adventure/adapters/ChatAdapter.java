@@ -29,22 +29,17 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position) {
         Message message = messageList.get(position);
-        if ("user".equals(message.getRole())) {
-            return VIEW_TYPE_USER;
-        } else {
-            return VIEW_TYPE_AI;
-        }
+        return "user".equals(message.getRole()) ? VIEW_TYPE_USER : VIEW_TYPE_AI;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         if (viewType == VIEW_TYPE_USER) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_user, parent, false);
-            return new UserViewHolder(view);
+            return new UserViewHolder(inflater.inflate(R.layout.item_message_user, parent, false));
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message_ai, parent, false);
-            return new AiViewHolder(view);
+            return new AiViewHolder(inflater.inflate(R.layout.item_message_ai, parent, false));
         }
     }
 
@@ -64,17 +59,28 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .into(aiHolder.imgAiResponse);
             } else {
                 aiHolder.imgAiResponse.setVisibility(View.GONE);
+                // Giải phóng bộ nhớ của ảnh nếu item không có ảnh
+                Glide.with(aiHolder.itemView.getContext()).clear(aiHolder.imgAiResponse);
             }
         }
     }
 
     @Override
+    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+        super.onViewRecycled(holder);
+        if (holder instanceof AiViewHolder) {
+            // Giải phóng bộ nhớ của ảnh ngay khi item biến mất khỏi màn hình để tiết kiệm RAM
+            Glide.with(holder.itemView.getContext()).clear(((AiViewHolder) holder).imgAiResponse);
+        }
+    }
+
+    @Override
     public int getItemCount() {
-        return messageList.size();
+        return messageList != null ? messageList.size() : 0;
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView txtUserMessage;
+        final TextView txtUserMessage;
 
         UserViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,8 +89,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     static class AiViewHolder extends RecyclerView.ViewHolder {
-        TextView txtAiMessage;
-        ImageView imgAiResponse;
+        final TextView txtAiMessage;
+        final ImageView imgAiResponse;
 
         AiViewHolder(@NonNull View itemView) {
             super(itemView);
