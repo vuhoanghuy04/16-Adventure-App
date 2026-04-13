@@ -1,72 +1,45 @@
 package com.example.a16adventure.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import com.bumptech.glide.Glide;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.a16adventure.R;
 
-public class DetailActivity extends BaseActivity {
+public class DetailActivity extends AppCompatActivity {
 
-    private ImageView imgDetail;
-    private TextView tvDetailName, tvDetailDistrict, tvDetailDescription;
-    private Button btnViewOnMap;
+    private TextView tvDetailTitle, tvDetailCategory, tvDetailTime;
+    private ImageView btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_detail); // Gắn giao diện bạn vừa tạo ở trên
 
-        // 1. Ánh xạ View
-        imgDetail = findViewById(R.id.imgDetail);
-        tvDetailName = findViewById(R.id.tvDetailName);
-        tvDetailDistrict = findViewById(R.id.tvDetailDistrict);
-        tvDetailDescription = findViewById(R.id.tvDetailDescription);
-        btnViewOnMap = findViewById(R.id.btnViewOnMap);
+        // 1. Ánh xạ các thành phần
+        tvDetailTitle = findViewById(R.id.tvDetailTitle);
+        tvDetailCategory = findViewById(R.id.tvDetailCategory);
+        tvDetailTime = findViewById(R.id.tvDetailTime);
+        btnBack = findViewById(R.id.btnBack);
 
-        // 2. Nhận dữ liệu từ Intent gửi tới
-        Intent intent = getIntent();
-        if (intent != null) {
-            String name = intent.getStringExtra("name");
-            String district = intent.getStringExtra("district");
-            String description = intent.getStringExtra("description");
-            String imageUrl = intent.getStringExtra("image");
+        // 2. Nhận dữ liệu từ chuyến xe Intent
+        String title = getIntent().getStringExtra("TITLE");
+        String category = getIntent().getStringExtra("CATEGORY");
+        String timeViews = getIntent().getStringExtra("TIME_VIEWS");
 
-            // Lấy toạ độ để dùng cho Google Maps
-            double lat = intent.getDoubleExtra("lat", 0);
-            double lng = intent.getDoubleExtra("lng", 0);
+        // 3. Đổ dữ liệu lên màn hình
+        if (title != null) tvDetailTitle.setText(title);
+        if (category != null) tvDetailCategory.setText("• " + category);
+        if (timeViews != null) tvDetailTime.setText(timeViews);
 
-            // 3. Hiển thị dữ liệu lên màn hình
-            tvDetailName.setText(name);
-            tvDetailDistrict.setText("📍 " + district);
-            tvDetailDescription.setText(description);
-
-            Glide.with(this)
-                    .load(imageUrl)
-                    .into(imgDetail);
-
-            // 4. Xử lý nút bấm Xem trên bản đồ (Chuyển hướng sang Google Maps ngoài)
-            btnViewOnMap.setOnClickListener(v -> {
-                // Tạo chuỗi URI theo chuẩn của hệ điều hành để gọi Bản đồ
-                // Cú pháp: geo:lat,lng?q=lat,lng(Tên nhãn)
-                String uriString = "geo:" + lat + "," + lng + "?q=" + lat + "," + lng + "(" + name + ")";
-                android.net.Uri gmmIntentUri = android.net.Uri.parse(uriString);
-
-                // Tạo Intent yêu cầu hệ thống mở URI này
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-
-                // Thử mở ứng dụng. Nếu máy (đặc biệt là máy ảo) không có app Bản đồ thì báo lỗi nhẹ nhàng
-                try {
-                    startActivity(mapIntent);
-                } catch (android.content.ActivityNotFoundException e) {
-                    Toast.makeText(DetailActivity.this, "Máy của bạn chưa cài đặt ứng dụng Bản đồ (Google Maps)!", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-        }
+        // 4. Cài đặt tính năng cho nút Back (Quay lại)
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed(); // Bấm vào là lùi lại trang Khám phá
+            }
+        });
     }
 }
