@@ -37,6 +37,7 @@
         <activity android:name=".activities.ExploreActivity" />
         <activity android:name=".activities.AiActivity" />
         <activity android:name=".activities.QuizActivity" />
+        <activity android:name=".activities.SavedMonumentsActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
