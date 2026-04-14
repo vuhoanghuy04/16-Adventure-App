@@ -9,8 +9,11 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +32,20 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -50,28 +59,46 @@ public class ChatActivity extends AppCompatActivity {
     private List<Message> messageList;
     private EditText edtMessage;
     private TextView btnSend;
-    private ImageButton btnBack, btnMic, btnCamera;
+    private ImageButton btnBack, btnMic, btnCamera, btnMore;
+    
+    private View layoutImagePreview;
+    private ImageView imgPreview;
+    private ImageButton btnRemoveImage;
+    private Bitmap selectedBitmap = null;
 
     private GenerativeModelFutures model;
     private final Executor chatExecutor = Executors.newSingleThreadExecutor();
     
-    private static final String PREFS_NAME = "ChatPrefs";
-    private static final String KEY_MESSAGES = "saved_messages";
+    private FirebaseAuth mAuth;
+    private String currentUserId = "guest";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) currentUserId = user.getUid();
+
         initViews();
         loadChatHistory();
         setupGemini();
 
-        btnSend.setOnClickListener(v -> sendMessage(null));
+        btnSend.setOnClickListener(v -> sendMessage());
         btnBack.setOnClickListener(v -> finish());
-        
         btnMic.setOnClickListener(v -> startSpeechToText());
-        btnCamera.setOnClickListener(v -> openGallery());
+        btnCamera.setOnClickListener(v -> {
+            if (mAuth.getCurrentUser() == null) {
+                Toast.makeText(this, "Vui lòng đăng nhập để gửi ảnh!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            openGallery();
+        });
+        btnRemoveImage.setOnClickListener(v -> removeSelectedImage());
+        
+        // Nút tròn (More) bên phải phía trên
+        btnMore.setOnClickListener(this::showPopupMenu);
     }
 
     private void initViews() {
@@ -81,6 +108,39 @@ public class ChatActivity extends AppCompatActivity {
         btnBack = findViewById(R.id.btnBack);
         btnMic = findViewById(R.id.btnMic);
         btnCamera = findViewById(R.id.btnCamera);
+        btnMore = findViewById(R.id.btnMore);
+        
+        layoutImagePreview = findViewById(R.id.layoutImagePreview);
+        imgPreview = findViewById(R.id.imgPreview);
+        btnRemoveImage = findViewById(R.id.btnRemoveImage);
+    }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.getMenu().add("Cuộc trò chuyện mới");
+        
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getTitle().equals("Cuộc trò chuyện mới")) {
+                startNewChat();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
+
+    private void startNewChat() {
+        // 1. Xóa danh sách hiện tại
+        messageList.clear();
+        messageList.add(new Message("model", "Chào bạn! Một cuộc trò chuyện mới đã bắt đầu. Tôi có thể giúp gì cho bạn?"));
+        
+        // 2. Cập nhật giao diện
+        chatAdapter.notifyDataSetChanged();
+        
+        // 3. Xóa lịch sử trong SharedPreferences
+        saveChatHistory();
+        
+        Toast.makeText(this, "Đã bắt đầu cuộc trò chuyện mới", Toast.LENGTH_SHORT).show();
     }
 
     private void startSpeechToText() {
@@ -100,6 +160,11 @@ public class ChatActivity extends AppCompatActivity {
         startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
     }
 
+    private void removeSelectedImage() {
+        selectedBitmap = null;
+        layoutImagePreview.setVisibility(View.GONE);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -112,25 +177,28 @@ public class ChatActivity extends AppCompatActivity {
             } else if (requestCode == PICK_IMAGE_REQUEST_CODE) {
                 Uri imageUri = data.getData();
                 if (imageUri != null) {
-                    processImageMessage(imageUri);
+                    showImagePreview(imageUri);
                 }
             }
         }
     }
 
-    private void processImageMessage(Uri imageUri) {
+    private void showImagePreview(Uri imageUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            sendMessage(bitmap);
+            selectedBitmap = BitmapFactory.decodeStream(inputStream);
+            if (selectedBitmap != null) {
+                imgPreview.setImageBitmap(selectedBitmap);
+                layoutImagePreview.setVisibility(View.VISIBLE);
+            }
         } catch (Exception e) {
-            Log.e("ChatActivity", "Lỗi xử lý ảnh", e);
+            Log.e("ChatActivity", "Lỗi preview ảnh", e);
         }
     }
 
     private void loadChatHistory() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String json = prefs.getString(KEY_MESSAGES, null);
+        SharedPreferences prefs = getSharedPreferences("ChatHistory_" + currentUserId, MODE_PRIVATE);
+        String json = prefs.getString("messages", null);
         Gson gson = new Gson();
         
         if (json != null) {
@@ -138,7 +206,7 @@ public class ChatActivity extends AppCompatActivity {
             messageList = gson.fromJson(json, type);
         } else {
             messageList = new ArrayList<>();
-            messageList.add(new Message("model", "Chào bạn! Tôi là trợ lý ảo của 16 Adventure. Tôi có thể giúp gì cho bạn về du lịch Hải Phòng?"));
+            messageList.add(new Message("model", "Chào bạn! Tôi có thể giúp gì cho bạn về du lịch Hải Phòng?"));
         }
         
         chatAdapter = new ChatAdapter(messageList);
@@ -148,11 +216,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void saveChatHistory() {
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences prefs = getSharedPreferences("ChatHistory_" + currentUserId, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(messageList);
-        editor.putString(KEY_MESSAGES, json);
+        editor.putString("messages", json);
         editor.apply();
     }
 
@@ -162,30 +230,64 @@ public class ChatActivity extends AppCompatActivity {
         model = GenerativeModelFutures.from(gm);
     }
 
-    private void sendMessage(@Nullable Bitmap bitmap) {
+    private void sendMessage() {
         String query = edtMessage.getText().toString().trim();
-        if (query.isEmpty() && bitmap == null) return;
+        if (query.isEmpty() && selectedBitmap == null) return;
 
-        // Thêm tin nhắn user
-        messageList.add(new Message("user", query));
+        final String userMsgContent = query.isEmpty() && selectedBitmap != null ? "[Hình ảnh]" : query;
+        
+        if (selectedBitmap != null) {
+            if (mAuth.getCurrentUser() == null) {
+                Toast.makeText(this, "Hãy đăng nhập để có thể gửi ảnh!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            uploadImageToFirebase(selectedBitmap, userMsgContent);
+        } else {
+            executeSendMessage(userMsgContent, null, null);
+        }
+    }
+
+    private void uploadImageToFirebase(Bitmap bitmap, String text) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child("users/" + currentUserId + "/chat_images/" + UUID.randomUUID().toString() + ".jpg");
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+        byte[] data = baos.toByteArray();
+
+        storageRef.putBytes(data).addOnSuccessListener(taskSnapshot -> {
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                executeSendMessage(text, uri.toString(), bitmap);
+            });
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Lỗi tải ảnh", Toast.LENGTH_SHORT).show();
+            executeSendMessage(text, null, bitmap);
+        });
+    }
+
+    private void executeSendMessage(String text, String imageUrl, Bitmap bitmapForAi) {
+        Message userMessage = new Message("user", text);
+        if (imageUrl != null) userMessage.setImageUrl(imageUrl);
+        
+        messageList.add(userMessage);
         chatAdapter.notifyItemInserted(messageList.size() - 1);
         chatRecyclerView.scrollToPosition(messageList.size() - 1);
+        
         edtMessage.setText("");
+        Bitmap bitmapToSend = selectedBitmap;
+        removeSelectedImage();
 
-        // Thêm tin nhắn chờ của AI
         messageList.add(new Message("model", "..."));
         int aiLoadingPos = messageList.size() - 1;
-        chatAdapter.notifyItemInserted(aiLoadingPos);
+        chatAdapter.notifyItemChanged(aiLoadingPos);
         chatRecyclerView.scrollToPosition(aiLoadingPos);
 
-        // Xây dựng nội dung gửi đi
         Content.Builder contentBuilder = new Content.Builder();
         contentBuilder.setRole("user");
-        if (!query.isEmpty()) contentBuilder.addText(query);
-        if (bitmap != null) contentBuilder.addImage(bitmap);
+        if (!text.equals("[Hình ảnh]")) contentBuilder.addText(text);
+        if (bitmapToSend != null) contentBuilder.addImage(bitmapToSend);
         
         Content content = contentBuilder.build();
-
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
 
         Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
@@ -197,7 +299,7 @@ public class ChatActivity extends AppCompatActivity {
                         String cleanAiText = rawAiText.replace("*", "");
                         messageList.get(aiLoadingPos).setContent(cleanAiText);
                     } else {
-                        messageList.get(aiLoadingPos).setContent("AI không phản hồi dữ liệu.");
+                        messageList.get(aiLoadingPos).setContent("AI không phản hồi.");
                     }
                     chatAdapter.notifyItemChanged(aiLoadingPos);
                     chatRecyclerView.scrollToPosition(aiLoadingPos);
@@ -207,9 +309,8 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e("GeminiError", "LỖI: ", t);
                 runOnUiThread(() -> {
-                    messageList.get(aiLoadingPos).setContent("Lỗi kết nối: " + t.getMessage());
+                    messageList.get(aiLoadingPos).setContent("Lỗi: " + t.getMessage());
                     chatAdapter.notifyItemChanged(aiLoadingPos);
                     saveChatHistory();
                 });

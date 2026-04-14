@@ -47,11 +47,24 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messageList.get(position);
         if (holder instanceof UserViewHolder) {
-            ((UserViewHolder) holder).txtUserMessage.setText(message.getContent());
+            UserViewHolder userHolder = (UserViewHolder) holder;
+            userHolder.txtUserMessage.setText(message.getContent());
+            
+            // Hiển thị ảnh của User nếu có
+            if (message.getImageUrl() != null && !message.getImageUrl().isEmpty()) {
+                userHolder.cardUserImage.setVisibility(View.VISIBLE);
+                Glide.with(userHolder.itemView.getContext())
+                        .load(message.getImageUrl())
+                        .into(userHolder.imgUserMessage);
+            } else {
+                userHolder.cardUserImage.setVisibility(View.GONE);
+                Glide.with(userHolder.itemView.getContext()).clear(userHolder.imgUserMessage);
+            }
         } else if (holder instanceof AiViewHolder) {
             AiViewHolder aiHolder = (AiViewHolder) holder;
             aiHolder.txtAiMessage.setText(message.getContent());
             
+            // Hiển thị ảnh của AI nếu có
             if (message.getImageUrl() != null && !message.getImageUrl().isEmpty()) {
                 aiHolder.imgAiResponse.setVisibility(View.VISIBLE);
                 Glide.with(aiHolder.itemView.getContext())
@@ -59,7 +72,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         .into(aiHolder.imgAiResponse);
             } else {
                 aiHolder.imgAiResponse.setVisibility(View.GONE);
-                // Giải phóng bộ nhớ của ảnh nếu item không có ảnh
                 Glide.with(aiHolder.itemView.getContext()).clear(aiHolder.imgAiResponse);
             }
         }
@@ -69,8 +81,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof AiViewHolder) {
-            // Giải phóng bộ nhớ của ảnh ngay khi item biến mất khỏi màn hình để tiết kiệm RAM
             Glide.with(holder.itemView.getContext()).clear(((AiViewHolder) holder).imgAiResponse);
+        } else if (holder instanceof UserViewHolder) {
+            Glide.with(holder.itemView.getContext()).clear(((UserViewHolder) holder).imgUserMessage);
         }
     }
 
@@ -81,10 +94,14 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
         final TextView txtUserMessage;
+        final ImageView imgUserMessage;
+        final View cardUserImage;
 
         UserViewHolder(@NonNull View itemView) {
             super(itemView);
             txtUserMessage = itemView.findViewById(R.id.txtUserMessage);
+            imgUserMessage = itemView.findViewById(R.id.imgUserMessage);
+            cardUserImage = itemView.findViewById(R.id.cardUserImage);
         }
     }
 

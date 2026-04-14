@@ -2,6 +2,7 @@ package com.example.a16adventure.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.ImagePagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -23,12 +26,14 @@ public class RecognitionResultActivity extends AppCompatActivity {
     private TextView txtLandmarkName, txtLandmarkDesc, txtLandmarkLocation;
     private TextView txtTag1, txtTag2, txtTag3;
     private TextView txtLandmarkRating, txtLandmarkHours, txtLandmarkVisits, txtLandmarkDistance;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recognition_result);
 
+        storage = FirebaseStorage.getInstance();
         initViews();
         
         String resultText = getIntent().getStringExtra("RECOGNITION_RESULT");
@@ -66,81 +71,97 @@ public class RecognitionResultActivity extends AppCompatActivity {
     private void parseAndShowResult(String resultText) {
         String cleanText = resultText.replace("**", "").trim();
         String name = "Địa danh";
+        String code = "";
         String description = "";
-        List<String> aiImageUrls = new ArrayList<>();
 
-        // Tách dữ liệu từ cấu trúc của AI
+        // Tách dữ liệu từ cấu trúc nâng cấp của AI
         String[] lines = cleanText.split("\n");
         for (String line : lines) {
-            String lowerLine = line.toLowerCase();
-            if (lowerLine.contains("tên địa danh:")) {
+            if (line.toLowerCase().startsWith("tên:")) {
                 name = line.substring(line.indexOf(":") + 1).trim();
-            } else if (lowerLine.contains("mô tả:")) {
+            } else if (line.toLowerCase().startsWith("mã:")) {
+                code = line.substring(line.indexOf(":") + 1).trim();
+            } else if (line.toLowerCase().startsWith("mô tả:")) {
                 description = line.substring(line.indexOf(":") + 1).trim();
-            } else if (lowerLine.contains("hình ảnh:")) {
-                String urlsPart = line.substring(line.indexOf(":") + 1).trim();
-                String[] urls = urlsPart.split(",");
-                for (String url : urls) {
-                    if (url.trim().startsWith("http")) {
-                        aiImageUrls.add(url.trim());
-                    }
-                }
             }
         }
 
-        // Nếu không tách được theo định dạng, dùng fallback cũ
-        if (description.isEmpty() && cleanText.contains("\n")) {
+        // Fallback nếu AI trả về định dạng cũ
+        if (code.isEmpty() && !cleanText.isEmpty()) {
             String[] parts = cleanText.split("\n", 2);
             name = parts[0].trim();
-            description = parts[1].trim();
+            description = parts.length > 1 ? parts[1].trim() : "";
         }
 
         txtLandmarkName.setText(name);
         txtLandmarkDesc.setText(description);
         
         updateLandmarkDetails(name);
-        setupViewPagerWithAiUrls(aiImageUrls);
+        
+        // Sử dụng Mã (code) để lấy ảnh chính xác từ Firebase Storage
+        if (!code.isEmpty()) {
+            fetchImageByCode(code);
+        } else {
+            fetchImageByCode(name); // Thử dùng tên nếu không có mã
+        }
+    }
+
+    private void fetchImageByCode(String code) {
+        imageUrls = new ArrayList<>();
+        
+        // Chuẩn hóa mã thành viết liền không dấu (nếu AI chưa làm chuẩn)
+        String fileName = code.toLowerCase().replaceAll("\\s+", "");
+        
+        // Thử tìm file .webp trong Firebase Storage
+        StorageReference storageRef = storage.getReference().child(fileName + ".webp");
+
+        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            imageUrls.add(uri.toString());
+            updateViewPager();
+        }).addOnFailureListener(e -> {
+            Log.e("FirebaseError", "Không tìm thấy file: " + fileName + ".webp");
+            // Thử tìm với định dạng .jpg nếu .webp không có
+            storage.getReference().child(fileName + ".jpg").getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrls.add(uri.toString());
+                updateViewPager();
+            }).addOnFailureListener(e2 -> {
+                // Nếu vẫn không có, dùng ảnh mặc định
+                imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
+                updateViewPager();
+            });
+        });
+    }
+
+    private void updateViewPager() {
+        pagerAdapter = new ImagePagerAdapter(imageUrls);
+        viewPagerLandmark.setAdapter(pagerAdapter);
+        new TabLayoutMediator(tabIndicator, viewPagerLandmark, (tab, position) -> {}).attach();
     }
 
     private void updateLandmarkDetails(String name) {
         String lowerName = name.toLowerCase();
         Random random = new Random();
 
-        // Cập nhật vị trí thông minh
-        if (lowerName.contains("cát bà") || lowerName.contains("lan hạ")) {
+        if (lowerName.contains("tuyệt tình cốc") || lowerName.contains("hồ đá")) {
+            txtLandmarkLocation.setText("📍 Thủy Nguyên, Hải Phòng");
+            txtTag1.setText("Thiên nhiên");
+            txtTag2.setText("Khám phá");
+            txtLandmarkHours.setText("07:00 - 18:00");
+        } else if (lowerName.contains("cát bà") || lowerName.contains("lan hạ")) {
             txtLandmarkLocation.setText("📍 Cát Bà, Hải Phòng");
             txtTag1.setText("Biển đảo");
             txtTag2.setText("Kỳ quan");
-        } else if (lowerName.contains("đồ sơn")) {
-            txtLandmarkLocation.setText("📍 Đồ Sơn, Hải Phòng");
-            txtTag1.setText("Bãi biển");
-            txtTag2.setText("Giải trí");
+            txtLandmarkHours.setText("Mở cả ngày");
         } else {
             txtLandmarkLocation.setText("📍 Hải Phòng, Việt Nam");
             txtTag1.setText("Du lịch");
-            txtTag2.setText("Khám phá");
+            txtTag2.setText("Hải Phòng");
+            txtLandmarkHours.setText("08:00 - 21:00");
         }
         
-        txtTag3.setText("Hải Phòng");
-        txtLandmarkHours.setText("08:00 - 21:00");
-        txtLandmarkVisits.setText((5 + random.nextInt(15)) + ".0K / tháng");
+        txtTag3.setText("Địa danh");
+        txtLandmarkVisits.setText((5 + random.nextInt(15)) + ".2K / tháng");
         txtLandmarkRating.setText("4." + (6 + random.nextInt(4)));
-        txtLandmarkDistance.setText((5 + random.nextInt(20)) + " km");
-    }
-
-    private void setupViewPagerWithAiUrls(List<String> urls) {
-        imageUrls = new ArrayList<>();
-        
-        if (urls != null && !urls.isEmpty()) {
-            imageUrls.addAll(urls);
-        } else {
-            // Ảnh mặc định nếu AI không trả về link ảnh
-            imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
-            imageUrls.add("https://images2.thanhnien.vn/528068207945824256/2023/11/17/img2122-17002062634352125134767.jpg");
-        }
-
-        pagerAdapter = new ImagePagerAdapter(imageUrls);
-        viewPagerLandmark.setAdapter(pagerAdapter);
-        new TabLayoutMediator(tabIndicator, viewPagerLandmark, (tab, position) -> {}).attach();
+        txtLandmarkDistance.setText((10 + random.nextInt(15)) + " km");
     }
 }

@@ -78,6 +78,7 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void setupGemini() {
+        // Sử dụng API Key của bạn
         String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
@@ -174,14 +175,14 @@ public class RecognitionActivity extends AppCompatActivity {
 
             Bitmap resizedBitmap = scaleBitmap(originalBitmap, 1024);
 
-            // Nâng cấp Prompt: Yêu cầu 2 ảnh chất lượng cao và định dạng link ảnh chuẩn
+            // Nâng cấp Prompt: Yêu cầu AI trả về Mã định danh ngắn gọn để khớp với tên file Firebase
             Content content = new Content.Builder()
                     .addImage(resizedBitmap)
-                    .addText("Hãy đóng vai chuyên gia du lịch Hải Phòng. Xác định địa danh trong ảnh. Trả về kết quả duy nhất theo cấu trúc sau:\n" +
-                            "Tên địa danh: [Tên chính xác nhất]\n" +
-                            "Mô tả: [Mô tả hấp dẫn về địa danh]\n" +
-                            "Hình ảnh: [Cung cấp 2 liên kết hình ảnh .jpg hoặc .png thực tế và công khai của địa danh này từ các nguồn như wikipedia, các trang du lịch nổi tiếng, cách nhau bằng dấu phẩy]\n" +
-                            "Yêu cầu: Link ảnh phải hoạt động và không có lời dẫn thêm.")
+                    .addText("Xác định địa danh trong ảnh tại Hải Phòng. Trả về kết quả theo đúng định dạng sau:\n" +
+                            "Tên: [Tên hiển thị đầy đủ]\n" +
+                            "Mã: [Tên viết liền không dấu, ngắn gọn nhất, ví dụ: tuyettinhcoc, baitamcatco, bachdanggiang]\n" +
+                            "Mô tả: [Mô tả ngắn gọn hấp dẫn]\n" +
+                            "Lưu ý: Tuyệt đối không lời dẫn, không ký hiệu lạ.")
                     .build();
 
             ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -197,7 +198,7 @@ public class RecognitionActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Throwable t) {
-                    Log.e("GeminiError", "Lỗi nhận diện chi tiết: ", t);
+                    Log.e("GeminiError", "Lỗi nhận diện: ", t);
                     runOnUiThread(() -> {
                         loadingLayout.setVisibility(View.GONE);
                         Toast.makeText(RecognitionActivity.this, "Lỗi: " + t.getMessage(), Toast.LENGTH_LONG).show();

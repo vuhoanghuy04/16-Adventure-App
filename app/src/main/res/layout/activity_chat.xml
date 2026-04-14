@@ -75,6 +75,37 @@
         android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
+        <!-- Preview Image Selected -->
+        <RelativeLayout
+            android:id="@+id/layoutImagePreview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:visibility="gone">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+
+                <ImageView
+                    android:id="@+id/imgPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <ImageButton
+                    android:id="@+id/btnRemoveImage"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="end|top"
+                    android:background="#99000000"
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    app:tint="#FFFFFF" />
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
