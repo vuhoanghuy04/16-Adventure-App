@@ -22,13 +22,23 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 
 public class MonumentAdapter extends RecyclerView.Adapter<MonumentAdapter.MonumentViewHolder> {
+    public interface SaveToggleCallback {
+        void onSuccess();
+        void onError(String message);
+    }
+
+    public interface SaveToggleHandler {
+        void onToggleSave(Monument monument, boolean newSavedState, SaveToggleCallback callback);
+    }
 
     private Context context;
     private List<Monument> monumentList;
+    private final SaveToggleHandler saveToggleHandler;
 
-    public MonumentAdapter(Context context, List<Monument> monumentList) {
+    public MonumentAdapter(Context context, List<Monument> monumentList, SaveToggleHandler saveToggleHandler) {
         this.context = context;
         this.monumentList = monumentList;
+        this.saveToggleHandler = saveToggleHandler;
     }
 
     @NonNull
@@ -111,33 +121,23 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentAdapter.Monume
 
             Monument currentMonument = monumentList.get(currentPosition);
 
-            // --- KIỂM TRA ĐĂNG NHẬP ---
-            com.google.firebase.auth.FirebaseUser user = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
-            if (user == null) {
-                android.widget.Toast.makeText(context, "Bạn cần đăng nhập để lưu địa danh!", android.widget.Toast.LENGTH_SHORT).show();
+            if (saveToggleHandler == null) {
                 return;
             }
 
-            // --- LOGIC LƯU LOCAL VÀ ĐỔI UI ---
-            String uid = user.getUid();
-            String monumentId = currentMonument.getId();
-
             boolean newSavedState = !currentMonument.isSaved();
-            currentMonument.setSaved(newSavedState);
-            updateSaveUI(holder, newSavedState);
+            saveToggleHandler.onToggleSave(currentMonument, newSavedState, new SaveToggleCallback() {
+                @Override
+                public void onSuccess() {
+                    currentMonument.setSaved(newSavedState);
+                    updateSaveUI(holder, newSavedState);
+                }
 
-            // --- ĐỒNG BỘ LÊN FIREBASE REALTIME DATABASE ---
-            com.google.firebase.database.DatabaseReference savedRef = com.google.firebase.database.FirebaseDatabase.getInstance()
-                    .getReference("users")
-                    .child(uid)
-                    .child("saved_ids")
-                    .child(monumentId);
-
-            if (newSavedState) {
-                savedRef.setValue(true);
-            } else {
-                savedRef.removeValue();
-            }
+                @Override
+                public void onError(String message) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                }
+            });
         });
 
         // 5. XỬ LÝ NÚT KHÔNG THÍCH (Chữ X Đỏ) -> XÓA THẺ VÀ ĐẨY CÁC THẺ CÙNG KHU VỰC XUỐNG CUỐI

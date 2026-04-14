@@ -13,14 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.a16adventure.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.example.a16adventure.presentation.auth.AuthViewModel;
 
 public class RegisterActivity extends BaseActivity {
 
-    private FirebaseAuth mAuth;
+    private AuthViewModel authViewModel;
     private EditText edtRegisterName, edtRegisterEmail, edtRegisterPassword;
     private Button btnRegister;
     private TextView tvGoToLogin;
@@ -30,8 +30,8 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        // 1. Khởi tạo Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        // 1. Khởi tạo AuthViewModel
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         // 2. Ánh xạ View
         edtRegisterName = findViewById(R.id.edtRegisterName);
@@ -43,6 +43,7 @@ public class RegisterActivity extends BaseActivity {
         // 3. Cấu hình giao diện
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_profile);
         setupStyledText();
+        observeViewModel();
 
         // 4. Chuyển sang trang Login
         if (tvGoToLogin != null) {
@@ -75,41 +76,31 @@ public class RegisterActivity extends BaseActivity {
                     return;
                 }
 
-                // Gửi yêu cầu tạo tài khoản lên Firebase
-                mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, task -> {
-                            if (task.isSuccessful()) {
-                                // TẠO TÀI KHOẢN THÀNH CÔNG -> Cập nhật thêm Họ Tên
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                if (user != null) {
-                                    updateUserInfo(user, name);
-                                }
-                            } else {
-                                // THẤT BẠI
-                                String errorMsg = task.getException() != null ? task.getException().getMessage() : "Lỗi đăng ký";
-                                Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + errorMsg, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                // Gửi yêu cầu tạo tài khoản qua ViewModel/UseCase/Repository
+                authViewModel.register(name, email, password);
             });
         }
     }
 
-    // Hàm cập nhật Họ và Tên cho người dùng
-    private void updateUserInfo(FirebaseUser user, String name) {
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
+    private void observeViewModel() {
+        authViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if (user == null) return;
+            Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
-                        // Chuyển về trang chủ
-                        Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                });
+        authViewModel.getSuccessMessage().observe(this, message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        authViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(RegisterActivity.this, "Đăng ký thất bại: " + message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setupStyledText() {

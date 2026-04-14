@@ -6,7 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,13 +17,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.MonumentAdapter;
+import com.example.a16adventure.domain.model.WeatherInfo;
 import com.example.a16adventure.models.Monument;
-import com.example.a16adventure.models.MonumentDataManager;
+import com.example.a16adventure.presentation.home.MainViewModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.ChipGroup;
 
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity {
 
     private RecyclerView recyclerView;
     private MonumentAdapter adapter;
+    private MainViewModel mainViewModel;
     private List<Monument> fullMonumentList;
     private List<Monument> displayList;
     private ChipGroup chipGroupDistricts;
@@ -66,8 +68,12 @@ public class MainActivity extends BaseActivity {
         imgWeatherBackground = findViewById(R.id.imgWeatherBackground);
         btnWeatherCurrent = findViewById(R.id.btnWeatherCurrent);
 
-        // Khởi động luồng tải thời tiết
-        fetchHaiPhongWeather();
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        setupRecyclerAndAdapter();
+        observeViewModel();
+
+        // Khởi động luồng tải thời tiết qua ViewModel
+        mainViewModel.fetchCurrentWeather();
 
         // Bắt sự kiện bấm vào nút thời tiết -> Mở web thời tiết
         if (btnWeatherCurrent != null) {
@@ -79,20 +85,7 @@ public class MainActivity extends BaseActivity {
             });
         }
 
-        setupData();
-
-        preloadImages();
-
-        // Đúc các nút Lọc (Lúc này danh sách vẫn giữ nguyên thứ tự gốc)
-        setupFilters();
-
-        // Xáo trộn danh sách thẻ ngẫu nhiên
-        java.util.Collections.shuffle(fullMonumentList);
-
-        displayList = new ArrayList<>(fullMonumentList);
-        adapter = new MonumentAdapter(this, displayList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setAdapter(adapter);
+        mainViewModel.loadMonuments();
 
         // --- CẤU HÌNH ICON RELOAD NỔI TỪ NGOÀI MÀN HÌNH ---
         MaterialCardView cardReload = new MaterialCardView(this);
@@ -230,55 +223,71 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    // --- HÀM GỌI API THỜI TIẾT ---
-    private void fetchHaiPhongWeather() {
-        // API của Open-Meteo lấy nhiệt độ và mã thời tiết tại Hải Phòng (Tọa độ: 20.86, 106.68)
-        String apiUrl = "https://api.open-meteo.com/v1/forecast?latitude=20.8648&longitude=106.6835&current_weather=true";
-
-        new Thread(() -> {
-            try {
-                java.net.URL url = new java.net.URL(apiUrl);
-                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-
-                java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream()));
-                StringBuilder result = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-                reader.close();
-
-                // Phân tích JSON trả về
-                org.json.JSONObject jsonObject = new org.json.JSONObject(result.toString());
-                org.json.JSONObject current = jsonObject.getJSONObject("current_weather");
-
-                double temp = current.getDouble("temperature");
-                int weatherCode = current.getInt("weathercode");
-
-                // Cập nhật Giao diện trên Main Thread
-                runOnUiThread(() -> updateWeatherUI(temp, weatherCode));
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                runOnUiThread(() -> {
-                    if (tvCurrentTemp != null) {
-                        tvCurrentTemp.setText("Lỗi");
-                    }
-                });
+    private void observeViewModel() {
+        mainViewModel.getDisplayMonuments().observe(this, monuments -> {
+            displayList.clear();
+            if (monuments != null) {
+                displayList.addAll(monuments);
             }
-        }).start();
+            adapter.notifyDataSetChanged();
+            if (!displayList.isEmpty()) {
+                recyclerView.scrollToPosition(0);
+            }
+        });
+
+        mainViewModel.getFullMonuments().observe(this, monuments -> {
+            if (monuments == null) return;
+            fullMonumentList = new ArrayList<>(monuments);
+            mainViewModel.filterMonuments("Tất cả");
+            preloadImages();
+            setupFilters();
+        });
+
+        mainViewModel.getWeatherInfo().observe(this, this::updateWeatherUI);
+
+        mainViewModel.getErrorMessage().observe(this, message -> {
+            if (message == null || message.trim().isEmpty()) return;
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            if (tvCurrentTemp != null) {
+                tvCurrentTemp.setText("Lỗi");
+            }
+        });
+    }
+
+    private void setupRecyclerAndAdapter() {
+        fullMonumentList = new ArrayList<>();
+        displayList = new ArrayList<>();
+
+        adapter = new MonumentAdapter(this, displayList, (monument, newSavedState, callback) -> {
+            String uid = mainViewModel.getCurrentUserId();
+            mainViewModel.toggleSavedMonument(uid, monument, newSavedState, new MainViewModel.SaveActionCallback() {
+                @Override
+                public void onSuccess() {
+                    callback.onSuccess();
+                }
+
+                @Override
+                public void onError(String message) {
+                    callback.onError(message);
+                }
+            });
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setAdapter(adapter);
     }
 
     // --- HÀM CẬP NHẬT GIAO DIỆN THỜI TIẾT (TỐC ĐỘ 0 GIÂY - ẢNH OFFLINE) ---
-    private void updateWeatherUI(double temp, int weatherCode) {
+    private void updateWeatherUI(WeatherInfo weatherInfo) {
         if (tvCurrentTemp == null || imgWeatherBackground == null) return;
+        if (weatherInfo == null) return;
 
         // 1. Cập nhật nhiệt độ
-        tvCurrentTemp.setText(Math.round(temp) + "°C");
+        tvCurrentTemp.setText(Math.round(weatherInfo.getTemperature()) + "°C");
 
         // 2. Chọn ảnh nội bộ cực nhanh
         int drawableResId = R.drawable.bg_weather_default; // Mặc định
+        int weatherCode = weatherInfo.getWeatherCode();
 
         if (weatherCode == 0 || weatherCode == 1) {
             drawableResId = R.drawable.bg_weather_sunny;
@@ -294,42 +303,6 @@ public class MainActivity extends BaseActivity {
         imgWeatherBackground.setImageResource(drawableResId);
     }
 
-
-    private void setupData() {
-        fullMonumentList = new ArrayList<>();
-        try {
-            java.io.InputStream is = getAssets().open("monuments.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            String jsonString = new String(buffer, "UTF-8");
-            org.json.JSONArray jsonArray = new org.json.JSONArray(jsonString);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                org.json.JSONObject obj = jsonArray.getJSONObject(i);
-                Monument m = new Monument(
-                        obj.getString("id"),
-                        obj.getString("name"),
-                        obj.getString("district"),
-                        obj.getString("description"),
-                        obj.getString("imageUrl"),
-                        obj.getDouble("lat"),
-                        obj.getDouble("lng")
-                );
-                fullMonumentList.add(m);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Đưa danh sách vừa load vào kho quản lý chung
-        MonumentDataManager.getInstance().setMonumentList(fullMonumentList);
-
-        MonumentDataManager.getInstance().setMonumentList(fullMonumentList);
-        Log.d("DEBUG_SAVE", "Da nap " + fullMonumentList.size() + " dia danh vao kho chung");
-    }
-
     private void setupFilters() {
         chipGroupDistricts.removeAllViews();
 
@@ -343,14 +316,10 @@ public class MainActivity extends BaseActivity {
         chipAll.setChecked(true); // Chọn sẵn
         chipGroupDistricts.addView(chipAll);
 
-        // 2. Tự động quét và lọc ra các Quận/Huyện/Xã (Không bị trùng lặp)
-        java.util.LinkedHashSet<String> uniqueDistricts = new java.util.LinkedHashSet<>();
-        for (Monument m : fullMonumentList) {
-            uniqueDistricts.add(m.getDistrict());
-        }
-
         // 3. Vòng lặp tự động đúc hàng loạt Chip từ khuôn
-        for (String districtName : uniqueDistricts) {
+        List<String> districtNames = mainViewModel.getDistricts().getValue();
+        if (districtNames == null) districtNames = new ArrayList<>();
+        for (String districtName : districtNames) {
             com.google.android.material.chip.Chip chip = (com.google.android.material.chip.Chip)
                     inflater.inflate(R.layout.item_chip_filter, chipGroupDistricts, false);
             chip.setText(districtName);
@@ -364,19 +333,7 @@ public class MainActivity extends BaseActivity {
             int checkedId = checkedIds.get(0);
             com.google.android.material.chip.Chip selectedChip = findViewById(checkedId);
             String selectedText = selectedChip.getText().toString();
-
-            displayList.clear();
-
-            if (selectedText.equals("Tất cả")) {
-                displayList.addAll(fullMonumentList);
-            } else {
-                filterByDistrict(selectedText);
-            }
-
-            adapter.notifyDataSetChanged();
-            if (!displayList.isEmpty()) {
-                recyclerView.scrollToPosition(0);
-            }
+            mainViewModel.filterMonuments(selectedText);
         });
     }
 
@@ -403,14 +360,6 @@ public class MainActivity extends BaseActivity {
         }
 
         tvHeader.setText("Chào buổi " + session + ", " + username + " 👋");
-    }
-
-    private void filterByDistrict(String districtName) {
-        for (Monument m : fullMonumentList) {
-            if (m.getDistrict().equals(districtName)) {
-                displayList.add(m);
-            }
-        }
     }
 
     // --- CÁC HÀM PHỤ TRỢ (HELPER METHODS) ---
