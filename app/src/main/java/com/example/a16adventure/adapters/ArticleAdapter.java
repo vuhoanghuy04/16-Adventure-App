@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.Glide; // Thư viện tải ảnh thần thánh
 import com.example.a16adventure.R;
 import com.example.a16adventure.activities.ArticleDetailActivity;
 import com.example.a16adventure.models.Article;
@@ -24,7 +24,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         this.articleList = articleList;
     }
 
-    // Hàm cập nhật dữ liệu khi tìm kiếm/lọc
     public void updateData(List<Article> newList) {
         this.articleList = newList;
         notifyDataSetChanged();
@@ -41,23 +40,29 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
         Article article = articleList.get(position);
 
-        holder.tvTitle.setText(article.getTitle());
-        holder.tvCategory.setText("• " + article.getCategory());
-        holder.tvTime.setText(article.getTimeAndViews());
+        // 1. Gắn chữ vào đúng ID thiết kế của Huy
+        if (holder.tvArticleTitle != null) holder.tvArticleTitle.setText(article.getTitle());
+        if (holder.tvCategory != null) holder.tvCategory.setText(article.getCategory());
+        if (holder.tvTime != null) holder.tvTime.setText(article.getTimeAndViews());
 
-        // --- SỰ KIỆN CLICK VÀO BÀI VIẾT ---
+        // 2. Tải ảnh vào ô imgThumbnail
+        if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(article.getImageUrl())
+                    .placeholder(R.drawable.bg_search_bar) // Ảnh chờ tải
+                    .into(holder.imgThumbnail);
+        }
+
+        // 3. Sự kiện Click: Đóng gói toàn bộ đồ đạc gửi sang trang Chi tiết
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
-
-                // Đóng gói toàn bộ dữ liệu gửi đi
                 intent.putExtra("TITLE", article.getTitle());
                 intent.putExtra("CATEGORY", article.getCategory());
                 intent.putExtra("TIME_VIEWS", article.getTimeAndViews());
                 intent.putExtra("CONTENT", article.getContent());
                 intent.putExtra("IMAGE_URL", article.getImageUrl());
-
                 v.getContext().startActivity(intent);
             }
         });
@@ -72,13 +77,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     }
 
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvCategory, tvTime;
+        ImageView imgThumbnail;
+        TextView tvCategory, tvArticleTitle, tvTime;
 
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Lưu ý: ID có thể khác một chút tùy file XML của bạn, nếu bị đỏ thì sửa lại cho khớp với item_article.xml nhé
-            tvTitle = itemView.findViewById(R.id.tvTitle);
+            // KẾT NỐI ĐÚNG VỚI CÁC ID TRONG FILE item_article.xml
+            imgThumbnail = itemView.findViewById(R.id.imgThumbnail);
             tvCategory = itemView.findViewById(R.id.tvCategory);
+            tvArticleTitle = itemView.findViewById(R.id.tvArticleTitle);
             tvTime = itemView.findViewById(R.id.tvTime);
         }
     }
