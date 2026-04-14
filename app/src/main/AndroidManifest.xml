@@ -33,7 +33,7 @@
             android:exported="false" />
 
         <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.ExploreActivity" />
+        <activity android:name=".activities.KnowledgeActivity" />
         <activity android:name=".activities.AiActivity" />
 
         <meta-data
