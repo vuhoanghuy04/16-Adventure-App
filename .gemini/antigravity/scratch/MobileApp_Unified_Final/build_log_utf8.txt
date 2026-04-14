@@ -1,0 +1,505 @@
+﻿
+> Configure project :app
+WARNING: The option setting 'android.enableJetifier=true' is deprecated.
+The current default is 'false'.
+It will be removed in version 10.0 of the Android Gradle plugin.
+
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:processDebugNavigationResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:generateDebugRFile UP-TO-DATE
+> Task :app:compileDebugKotlin NO-SOURCE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+
+> Task :app:compileDebugJavaWithJavac
+Java compiler version 21 has deprecated support for compiling with source/target version 8.
+Try one of the following options:
+    1. [Recommended] Use Java toolchain with a lower language version
+    2. Set a higher source/target version
+    3. Use a lower version of the JDK running the build (if you're not using Java toolchain)
+For more details on how to configure these settings, see https://developer.android.com/build/jdks.
+To suppress this warning, set android.javaCompile.suppressSourceTargetDeprecationWarning=true in gradle.properties.
+.\gradlew : warning: [options] source value 8 is obsolete and will be removed in a future release
+At line:1 char:1
++ .\gradlew compileDebugJavaWithJavac > build_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (warning: [optio... future release:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+warning: [options] target value 8 is obsolete and will be removed in a future release
+warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:201: error: cannot find symbol
+            View itemView = LayoutInflater.from(this).inflate(R.layout.item_practice_question, 
+layoutQuestionsContainer, false);
+                                                                      ^
+  symbol:   variable item_practice_question
+  location: class layout
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:203: error: cannot find symbol
+            TextView tvStep = itemView.findViewById(R.id.tv_item_step);
+                                                        ^
+  symbol:   variable tv_item_step
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:204: error: cannot find symbol
+            TextView tvQuestion = itemView.findViewById(R.id.tv_item_question);
+                                                            ^
+  symbol:   variable tv_item_question
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:205: error: cannot find symbol
+            MaterialButton btnA = itemView.findViewById(R.id.btn_item_a);
+                                                            ^
+  symbol:   variable btn_item_a
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:206: error: cannot find symbol
+            MaterialButton btnB = itemView.findViewById(R.id.btn_item_b);
+                                                            ^
+  symbol:   variable btn_item_b
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:207: error: cannot find symbol
+            MaterialButton btnC = itemView.findViewById(R.id.btn_item_c);
+                                                            ^
+  symbol:   variable btn_item_c
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Listen
+ingActivity.java:208: error: cannot find symbol
+            MaterialButton btnD = itemView.findViewById(R.id.btn_item_d);
+                                                            ^
+  symbol:   variable btn_item_d
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:115: error: cannot find symbol
+        moduleList.add(new StudyModule("vocab", R.drawable.ic_book, "Tß╗½ vß╗▒ng", "Flashcard", R.color.vocab_main, 
+R.color.vocab_bg));
+                                                                                                   ^
+  symbol:   variable vocab_main
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:115: error: cannot find symbol
+        moduleList.add(new StudyModule("vocab", R.drawable.ic_book, "Tß╗½ vß╗▒ng", "Flashcard", R.color.vocab_main, 
+R.color.vocab_bg));
+                                                                                                                       
+^
+  symbol:   variable vocab_bg
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:116: error: cannot find symbol
+        moduleList.add(new StudyModule("grammar", R.drawable.ic_pen, "Ngß╗» ph├íp", "─Éiß╗ün tß╗½ & Sß║»p xß║┐p", 
+R.color.grammar_main, R.color.grammar_bg));
+                                                                                                             ^
+  symbol:   variable grammar_main
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:116: error: cannot find symbol
+        moduleList.add(new StudyModule("grammar", R.drawable.ic_pen, "Ngß╗» ph├íp", "─Éiß╗ün tß╗½ & Sß║»p xß║┐p", 
+R.color.grammar_main, R.color.grammar_bg));
+                                                                                                                       
+            ^
+  symbol:   variable grammar_bg
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:117: error: cannot find symbol
+        moduleList.add(new StudyModule("listening", R.drawable.ic_headphone, "Nghe hiß╗âu", "Trß║»c nghiß╗çm", 
+R.color.listening_main, R.color.listening_bg));
+                                                                                                                ^
+  symbol:   variable listening_main
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:117: error: cannot find symbol
+        moduleList.add(new StudyModule("listening", R.drawable.ic_headphone, "Nghe hiß╗âu", "Trß║»c nghiß╗çm", 
+R.color.listening_main, R.color.listening_bg));
+                                                                                                                       
+                 ^
+  symbol:   variable listening_bg
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:118: error: cannot find symbol
+        moduleList.add(new StudyModule("pronunciation", R.drawable.ic_mic, "Ph├ít ├óm", "AI ─æ├ính gi├í", 
+R.color.pronunciation_main, R.color.pronunciation_bg));
+                                                                                                            ^
+  symbol:   variable pronunciation_main
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\MainAc
+tivity.java:118: error: cannot find symbol
+        moduleList.add(new StudyModule("pronunciation", R.drawable.ic_mic, "Ph├ít ├óm", "AI ─æ├ính gi├í", 
+R.color.pronunciation_main, R.color.pronunciation_bg));
+                                                                                                                       
+                 ^
+  symbol:   variable pronunciation_bg
+  location: class color
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:89: error: cannot find symbol
+            View itemView = LayoutInflater.from(this).inflate(R.layout.item_practice_question, 
+layoutQuestionContainer, false);
+                                                                      ^
+  symbol:   variable item_practice_question
+  location: class layout
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:92: error: cannot find symbol
+            TextView tvStep = itemView.findViewById(R.id.tv_item_step);
+                                                        ^
+  symbol:   variable tv_item_step
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:93: error: cannot find symbol
+            TextView tvQuestion = itemView.findViewById(R.id.tv_item_question);
+                                                            ^
+  symbol:   variable tv_item_question
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:94: error: cannot find symbol
+            MaterialButton btnA = itemView.findViewById(R.id.btn_item_a);
+                                                            ^
+  symbol:   variable btn_item_a
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:95: error: cannot find symbol
+            MaterialButton btnB = itemView.findViewById(R.id.btn_item_b);
+                                                            ^
+  symbol:   variable btn_item_b
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:96: error: cannot find symbol
+            MaterialButton btnC = itemView.findViewById(R.id.btn_item_c);
+                                                            ^
+  symbol:   variable btn_item_c
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Practi
+ceActivity.java:97: error: cannot find symbol
+            MaterialButton btnD = itemView.findViewById(R.id.btn_item_d);
+                                                            ^
+  symbol:   variable btn_item_d
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronuncia
+tionAdapter.java:31: error: cannot find symbol
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pronunciation_lesson, parent, 
+false);
+                                                                             ^
+  symbol:   variable item_pronunciation_lesson
+  location: class layout
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronuncia
+tionAdapter.java:50: error: cannot find symbol
+            txtTitle = itemView.findViewById(R.id.txtLessonTitle);
+                                                 ^
+  symbol:   variable txtLessonTitle
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronuncia
+tionAdapter.java:51: error: cannot find symbol
+            txtDifficulty = itemView.findViewById(R.id.txtLessonDifficulty);
+                                                      ^
+  symbol:   variable txtLessonDifficulty
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\GrammarLe
+ssonAdapter.java:36: error: cannot find symbol
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grammar_lesson, parent, false);
+                                                                             ^
+  symbol:   variable item_grammar_lesson
+  location: class layout
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\GrammarLe
+ssonAdapter.java:63: error: cannot find symbol
+            tvTitle = itemView.findViewById(R.id.tv_lesson_title);
+                                                ^
+  symbol:   variable tv_lesson_title
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\GrammarLe
+ssonAdapter.java:64: error: cannot find symbol
+            tvDesc = itemView.findViewById(R.id.tv_lesson_desc);
+                                               ^
+  symbol:   variable tv_lesson_desc
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\GrammarLe
+ssonAdapter.java:65: error: cannot find symbol
+            cardLesson = itemView.findViewById(R.id.card_lesson); // ├ünh xß║í n├│
+                                                   ^
+  symbol:   variable card_lesson
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyModu
+leAdapter.java:34: error: cannot find symbol
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_study_module, parent, false);
+                                                                             ^
+  symbol:   variable item_study_module
+  location: class layout
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyModu
+leAdapter.java:65: error: cannot find symbol
+            cardIconBg = itemView.findViewById(R.id.cardIconBg);
+                                                   ^
+  symbol:   variable cardIconBg
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyModu
+leAdapter.java:66: error: cannot find symbol
+            imgIcon = itemView.findViewById(R.id.imgIcon);
+                                                ^
+  symbol:   variable imgIcon
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyModu
+leAdapter.java:67: error: cannot find symbol
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+                                                ^
+  symbol:   variable tvTitle
+  location: class id
+C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyModu
+leAdapter.java:68: error: cannot find symbol
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+                                                      ^
+  symbol:   variable tvDescription
+  location: class id
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+34 errors
+3 warnings
+
+> Task :app:compileDebugJavaWithJavac FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/ADMIn/.gemini/antigravity/scratch/MobileApp_Unified_Final/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:compileDebugJavaWithJavac'.
+> Compilation failed; see the compiler output below.
+  warning: [options] target value 8 is obsolete and will be removed in a future release
+  Note: Recompile with -Xlint:deprecation for details.
+  warning: [options] source value 8 is obsolete and will be removed in a future release
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:201: error: cannot find symbol
+              View itemView = LayoutInflater.from(this).inflate(R.layout.item_practice_question, 
+layoutQuestionsContainer, false);
+                                                                        ^
+    symbol:   variable item_practice_question
+    location: class layout
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:203: error: cannot find symbol
+              TextView tvStep = itemView.findViewById(R.id.tv_item_step);
+                                                          ^
+    symbol:   variable tv_item_step
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:204: error: cannot find symbol
+              TextView tvQuestion = itemView.findViewById(R.id.tv_item_question);
+                                                              ^
+    symbol:   variable tv_item_question
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:205: error: cannot find symbol
+              MaterialButton btnA = itemView.findViewById(R.id.btn_item_a);
+                                                              ^
+    symbol:   variable btn_item_a
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:206: error: cannot find symbol
+              MaterialButton btnB = itemView.findViewById(R.id.btn_item_b);
+                                                              ^
+    symbol:   variable btn_item_b
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:207: error: cannot find symbol
+              MaterialButton btnC = itemView.findViewById(R.id.btn_item_c);
+                                                              ^
+    symbol:   variable btn_item_c
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\List
+eningActivity.java:208: error: cannot find symbol
+              MaterialButton btnD = itemView.findViewById(R.id.btn_item_d);
+                                                              ^
+    symbol:   variable btn_item_d
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:115: error: cannot find symbol
+          moduleList.add(new StudyModule("vocab", R.drawable.ic_book, "Tß╗½ vß╗▒ng", "Flashcard", R.color.vocab_main, 
+R.color.vocab_bg));
+                                                                                                     ^
+    symbol:   variable vocab_main
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:115: error: cannot find symbol
+          moduleList.add(new StudyModule("vocab", R.drawable.ic_book, "Tß╗½ vß╗▒ng", "Flashcard", R.color.vocab_main, 
+R.color.vocab_bg));
+                                                                                                                       
+  ^
+    symbol:   variable vocab_bg
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:116: error: cannot find symbol
+          moduleList.add(new StudyModule("grammar", R.drawable.ic_pen, "Ngß╗» ph├íp", "─Éiß╗ün tß╗½ & Sß║»p xß║┐p", 
+R.color.grammar_main, R.color.grammar_bg));
+                                                                                                               ^
+    symbol:   variable grammar_main
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:116: error: cannot find symbol
+          moduleList.add(new StudyModule("grammar", R.drawable.ic_pen, "Ngß╗» ph├íp", "─Éiß╗ün tß╗½ & Sß║»p xß║┐p", 
+R.color.grammar_main, R.color.grammar_bg));
+                                                                                                                       
+              ^
+    symbol:   variable grammar_bg
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:117: error: cannot find symbol
+          moduleList.add(new StudyModule("listening", R.drawable.ic_headphone, "Nghe hiß╗âu", "Trß║»c nghiß╗çm", 
+R.color.listening_main, R.color.listening_bg));
+                                                                                                                  ^
+    symbol:   variable listening_main
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:117: error: cannot find symbol
+          moduleList.add(new StudyModule("listening", R.drawable.ic_headphone, "Nghe hiß╗âu", "Trß║»c nghiß╗çm", 
+R.color.listening_main, R.color.listening_bg));
+                                                                                                                       
+                   ^
+    symbol:   variable listening_bg
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:118: error: cannot find symbol
+          moduleList.add(new StudyModule("pronunciation", R.drawable.ic_mic, "Ph├ít ├óm", "AI ─æ├ính gi├í", 
+R.color.pronunciation_main, R.color.pronunciation_bg));
+                                                                                                              ^
+    symbol:   variable pronunciation_main
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Main
+Activity.java:118: error: cannot find symbol
+          moduleList.add(new StudyModule("pronunciation", R.drawable.ic_mic, "Ph├ít ├óm", "AI ─æ├ính gi├í", 
+R.color.pronunciation_main, R.color.pronunciation_bg));
+                                                                                                                       
+                   ^
+    symbol:   variable pronunciation_bg
+    location: class color
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:89: error: cannot find symbol
+              View itemView = LayoutInflater.from(this).inflate(R.layout.item_practice_question, 
+layoutQuestionContainer, false);
+                                                                        ^
+    symbol:   variable item_practice_question
+    location: class layout
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:92: error: cannot find symbol
+              TextView tvStep = itemView.findViewById(R.id.tv_item_step);
+                                                          ^
+    symbol:   variable tv_item_step
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:93: error: cannot find symbol
+              TextView tvQuestion = itemView.findViewById(R.id.tv_item_question);
+                                                              ^
+    symbol:   variable tv_item_question
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:94: error: cannot find symbol
+              MaterialButton btnA = itemView.findViewById(R.id.btn_item_a);
+                                                              ^
+    symbol:   variable btn_item_a
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:95: error: cannot find symbol
+              MaterialButton btnB = itemView.findViewById(R.id.btn_item_b);
+                                                              ^
+    symbol:   variable btn_item_b
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:96: error: cannot find symbol
+              MaterialButton btnC = itemView.findViewById(R.id.btn_item_c);
+                                                              ^
+    symbol:   variable btn_item_c
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\activities\Prac
+ticeActivity.java:97: error: cannot find symbol
+              MaterialButton btnD = itemView.findViewById(R.id.btn_item_d);
+                                                              ^
+    symbol:   variable btn_item_d
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronunc
+iationAdapter.java:31: error: cannot find symbol
+          View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pronunciation_lesson, parent, 
+false);
+                                                                               ^
+    symbol:   variable item_pronunciation_lesson
+    location: class layout
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronunc
+iationAdapter.java:50: error: cannot find symbol
+              txtTitle = itemView.findViewById(R.id.txtLessonTitle);
+                                                   ^
+    symbol:   variable txtLessonTitle
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Pronunc
+iationAdapter.java:51: error: cannot find symbol
+              txtDifficulty = itemView.findViewById(R.id.txtLessonDifficulty);
+                                                        ^
+    symbol:   variable txtLessonDifficulty
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Grammar
+LessonAdapter.java:36: error: cannot find symbol
+          View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grammar_lesson, parent, false);
+                                                                               ^
+    symbol:   variable item_grammar_lesson
+    location: class layout
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Grammar
+LessonAdapter.java:63: error: cannot find symbol
+              tvTitle = itemView.findViewById(R.id.tv_lesson_title);
+                                                  ^
+    symbol:   variable tv_lesson_title
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Grammar
+LessonAdapter.java:64: error: cannot find symbol
+              tvDesc = itemView.findViewById(R.id.tv_lesson_desc);
+                                                 ^
+    symbol:   variable tv_lesson_desc
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\Grammar
+LessonAdapter.java:65: error: cannot find symbol
+              cardLesson = itemView.findViewById(R.id.card_lesson); // ├ünh xß║í n├│
+                                                     ^
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.3.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+7 actionable tasks: 1 executed, 6 up-to-date
+    symbol:   variable card_lesson
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyMo
+duleAdapter.java:34: error: cannot find symbol
+          View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_study_module, parent, false);
+                                                                               ^
+    symbol:   variable item_study_module
+    location: class layout
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyMo
+duleAdapter.java:65: error: cannot find symbol
+              cardIconBg = itemView.findViewById(R.id.cardIconBg);
+                                                     ^
+    symbol:   variable cardIconBg
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyMo
+duleAdapter.java:66: error: cannot find symbol
+              imgIcon = itemView.findViewById(R.id.imgIcon);
+                                                  ^
+    symbol:   variable imgIcon
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyMo
+duleAdapter.java:67: error: cannot find symbol
+              tvTitle = itemView.findViewById(R.id.tvTitle);
+                                                  ^
+    symbol:   variable tvTitle
+    location: class id
+  C:\Users\ADMIn\.gemini\antigravity\scratch\MobileApp_Unified_Final\app\src\main\java\com\duolingo\app\adapter\StudyMo
+duleAdapter.java:68: error: cannot find symbol
+              tvDescription = itemView.findViewById(R.id.tvDescription);
+                                                        ^
+    symbol:   variable tvDescription
+    location: class id
+  warning: [options] To suppress warnings about obsolete options, use -Xlint:-options.
+  Note: Some input files use or override a deprecated API.
+  34 errors
+  3 warnings
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 7s

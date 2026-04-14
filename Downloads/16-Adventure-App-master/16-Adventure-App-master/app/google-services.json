@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229929200916",
+    "project_id": "adventure-23ee9",
+    "storage_bucket": "adventure-23ee9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229929200916:android:b06316ae7f6823f7a32601",
+        "android_client_info": {
+          "package_name": "com.example.a16adventure"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnLc444-UFpvAf9sb4A0eFkSmg4ab8Ss0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
