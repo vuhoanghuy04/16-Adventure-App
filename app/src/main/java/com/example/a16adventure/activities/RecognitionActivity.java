@@ -68,7 +68,7 @@ public class RecognitionActivity extends AppCompatActivity {
     private void setupGemini() {
         // GIỮ NGUYÊN NHƯ BẠN YÊU CẦU
         String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
-        GenerativeModel gm = new GenerativeModel("gemini-1.5-flash", apiKey);
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
 
