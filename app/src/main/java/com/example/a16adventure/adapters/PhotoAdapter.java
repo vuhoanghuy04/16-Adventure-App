@@ -35,10 +35,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
         if (position == photoUris.size()) {
             // Ô cuối cùng là nút thêm ảnh
-            holder.imgPhoto.setImageResource(android.R.drawable.ic_input_add);
+            holder.imgPhoto.setImageResource(R.drawable.ic_add_custom);
+            // Tăng padding để thu nhỏ icon dấu cộng (thu nhỏ còn khoảng một nửa)
+            int padding = 120; // Tăng từ 30 lên 120 (pixel tương đối) để đạt kích thước mong muốn
+            holder.imgPhoto.setPadding(padding, padding, padding, padding);
             holder.itemView.setOnClickListener(v -> onAddPhotoClickListener.onAddPhotoClick());
         } else {
             // Hiển thị ảnh đã chọn
+            holder.imgPhoto.setPadding(0, 0, 0, 0);
             holder.imgPhoto.setImageURI(photoUris.get(position));
             holder.itemView.setOnClickListener(null);
         }

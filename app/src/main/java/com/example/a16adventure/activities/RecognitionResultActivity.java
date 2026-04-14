@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class RecognitionResultActivity extends AppCompatActivity {
 
@@ -20,6 +21,8 @@ public class RecognitionResultActivity extends AppCompatActivity {
     private ImagePagerAdapter pagerAdapter;
     private List<String> imageUrls;
     private TextView txtLandmarkName, txtLandmarkDesc, txtLandmarkLocation;
+    private TextView txtTag1, txtTag2, txtTag3;
+    private TextView txtLandmarkRating, txtLandmarkHours, txtLandmarkVisits, txtLandmarkDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +31,10 @@ public class RecognitionResultActivity extends AppCompatActivity {
 
         initViews();
         
-        // Lấy dữ liệu từ Intent
         String resultText = getIntent().getStringExtra("RECOGNITION_RESULT");
-        String userImageUri = getIntent().getStringExtra("IMAGE_URI");
 
         if (resultText != null) {
             parseAndShowResult(resultText);
-            setupViewPager(txtLandmarkName.getText().toString(), userImageUri);
         }
 
         findViewById(R.id.btnResultBack).setOnClickListener(v -> finish());
@@ -52,86 +52,95 @@ public class RecognitionResultActivity extends AppCompatActivity {
         txtLandmarkName = findViewById(R.id.txtLandmarkName);
         txtLandmarkDesc = findViewById(R.id.txtLandmarkDesc);
         txtLandmarkLocation = findViewById(R.id.txtLandmarkLocation);
+        
+        txtTag1 = findViewById(R.id.txtTag1);
+        txtTag2 = findViewById(R.id.txtTag2);
+        txtTag3 = findViewById(R.id.txtTag3);
+        
+        txtLandmarkRating = findViewById(R.id.txtLandmarkRating);
+        txtLandmarkHours = findViewById(R.id.txtLandmarkHours);
+        txtLandmarkVisits = findViewById(R.id.txtLandmarkVisits);
+        txtLandmarkDistance = findViewById(R.id.txtLandmarkDistance);
     }
 
     private void parseAndShowResult(String resultText) {
         String cleanText = resultText.replace("**", "").trim();
-        String name = "";
-        String description = cleanText;
+        String name = "Địa danh";
+        String description = "";
+        List<String> aiImageUrls = new ArrayList<>();
 
-        // Cố gắng tách Tên địa danh từ định dạng "Tên địa danh: Mô tả"
-        if (cleanText.toLowerCase().contains("tên địa danh:")) {
-            String[] lines = cleanText.split("\n");
-            for (String line : lines) {
-                if (line.toLowerCase().contains("tên địa danh:")) {
-                    name = line.substring(line.toLowerCase().indexOf("tên địa danh:") + 13).trim();
-                    if (name.startsWith(":")) name = name.substring(1).trim();
-                    break;
+        // Tách dữ liệu từ cấu trúc của AI
+        String[] lines = cleanText.split("\n");
+        for (String line : lines) {
+            String lowerLine = line.toLowerCase();
+            if (lowerLine.contains("tên địa danh:")) {
+                name = line.substring(line.indexOf(":") + 1).trim();
+            } else if (lowerLine.contains("mô tả:")) {
+                description = line.substring(line.indexOf(":") + 1).trim();
+            } else if (lowerLine.contains("hình ảnh:")) {
+                String urlsPart = line.substring(line.indexOf(":") + 1).trim();
+                String[] urls = urlsPart.split(",");
+                for (String url : urls) {
+                    if (url.trim().startsWith("http")) {
+                        aiImageUrls.add(url.trim());
+                    }
                 }
             }
-            // Phần còn lại là mô tả
-            description = cleanText.substring(cleanText.toLowerCase().indexOf("mô tả:") != -1 ? 
-                          cleanText.toLowerCase().indexOf("mô tả:") + 6 : 
-                          cleanText.indexOf("\n") + 1).trim();
-            if (description.startsWith(":")) description = description.substring(1).trim();
-        } else {
-            // Nếu AI không trả về đúng định dạng, lấy dòng đầu tiên làm tên
-            String[] parts = cleanText.split("\n", 2);
-            name = parts[0].trim();
-            if (parts.length > 1) description = parts[1].trim();
         }
 
-        // Nếu tên quá dài (AI trả về cả câu), cắt bớt hoặc để mặc định
-        if (name.length() > 50 || name.isEmpty()) {
-            name = "Địa danh đã quét";
+        // Nếu không tách được theo định dạng, dùng fallback cũ
+        if (description.isEmpty() && cleanText.contains("\n")) {
+            String[] parts = cleanText.split("\n", 2);
+            name = parts[0].trim();
+            description = parts[1].trim();
         }
 
         txtLandmarkName.setText(name);
         txtLandmarkDesc.setText(description);
         
-        // Tự động cập nhật vị trí dựa trên tên địa danh
-        updateLocation(name);
+        updateLandmarkDetails(name);
+        setupViewPagerWithAiUrls(aiImageUrls);
     }
 
-    private void updateLocation(String name) {
-        String location = "📍 Hải Phòng, Việt Nam"; // Mặc định
+    private void updateLandmarkDetails(String name) {
         String lowerName = name.toLowerCase();
-        
-        if (lowerName.contains("cát bà") || lowerName.contains("lan hạ") || lowerName.contains("cát cò")) {
-            location = "📍 Cát Bà, Hải Phòng";
-        } else if (lowerName.contains("đồ sơn") || lowerName.contains("hòn dấu")) {
-            location = "📍 Đồ Sơn, Hải Phòng";
-        } else if (lowerName.contains("nhà hát lớn") || lowerName.contains("quảng trường")) {
-            location = "📍 Quận Hồng Bàng, Hải Phòng";
-        } else if (lowerName.contains("tuyệt tình cốc")) {
-            location = "📍 Thủy Nguyên, Hải Phòng";
+        Random random = new Random();
+
+        // Cập nhật vị trí thông minh
+        if (lowerName.contains("cát bà") || lowerName.contains("lan hạ")) {
+            txtLandmarkLocation.setText("📍 Cát Bà, Hải Phòng");
+            txtTag1.setText("Biển đảo");
+            txtTag2.setText("Kỳ quan");
+        } else if (lowerName.contains("đồ sơn")) {
+            txtLandmarkLocation.setText("📍 Đồ Sơn, Hải Phòng");
+            txtTag1.setText("Bãi biển");
+            txtTag2.setText("Giải trí");
+        } else {
+            txtLandmarkLocation.setText("📍 Hải Phòng, Việt Nam");
+            txtTag1.setText("Du lịch");
+            txtTag2.setText("Khám phá");
         }
         
-        txtLandmarkLocation.setText(location);
+        txtTag3.setText("Hải Phòng");
+        txtLandmarkHours.setText("08:00 - 21:00");
+        txtLandmarkVisits.setText((5 + random.nextInt(15)) + ".0K / tháng");
+        txtLandmarkRating.setText("4." + (6 + random.nextInt(4)));
+        txtLandmarkDistance.setText((5 + random.nextInt(20)) + " km");
     }
 
-    private void setupViewPager(String landmarkName, String userImageUri) {
+    private void setupViewPagerWithAiUrls(List<String> urls) {
         imageUrls = new ArrayList<>();
         
-        if (userImageUri != null && !userImageUri.isEmpty()) {
-            imageUrls.add(userImageUri);
-        }
-        
-        // Thêm ảnh mẫu phù hợp với địa danh
-        if (landmarkName.toLowerCase().contains("cát bà") || landmarkName.toLowerCase().contains("lan hạ")) {
-            imageUrls.add("https://statics.vinpearl.com/vinh-lan-ha-1_1625732168.jpg");
-            imageUrls.add("https://statics.vinwonders.com/vinh-lan-ha-cat-ba-2_1660127264.jpg");
-        } else if (landmarkName.toLowerCase().contains("đồ sơn")) {
-            imageUrls.add("https://Reviewvilla.vn/wp-content/uploads/2022/05/bien-do-son-1.jpg");
-            imageUrls.add("https://vcdn1-dulich.vnecdn.net/2022/04/18/haiphong-1650275322-1650275333-8742-1650275681.jpg");
+        if (urls != null && !urls.isEmpty()) {
+            imageUrls.addAll(urls);
         } else {
+            // Ảnh mặc định nếu AI không trả về link ảnh
             imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
             imageUrls.add("https://images2.thanhnien.vn/528068207945824256/2023/11/17/img2122-17002062634352125134767.jpg");
         }
 
         pagerAdapter = new ImagePagerAdapter(imageUrls);
         viewPagerLandmark.setAdapter(pagerAdapter);
-
         new TabLayoutMediator(tabIndicator, viewPagerLandmark, (tab, position) -> {}).attach();
     }
 }

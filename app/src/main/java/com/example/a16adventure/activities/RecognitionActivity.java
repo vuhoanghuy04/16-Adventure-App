@@ -1,17 +1,24 @@
 package com.example.a16adventure.activities;
 
+import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +44,8 @@ public class RecognitionActivity extends AppCompatActivity {
     private PhotoAdapter photoAdapter;
     private List<Uri> photoUris = new ArrayList<>();
     private View loadingLayout;
+    private ImageButton btnCamera;
+    private Uri camUri;
     
     private GenerativeModelFutures model;
     private final Executor executor = Executors.newSingleThreadExecutor();
@@ -52,11 +61,14 @@ public class RecognitionActivity extends AppCompatActivity {
 
         findViewById(R.id.btnScan).setOnClickListener(v -> startRecognition());
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        
+        btnCamera.setOnClickListener(v -> checkCameraPermissionAndTakePhoto());
     }
 
     private void initViews() {
         rvPhotos = findViewById(R.id.rvPhotos);
         loadingLayout = findViewById(R.id.loadingLayout);
+        btnCamera = findViewById(R.id.btnCamera);
     }
 
     private void setupRecyclerView() {
@@ -66,11 +78,56 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void setupGemini() {
-        // GIỮ NGUYÊN NHƯ BẠN YÊU CẦU
         String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
+
+    private void checkCameraPermissionAndTakePhoto() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            takePhoto();
+        } else {
+            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    private final ActivityResultLauncher<String> requestCameraPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (isGranted) {
+                    takePhoto();
+                } else {
+                    Toast.makeText(this, "Bạn cần cấp quyền Camera để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+                }
+            }
+    );
+
+    private void takePhoto() {
+        try {
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.TITLE, "New Picture");
+            values.put(MediaStore.Images.Media.DESCRIPTION, "From Camera");
+            camUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, camUri);
+            takePhotoLauncher.launch(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "Không thể mở máy ảnh", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private final ActivityResultLauncher<Intent> takePhotoLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    if (camUri != null) {
+                        photoUris.add(camUri);
+                        photoAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+    );
 
     private void pickImages() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -117,9 +174,14 @@ public class RecognitionActivity extends AppCompatActivity {
 
             Bitmap resizedBitmap = scaleBitmap(originalBitmap, 1024);
 
+            // Nâng cấp Prompt: Yêu cầu 2 ảnh chất lượng cao và định dạng link ảnh chuẩn
             Content content = new Content.Builder()
                     .addImage(resizedBitmap)
-                    .addText("Đây là địa danh nào ở Hải Phòng? Hãy cho tôi biết tên địa danh và mô tả ngắn gọn về nó theo cấu trúc: 'Tên địa danh: Mô tả'.")
+                    .addText("Hãy đóng vai chuyên gia du lịch Hải Phòng. Xác định địa danh trong ảnh. Trả về kết quả duy nhất theo cấu trúc sau:\n" +
+                            "Tên địa danh: [Tên chính xác nhất]\n" +
+                            "Mô tả: [Mô tả hấp dẫn về địa danh]\n" +
+                            "Hình ảnh: [Cung cấp 2 liên kết hình ảnh .jpg hoặc .png thực tế và công khai của địa danh này từ các nguồn như wikipedia, các trang du lịch nổi tiếng, cách nhau bằng dấu phẩy]\n" +
+                            "Yêu cầu: Link ảnh phải hoạt động và không có lời dẫn thêm.")
                     .build();
 
             ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -165,10 +227,11 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void showResult(String info, Uri imageUri) {
-        // CHUYỂN SANG MÀN HÌNH KẾT QUẢ MỚI
         Intent intent = new Intent(this, RecognitionResultActivity.class);
         intent.putExtra("RECOGNITION_RESULT", info);
         intent.putExtra("IMAGE_URI", imageUri.toString());
+        intent.setData(imageUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
     }
 }

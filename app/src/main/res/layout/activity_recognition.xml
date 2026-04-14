@@ -32,6 +32,19 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
+        <!-- Camera Button -->
+        <ImageButton
+            android:id="@+id/btnCamera"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_camera_red" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -79,28 +92,6 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:cornerRadius="28dp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:text="Smart Photos"
-                android:textColor="#333333" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/swSmartPhotos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:checked="true"
-                app:thumbTint="#FF4B4B"
-                app:trackTint="#F8BBD0" />
-        </RelativeLayout>
     </LinearLayout>
 
     <!-- Loading Overlay -->
@@ -109,7 +100,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
             android:layout_width="wrap_content"
