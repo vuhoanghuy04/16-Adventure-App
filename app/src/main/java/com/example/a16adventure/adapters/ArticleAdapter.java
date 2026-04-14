@@ -9,8 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
-import com.example.a16adventure.activities.DetailActivity;
+import com.example.a16adventure.activities.ArticleDetailActivity;
 import com.example.a16adventure.models.Article;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         this.articleList = articleList;
     }
 
+    // Hàm cập nhật dữ liệu khi tìm kiếm/lọc
     public void updateData(List<Article> newList) {
         this.articleList = newList;
         notifyDataSetChanged();
@@ -39,7 +41,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     public void onBindViewHolder(@NonNull ArticleViewHolder holder, int position) {
         Article article = articleList.get(position);
 
-        holder.tvArticleTitle.setText(article.getTitle());
+        holder.tvTitle.setText(article.getTitle());
         holder.tvCategory.setText("• " + article.getCategory());
         holder.tvTime.setText(article.getTimeAndViews());
 
@@ -47,15 +49,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 1. Gọi chuyến xe Intent để đi sang trang DetailActivity
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
 
-                // 2. Gửi gắm dữ liệu lên xe
+                // Đóng gói toàn bộ dữ liệu gửi đi
                 intent.putExtra("TITLE", article.getTitle());
                 intent.putExtra("CATEGORY", article.getCategory());
                 intent.putExtra("TIME_VIEWS", article.getTimeAndViews());
+                intent.putExtra("CONTENT", article.getContent());
+                intent.putExtra("IMAGE_URL", article.getImageUrl());
 
-                // 3. Khởi hành!
                 v.getContext().startActivity(intent);
             }
         });
@@ -70,16 +72,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
     }
 
     public static class ArticleViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgThumbnail;
-        TextView tvCategory;
-        TextView tvArticleTitle;
-        TextView tvTime;
+        TextView tvTitle, tvCategory, tvTime;
 
         public ArticleViewHolder(@NonNull View itemView) {
             super(itemView);
-            imgThumbnail = itemView.findViewById(R.id.imgThumbnail);
+            // Lưu ý: ID có thể khác một chút tùy file XML của bạn, nếu bị đỏ thì sửa lại cho khớp với item_article.xml nhé
+            tvTitle = itemView.findViewById(R.id.tvTitle);
             tvCategory = itemView.findViewById(R.id.tvCategory);
-            tvArticleTitle = itemView.findViewById(R.id.tvArticleTitle);
             tvTime = itemView.findViewById(R.id.tvTime);
         }
     }

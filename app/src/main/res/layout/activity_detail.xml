@@ -1,86 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:fillViewport="true">
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="400dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <ImageView
-            android:id="@+id/imgArticleCover"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:background="#E0E0E0"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="#FF4B2B"
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/bg_search_bar"
-            android:padding="8dp"
-            android:src="@android:drawable/ic_menu_revert"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:expandedTitleMarginStart="24dp"
+            app:expandedTitleMarginBottom="70dp"
 
-        <TextView
-            android:id="@+id/tvDetailCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="20dp"
-            android:text="• Lịch sử"
-            android:textColor="#009688"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgArticleCover" />
+            app:expandedTitleTextAppearance="@style/ExpandedTitleStyle"
+            app:expandedTitleTextColor="#FFFFFF"
+            app:collapsedTitleTextColor="#FFFFFF"
 
-        <TextView
-            android:id="@+id/tvDetailTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="🕒 8 phút   👁 3.420"
-            android:textColor="#888888"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@id/tvDetailCategory"
-            app:layout_constraintStart_toEndOf="@id/tvDetailCategory"
-            app:layout_constraintTop_toTopOf="@id/tvDetailCategory" />
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-        <TextView
-            android:id="@+id/tvDetailTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="12dp"
-            android:text="Tiêu đề bài viết"
-            android:textColor="#333333"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@id/tvDetailCategory" />
+            <ImageView
+                android:id="@+id/imgDetailCover"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7" />
 
-        <TextView
-            android:id="@+id/tvDetailContent"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/bg_glass_panel"
+                app:layout_collapseMode="pin" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarDetail"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrowback" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="32dp"
-            android:lineSpacingExtra="8dp"
-            android:text="Nội dung chi tiết của bài viết sẽ được hiển thị ở đây...\n\nỨng dụng đang phát triển, phần nội dung chữ dài này sẽ được đổ dữ liệu thật vào sau khi kết nối với Database."
-            android:textColor="#555555"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvDetailTitle" />
+            android:orientation="vertical"
+            android:padding="24dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_glass_option"
+                android:backgroundTint="#FFE4E1"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp">
 
-</androidx.core.widget.NestedScrollView>
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_map"
+                    app:tint="#FF4B2B" />
+
+                <TextView
+                    android:id="@+id/tvDetailDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="Quận/Huyện"
+                    android:textColor="#FF4B2B"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Giới thiệu"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvDetailDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="6dp"
+                android:text="Mô tả chi tiết địa danh sẽ hiển thị ở đây..."
+                android:textColor="#444444"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabNavigate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Chỉ đường"
+        android:textColor="@color/white"
+        app:icon="@drawable/ic_map"
+        app:iconTint="@color/white"
+        app:backgroundTint="#FF4B2B"
+        app:layout_anchor="@id/appBarLayout"
+        app:layout_anchorGravity="bottom|end" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

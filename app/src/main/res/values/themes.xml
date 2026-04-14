@@ -6,4 +6,17 @@
     </style>
 
     <style name="Theme._16Adventure" parent="Base.Theme._16Adventure" />
+
+    <style name="ExpandedTitleStyle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textSize">32sp</item>
+
+        <item name="android:textStyle">bold</item>
+
+        <item name="android:textColor">#FFFFFF</item>
+
+        <item name="android:shadowColor">#B3000000</item>
+        <item name="android:shadowDx">2</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">6</item>
+    </style>
 </resources>

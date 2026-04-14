@@ -5,28 +5,128 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5"
-    android:fitsSystemWindows="true"> <TextView
-    android:id="@+id/tvHeader"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="24dp"
-    android:text="Chào buổi tối, admin 👋"
-    android:textColor="@color/black"
-    android:textSize="24sp"
-    android:textStyle="bold"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    android:fitsSystemWindows="true">
+
+    <TextView
+        android:id="@+id/tvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Chào buổi tối, admin 👋"
+        android:textColor="@color/black"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnOpenQuizBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="20dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintTop_toBottomOf="@id/tvHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnWeatherCurrent"
+        app:layout_constraintHorizontal_weight="0.75">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/quiz_background_liquid"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="20dp">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/btn_glass_option"
+                android:padding="12dp"
+                android:src="@drawable/ic_learning"
+                app:tint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hải Phòng Quiz"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="Thử tài kiến thức!"
+                    android:textColor="#F5F5F5"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/btnWeatherCurrent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintTop_toTopOf="@id/btnOpenQuizBanner"
+        app:layout_constraintBottom_toBottomOf="@id/btnOpenQuizBanner"
+        app:layout_constraintStart_toEndOf="@id/btnOpenQuizBanner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="0.25">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgWeatherBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#33000000" />
+
+            <TextView
+                android:id="@+id/tvCurrentTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="--°C"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <HorizontalScrollView
         android:id="@+id/scrollViewFilters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:scrollbars="none"
-        app:layout_constraintTop_toBottomOf="@id/tvHeader">
+        app:layout_constraintTop_toBottomOf="@id/btnOpenQuizBanner">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupDistricts"
@@ -35,46 +135,21 @@
             app:selectionRequired="true"
             app:singleSelection="true">
 
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipAll"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:text="Tất cả" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipHongBang"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hồng Bàng" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipLeChan"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lê Chân" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipDoSon"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đồ Sơn" />
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewMonuments"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/scrollViewFilters"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingHorizontal="40dp"
         app:layout_constraintBottom_toTopOf="@+id/cardBottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@id/scrollViewFilters" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardMapContainer"
@@ -86,9 +161,9 @@
         android:visibility="gone"
         app:cardCornerRadius="24dp"
         app:cardElevation="12dp"
-        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintBottom_toTopOf="@+id/cardBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
         app:layout_constraintStart_toStartOf="parent">
 
         <FrameLayout

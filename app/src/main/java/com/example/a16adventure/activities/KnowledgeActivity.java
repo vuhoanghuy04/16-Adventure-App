@@ -3,13 +3,17 @@ package com.example.a16adventure.activities;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.ArticleAdapter;
@@ -27,6 +31,7 @@ public class KnowledgeActivity extends BaseActivity {
     private RecyclerView rvFeaturedArticles;
     private ArticleAdapter articleAdapter;
     private FeaturedAdapter featuredAdapter;
+
     private List<Article> articleList;
     private List<Article> featuredList;
 
@@ -34,16 +39,15 @@ public class KnowledgeActivity extends BaseActivity {
     private Chip chipAll, chipCustoms, chipFood, chipHistory;
     private EditText edtSearch;
 
+    private FirebaseFirestore db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Đã cập nhật trỏ về đúng tên file giao diện mới
         setContentView(R.layout.activity_knowledge);
-
-        // Vẫn giữ thanh điều hướng (Nếu trang này là trang con, sau này leader có thể bỏ dòng này đi)
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_explore);
 
-        // --- 0. ÁNH XẠ ---
+        // Ánh xạ
         chipGroupCategories = findViewById(R.id.chipGroupCategories);
         chipAll = findViewById(R.id.chipAll);
         chipCustoms = findViewById(R.id.chipCustoms);
@@ -51,37 +55,9 @@ public class KnowledgeActivity extends BaseActivity {
         chipHistory = findViewById(R.id.chipHistory);
         edtSearch = findViewById(R.id.edtSearch);
 
-        // --- 1. NẠP DỮ LIỆU THẬT (12 BÀI VIẾT) ---
         articleList = new ArrayList<>();
-
-        // THỂ LOẠI: LỊCH SỬ (4 bài)
-        articleList.add(new Article("Lịch sử hình thành thành phố Cảng", "Lịch sử", "🕒 8 phút   👁 3.420", 0));
-        articleList.add(new Article("Di tích bến tàu Không Số K15", "Lịch sử", "🕒 6 phút   👁 1.250", 0));
-        articleList.add(new Article("Trận chiến trên sông Bạch Đằng lịch sử", "Lịch sử", "🕒 12 phút  👁 5.100", 0));
-        articleList.add(new Article("Nữ tướng Lê Chân và công cuộc khai hoang", "Lịch sử", "🕒 9 phút   👁 2.800", 0));
-
-        // THỂ LOẠI: PHONG TỤC (4 bài)
-        articleList.add(new Article("Phong tục cưới hỏi truyền thống Hải Phòng", "Phong tục", "🕒 5 phút   👁 2.210", 0));
-        articleList.add(new Article("Tết Nguyên Đán ở Hải Phòng xưa và nay", "Phong tục", "🕒 7 phút   👁 3.100", 0));
-        articleList.add(new Article("Lễ hội Chọi Trâu Đồ Sơn", "Phong tục", "🕒 10 phút  👁 4.500", 0));
-        articleList.add(new Article("Tín ngưỡng thờ Mẫu tại đền Nghè", "Phong tục", "🕒 6 phút   👁 1.800", 0));
-
-        // THỂ LOẠI: ẨM THỰC (4 bài)
-        articleList.add(new Article("Ẩm thực đường phố Hải Phòng - Thiên đường vị giác", "Ẩm thực", "🕒 10 phút  👁 8.120", 0));
-        articleList.add(new Article("Nghệ thuật ẩm thực hải sản Cát Bà", "Ẩm thực", "🕒 8 phút   👁 6.050", 0));
-        articleList.add(new Article("Bánh đa cua - Linh hồn ẩm thực đất Cảng", "Ẩm thực", "🕒 5 phút   👁 9.200", 0));
-        articleList.add(new Article("Nem cua bể và cách làm truyền thống", "Ẩm thực", "🕒 7 phút   👁 5.400", 0));
-
-        // Danh sách Nổi bật (Vuốt ngang)
         featuredList = new ArrayList<>();
-        featuredList.add(new Article("Lịch sử hình thành thành phố Cảng", "Lịch sử", "🕒 8 phút", 0));
-        featuredList.add(new Article("Lễ hội Chọi Trâu Đồ Sơn", "Phong tục", "🕒 10 phút", 0));
-        featuredList.add(new Article("Bánh đa cua - Linh hồn ẩm thực đất Cảng", "Ẩm thực", "🕒 5 phút", 0));
 
-        // Đếm tự động số lượng và ghi lên nút
-        countAndUpdateChips();
-
-        // --- 2. CÀI ĐẶT DANH SÁCH ---
         rvAllArticles = findViewById(R.id.rvAllArticles);
         articleAdapter = new ArticleAdapter(articleList);
         rvAllArticles.setAdapter(articleAdapter);
@@ -92,32 +68,26 @@ public class KnowledgeActivity extends BaseActivity {
         rvFeaturedArticles.setAdapter(featuredAdapter);
         rvFeaturedArticles.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // --- 3. TÍNH NĂNG LỌC ---
-        chipGroupCategories.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(ChipGroup group, int checkedId) {
-                List<Article> filteredList = new ArrayList<>();
+        // Khởi tạo Firebase và gọi hàm tải dữ liệu
+        db = FirebaseFirestore.getInstance();
+        fetchArticlesFromFirebase();
 
-                if (checkedId == R.id.chipAll || checkedId == -1) {
-                    filteredList.addAll(articleList);
-                } else if (checkedId == R.id.chipCustoms) {
-                    for (Article a : articleList) {
-                        if (a.getCategory().equals("Phong tục")) filteredList.add(a);
-                    }
-                } else if (checkedId == R.id.chipFood) {
-                    for (Article a : articleList) {
-                        if (a.getCategory().equals("Ẩm thực")) filteredList.add(a);
-                    }
-                } else if (checkedId == R.id.chipHistory) {
-                    for (Article a : articleList) {
-                        if (a.getCategory().equals("Lịch sử")) filteredList.add(a);
-                    }
-                }
-                articleAdapter.updateData(filteredList);
+        // Tính năng lọc
+        chipGroupCategories.setOnCheckedChangeListener((group, checkedId) -> {
+            List<Article> filteredList = new ArrayList<>();
+            if (checkedId == R.id.chipAll || checkedId == -1) {
+                filteredList.addAll(articleList);
+            } else if (checkedId == R.id.chipCustoms) {
+                for (Article a : articleList) if (a.getCategory() != null && a.getCategory().equals("Phong tục")) filteredList.add(a);
+            } else if (checkedId == R.id.chipFood) {
+                for (Article a : articleList) if (a.getCategory() != null && a.getCategory().equals("Ẩm thực")) filteredList.add(a);
+            } else if (checkedId == R.id.chipHistory) {
+                for (Article a : articleList) if (a.getCategory() != null && a.getCategory().equals("Lịch sử")) filteredList.add(a);
             }
+            articleAdapter.updateData(filteredList);
         });
 
-        // --- 4. TÍNH NĂNG TÌM KIẾM KHÔNG DẤU ---
+        // Tính năng tìm kiếm không dấu
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -126,22 +96,50 @@ public class KnowledgeActivity extends BaseActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String keyword = removeAccents(s.toString().toLowerCase().trim());
                 List<Article> searchList = new ArrayList<>();
-
                 for (Article article : articleList) {
-                    String titleNoAccent = removeAccents(article.getTitle().toLowerCase());
-                    if (titleNoAccent.contains(keyword)) {
-                        searchList.add(article);
+                    if (article.getTitle() != null) {
+                        String titleNoAccent = removeAccents(article.getTitle().toLowerCase());
+                        if (titleNoAccent.contains(keyword)) searchList.add(article);
                     }
                 }
                 articleAdapter.updateData(searchList);
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
     }
 
-    // Hàm biến chữ có dấu thành không dấu
+    // --- HÀM TẢI DỮ LIỆU TỪ FIREBASE ---
+    private void fetchArticlesFromFirebase() {
+        db.collection("articles")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        articleList.clear();
+                        featuredList.clear();
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Biến dữ liệu mạng thành đối tượng Article
+                            Article article = document.toObject(Article.class);
+                            articleList.add(article);
+
+                            // Lọc thông minh: Chỉ những bài viết có isFeatured = true mới được vào mục Nổi bật
+                            Boolean isFeatured = document.getBoolean("isFeatured");
+                            if (isFeatured != null && isFeatured == true) {
+                                featuredList.add(article);
+                            }
+                        }
+
+                        articleAdapter.notifyDataSetChanged();
+                        featuredAdapter.notifyDataSetChanged();
+                        countAndUpdateChips();
+                    } else {
+                        Log.e("FIREBASE", "Lỗi lấy dữ liệu", task.getException());
+                        Toast.makeText(KnowledgeActivity.this, "Lỗi kết nối mạng!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     public static String removeAccents(String str) {
         if (str == null) return "";
         try {
@@ -153,18 +151,15 @@ public class KnowledgeActivity extends BaseActivity {
         }
     }
 
-    // Hàm đếm số lượng
     private void countAndUpdateChips() {
-        int countCustoms = 0;
-        int countFood = 0;
-        int countHistory = 0;
-
+        int countCustoms = 0, countFood = 0, countHistory = 0;
         for (Article article : articleList) {
-            if (article.getCategory().equals("Phong tục")) countCustoms++;
-            else if (article.getCategory().equals("Ẩm thực")) countFood++;
-            else if (article.getCategory().equals("Lịch sử")) countHistory++;
+            if (article.getCategory() != null) {
+                if (article.getCategory().equals("Phong tục")) countCustoms++;
+                else if (article.getCategory().equals("Ẩm thực")) countFood++;
+                else if (article.getCategory().equals("Lịch sử")) countHistory++;
+            }
         }
-
         chipAll.setText("Tất cả (" + articleList.size() + ")");
         chipCustoms.setText("🔴 Phong tục (" + countCustoms + ")");
         chipFood.setText("🟡 Ẩm thực (" + countFood + ")");

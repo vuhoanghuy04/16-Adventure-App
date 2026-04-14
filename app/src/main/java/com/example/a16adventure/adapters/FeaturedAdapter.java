@@ -9,8 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide; // Import thêm Glide để tải ảnh
 import com.example.a16adventure.R;
-import com.example.a16adventure.activities.DetailActivity;
+import com.example.a16adventure.activities.ArticleDetailActivity;
 import com.example.a16adventure.models.Article;
 
 import java.util.List;
@@ -38,17 +39,27 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
         holder.tvFeaturedCategory.setText(article.getCategory());
         holder.tvFeaturedTime.setText(article.getTimeAndViews());
 
+        // --- TẢI ẢNH ĐẠI DIỆN TỪ FIREBASE LÊN THẺ NỔI BẬT ---
+        if (article.getImageUrl() != null && !article.getImageUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(article.getImageUrl())
+                    .placeholder(R.drawable.bg_search_bar) // Ảnh hiện tạm lúc chờ load mạng
+                    .into(holder.imgFeatured);
+        }
+
         // --- SỰ KIỆN CLICK VÀO BÀI VIẾT NỔI BẬT ---
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Gọi chuyến xe Intent để đi sang trang DetailActivity
-                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                // Gọi chuyến xe Intent để đi sang trang ArticleDetailActivity
+                Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
 
-                // Gửi gắm dữ liệu lên xe
+                // Gửi gắm toàn bộ dữ liệu lên xe
                 intent.putExtra("TITLE", article.getTitle());
                 intent.putExtra("CATEGORY", article.getCategory());
                 intent.putExtra("TIME_VIEWS", article.getTimeAndViews());
+                intent.putExtra("CONTENT", article.getContent());     // Bổ sung Nội dung
+                intent.putExtra("IMAGE_URL", article.getImageUrl());  // Bổ sung Link ảnh
 
                 // Khởi hành!
                 v.getContext().startActivity(intent);

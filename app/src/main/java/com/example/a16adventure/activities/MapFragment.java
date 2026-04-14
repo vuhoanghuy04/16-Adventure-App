@@ -45,6 +45,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Thêm dấu ghim và di chuyển camera tới đó
         mMap.addMarker(new MarkerOptions().position(haiPhong).title("Nhà Hát Lớn Hải Phòng"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(haiPhong, 15f)); // Độ zoom 15 là vừa đẹp
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(haiPhong, 15f));
     }
 }

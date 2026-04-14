@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -58,7 +59,9 @@ dependencies {
 
     implementation("com.github.yuyakaido:cardstackview:2.3.4")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-    implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-auth")
+    // --- CÁC THƯ VIỆN FIREBASE ---
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
+    implementation("com.google.firebase:firebase-firestore") // Dành cho Thư viện kiến thức của Đức
+    implementation("com.google.firebase:firebase-database")  // Dành cho phần Lưu địa danh của Huy
+    implementation("com.google.firebase:firebase-auth")      // Dành cho tính năng Đăng nhập
 }

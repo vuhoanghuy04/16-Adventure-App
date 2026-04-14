@@ -48,7 +48,8 @@ public class BaseActivity extends AppCompatActivity {
                 // Xóa toàn bộ stack phía trên MainActivity để tránh đầy RAM
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             } else if (itemId == R.id.nav_explore) {
-                intent = new Intent(this, KnowledgeActivity.class);
+                // Đã sửa lại thành ExploreActivity để ra Menu Khám phá 2 nút
+                intent = new Intent(this, ExploreActivity.class);
             } else if (itemId == R.id.nav_map) {
                 intent = new Intent(this, MapActivity.class);
             } else if (itemId == R.id.nav_ai) {
