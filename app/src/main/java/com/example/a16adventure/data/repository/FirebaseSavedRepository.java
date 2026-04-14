@@ -13,8 +13,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FirebaseSavedRepository implements SavedRepository {
+    private static volatile FirebaseSavedRepository instance;
+
     private ValueEventListener valueEventListener;
     private DatabaseReference observedReference;
+
+    public static FirebaseSavedRepository getInstance() {
+        if (instance == null) {
+            synchronized (FirebaseSavedRepository.class) {
+                if (instance == null) {
+                    instance = new FirebaseSavedRepository();
+                }
+            }
+        }
+        return instance;
+    }
 
     @Override
     public void observeSavedIds(String uid, SavedIdsCallback callback) {

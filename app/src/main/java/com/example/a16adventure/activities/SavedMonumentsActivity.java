@@ -48,9 +48,6 @@ public class SavedMonumentsActivity extends AppCompatActivity {
         adapter = new SavedMonumentAdapter(this, listDisplay, position -> {
             Monument m = listDisplay.get(position);
             savedMonumentsViewModel.removeSavedMonument(uid, m.getId());
-            listDisplay.remove(position);
-            adapter.notifyItemRemoved(position);
-            adapter.notifyItemRangeChanged(position, listDisplay.size() - position);
         });
 
         rv.setAdapter(adapter);

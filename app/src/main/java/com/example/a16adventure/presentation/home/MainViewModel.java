@@ -48,7 +48,7 @@ public class MainViewModel extends AndroidViewModel {
         super(application);
         loadMonumentsUseCase = new LoadMonumentsUseCase(new AssetMonumentRepository(application));
         filterMonumentsByDistrictUseCase = new FilterMonumentsByDistrictUseCase();
-        toggleSavedMonumentUseCase = new ToggleSavedMonumentUseCase(new FirebaseSavedRepository());
+        toggleSavedMonumentUseCase = new ToggleSavedMonumentUseCase(FirebaseSavedRepository.getInstance());
         getCurrentUserUseCase = new GetCurrentUserUseCase(new FirebaseAuthRepository());
         fetchCurrentWeatherUseCase = new FetchCurrentWeatherUseCase(new OpenMeteoWeatherRepository());
     }

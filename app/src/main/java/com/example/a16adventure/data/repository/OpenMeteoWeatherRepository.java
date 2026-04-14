@@ -17,18 +17,19 @@ public class OpenMeteoWeatherRepository implements WeatherRepository {
     @Override
     public void fetchCurrentWeather(WeatherCallback callback) {
         new Thread(() -> {
+            HttpURLConnection conn = null;
             try {
                 URL url = new URL(HAI_PHONG_WEATHER_URL);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
 
-                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
                 StringBuilder result = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    result.append(line);
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
                 }
-                reader.close();
 
                 JSONObject jsonObject = new JSONObject(result.toString());
                 JSONObject current = jsonObject.getJSONObject("current_weather");
@@ -38,6 +39,10 @@ public class OpenMeteoWeatherRepository implements WeatherRepository {
                 callback.onSuccess(new WeatherInfo(temp, weatherCode));
             } catch (Exception e) {
                 callback.onError(e.getMessage() != null ? e.getMessage() : "Lỗi tải thời tiết");
+            } finally {
+                if (conn != null) {
+                    conn.disconnect();
+                }
             }
         }).start();
     }

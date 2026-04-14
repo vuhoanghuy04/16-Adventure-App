@@ -23,11 +23,12 @@ public class AssetQuizRepository implements QuizRepository {
     public List<JSONObject> getAllQuizzes() throws Exception {
         List<JSONObject> quizzes = new ArrayList<>();
 
-        InputStream is = context.getAssets().open("quizzes.json");
-        int size = is.available();
-        byte[] buffer = new byte[size];
-        is.read(buffer);
-        is.close();
+        byte[] buffer;
+        try (InputStream is = context.getAssets().open("quizzes.json")) {
+            int size = is.available();
+            buffer = new byte[size];
+            is.read(buffer);
+        }
 
         String jsonString = new String(buffer, StandardCharsets.UTF_8);
         JSONArray jsonArray = new JSONArray(jsonString);

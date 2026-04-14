@@ -26,7 +26,7 @@ public class SavedMonumentsViewModel extends AndroidViewModel {
 
     public SavedMonumentsViewModel(@NonNull Application application) {
         super(application);
-        savedRepository = new FirebaseSavedRepository();
+        savedRepository = FirebaseSavedRepository.getInstance();
         getSavedMonumentsUseCase = new GetSavedMonumentsUseCase(
                 savedRepository,
                 new AssetMonumentRepository(application)
