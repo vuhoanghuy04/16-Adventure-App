@@ -42,9 +42,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Ensure Material library is at least 1.12.0 for itemActiveIndicatorEnabled
     implementation("com.google.android.material:material:1.12.0")
-
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
@@ -59,9 +57,11 @@ dependencies {
 
     implementation("com.github.yuyakaido:cardstackview:2.3.4")
 
-    // --- CÁC THƯ VIỆN FIREBASE ---
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
-    implementation("com.google.firebase:firebase-firestore") // Dành cho Thư viện kiến thức của Đức
-    implementation("com.google.firebase:firebase-database")  // Dành cho phần Lưu địa danh của Huy
-    implementation("com.google.firebase:firebase-auth")      // Dành cho tính năng Đăng nhập
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-storage")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.guava:guava:31.1-android")
 }
