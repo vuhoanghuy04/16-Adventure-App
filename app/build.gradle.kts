@@ -61,7 +61,12 @@ dependencies {
 
     // --- CÁC THƯ VIỆN FIREBASE ---
     implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
-    implementation("com.google.firebase:firebase-firestore") // Dành cho Thư viện kiến thức của Đức
-    implementation("com.google.firebase:firebase-database")  // Dành cho phần Lưu địa danh của Huy
-    implementation("com.google.firebase:firebase-auth")      // Dành cho tính năng Đăng nhập
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-storage")
+
+    // --- GOOGLE AI (GEMINI) ---
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("com.google.guava:guava:33.0.0-android")
 }
