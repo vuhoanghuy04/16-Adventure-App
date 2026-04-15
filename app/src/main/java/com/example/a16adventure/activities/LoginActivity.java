@@ -13,12 +13,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast; // Thêm import này
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.a16adventure.R;
-import com.google.firebase.auth.FirebaseAuth; // Import rút gọn cho sạch code
+import com.example.a16adventure.presentation.auth.AuthViewModel;
 
 public class LoginActivity extends BaseActivity {
 
-    private FirebaseAuth mAuth;
+    private AuthViewModel authViewModel;
     private EditText edtLoginEmail, edtLoginPassword;
     private Button btnLogin;
     private TextView tvGoToRegister;
@@ -28,8 +30,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 1. Khởi tạo Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+        // 1. Khởi tạo ViewModel
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         // 2. Ánh xạ View
         edtLoginEmail = findViewById(R.id.edtLoginEmail);
@@ -42,6 +44,7 @@ public class LoginActivity extends BaseActivity {
             setupStyledText();
         }
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_profile);
+        observeViewModel();
 
         // 4. Sự kiện chuyển sang trang Đăng ký
         if (tvGoToRegister != null) {
@@ -69,23 +72,31 @@ public class LoginActivity extends BaseActivity {
                     return;
                 }
 
-                // Gửi yêu cầu đăng nhập lên Firebase
-                mAuth.signInWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(this, task -> {
-                            if (task.isSuccessful()) {
-                                // THÀNH CÔNG: Chuyển về MainActivity
-                                Toast.makeText(LoginActivity.this, "Chào mừng bạn quay trở lại!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                // THẤT BẠI: Hiển thị lỗi (Sai mật khẩu, không có mạng, email chưa đăng ký...)
-                                String errorMsg = task.getException() != null ? task.getException().getMessage() : "Lỗi đăng nhập";
-                                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + errorMsg, Toast.LENGTH_LONG).show();
-                            }
-                        });
+                // Gửi yêu cầu đăng nhập qua ViewModel/UseCase/Repository
+                authViewModel.signIn(email, password);
             });
         }
+    }
+
+    private void observeViewModel() {
+        authViewModel.getCurrentUserLiveData().observe(this, user -> {
+            if (user == null) return;
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        authViewModel.getSuccessMessage().observe(this, message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        authViewModel.getErrorMessage().observe(this, message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Đăng nhập thất bại: " + message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setupStyledText() {

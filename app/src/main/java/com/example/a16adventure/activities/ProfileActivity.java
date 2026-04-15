@@ -8,24 +8,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import com.example.a16adventure.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.a16adventure.domain.model.UserSession;
+import com.example.a16adventure.presentation.auth.AuthViewModel;
 
 public class ProfileActivity extends BaseActivity {
 
     private TextView tvProfileName, tvProfileEmail;
     private Button btnLogout;
     private LinearLayout btnSavedMonuments;
-    private FirebaseAuth mAuth;
+    private AuthViewModel authViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // 1. Khởi tạo Firebase Auth và Ánh xạ View
-        mAuth = FirebaseAuth.getInstance();
+        // 1. Khởi tạo AuthViewModel và Ánh xạ View
+        authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         tvProfileName = findViewById(R.id.tvProfileName);
         tvProfileEmail = findViewById(R.id.tvProfileEmail);
         btnLogout = findViewById(R.id.btnLogout);
@@ -35,7 +37,8 @@ public class ProfileActivity extends BaseActivity {
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_profile);
 
         // 3. LẤY DỮ LIỆU NGƯỜI DÙNG TỪ FIREBASE
-        loadUserData();
+        observeViewModel();
+        authViewModel.loadCurrentUser();
 
         // 4. XỬ LÝ NÚT ĐỊA DANH ĐÃ LƯU
         if (btnSavedMonuments != null) {
@@ -55,8 +58,7 @@ public class ProfileActivity extends BaseActivity {
         // 5. XỬ LÝ ĐĂNG XUẤT
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
-                mAuth.signOut();
-                Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                authViewModel.signOut();
 
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -66,22 +68,28 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
-    private void loadUserData() {
-        FirebaseUser user = mAuth.getCurrentUser();
-
-        if (user != null) {
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-
-            if (tvProfileName != null) {
-                tvProfileName.setText(name != null && !name.isEmpty() ? name : "Chưa đặt tên");
+    private void observeViewModel() {
+        authViewModel.getCurrentUserLiveData().observe(this, this::renderUser);
+        authViewModel.getSuccessMessage().observe(this, message -> {
+            if (message != null && !message.trim().isEmpty()) {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
-            if (tvProfileEmail != null) {
-                tvProfileEmail.setText(email);
-            }
-        } else {
+        });
+    }
+
+    private void renderUser(UserSession user) {
+        if (user == null) {
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
             finish();
+            return;
+        }
+
+        if (tvProfileName != null) {
+            String name = user.getDisplayName();
+            tvProfileName.setText(name != null && !name.isEmpty() ? name : "Chưa đặt tên");
+        }
+        if (tvProfileEmail != null) {
+            tvProfileEmail.setText(user.getEmail());
         }
     }
 }
