@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -56,14 +57,11 @@ dependencies {
 
     implementation("com.github.yuyakaido:cardstackview:2.3.4")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation(platform("com.google.firebase:firebase-bom:34.12.0"))
     implementation("com.google.firebase:firebase-firestore")
+    implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-storage")
-
-    // Cập nhật Google Gemini AI SDK lên 0.9.0
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-    
-    // Thêm Guava hỗ trợ Java Futures
     implementation("com.google.guava:guava:31.1-android")
 }
