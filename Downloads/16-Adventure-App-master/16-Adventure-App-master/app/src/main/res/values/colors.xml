@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="liquid_bg_start">#E0C3FC</color> <color name="liquid_bg_end">#8EC5FC</color>   <color name="liquid_pink">#FF9A9E</color>
-
-    <color name="glass_white_fill">#66FFFFFF</color> <color name="glass_white_stroke">#B3FFFFFF</color> <color name="glass_text_primary">#212121</color>
-    <color name="glass_text_secondary">#757575</color>
-</resources>

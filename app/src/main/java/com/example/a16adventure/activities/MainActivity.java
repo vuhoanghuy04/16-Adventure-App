@@ -25,6 +25,7 @@ import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.MonumentAdapter;
 import com.example.a16adventure.models.Monument;
 import com.example.a16adventure.models.MonumentDataManager;
+import com.example.a16adventure.models.MonumentRepository;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.ChipGroup;
 
@@ -296,36 +297,7 @@ public class MainActivity extends BaseActivity {
 
 
     private void setupData() {
-        fullMonumentList = new ArrayList<>();
-        try {
-            java.io.InputStream is = getAssets().open("monuments.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            String jsonString = new String(buffer, "UTF-8");
-            org.json.JSONArray jsonArray = new org.json.JSONArray(jsonString);
-
-            for (int i = 0; i < jsonArray.length(); i++) {
-                org.json.JSONObject obj = jsonArray.getJSONObject(i);
-                Monument m = new Monument(
-                        obj.getString("id"),
-                        obj.getString("name"),
-                        obj.getString("district"),
-                        obj.getString("description"),
-                        obj.getString("imageUrl"),
-                        obj.getDouble("lat"),
-                        obj.getDouble("lng")
-                );
-                fullMonumentList.add(m);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // Đưa danh sách vừa load vào kho quản lý chung
-        MonumentDataManager.getInstance().setMonumentList(fullMonumentList);
-
+        fullMonumentList = new ArrayList<>(MonumentRepository.loadFromAssets(this));
         MonumentDataManager.getInstance().setMonumentList(fullMonumentList);
         Log.d("DEBUG_SAVE", "Da nap " + fullMonumentList.size() + " dia danh vao kho chung");
     }
