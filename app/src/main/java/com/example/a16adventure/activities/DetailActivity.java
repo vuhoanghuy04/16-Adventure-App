@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
+import com.example.a16adventure.util.AppConstants;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -50,12 +51,12 @@ public class DetailActivity extends AppCompatActivity {
         // 3. Nhận dữ liệu (Intent Extras) từ Adapter gửi sang
         Intent intent = getIntent();
         if (intent != null) {
-            String name = intent.getStringExtra("EXTRA_NAME");
-            String district = intent.getStringExtra("EXTRA_DISTRICT");
-            String desc = intent.getStringExtra("EXTRA_DESC");
-            String imageUrl = intent.getStringExtra("EXTRA_IMAGE");
-            destLat = intent.getDoubleExtra("EXTRA_LAT", 0);
-            destLng = intent.getDoubleExtra("EXTRA_LNG", 0);
+            String name = intent.getStringExtra(AppConstants.Extras.MONUMENT_NAME);
+            String district = intent.getStringExtra(AppConstants.Extras.MONUMENT_DISTRICT);
+            String desc = intent.getStringExtra(AppConstants.Extras.MONUMENT_DESC);
+            String imageUrl = intent.getStringExtra(AppConstants.Extras.MONUMENT_IMAGE);
+            destLat = intent.getDoubleExtra(AppConstants.Extras.MONUMENT_LAT, 0);
+            destLng = intent.getDoubleExtra(AppConstants.Extras.MONUMENT_LNG, 0);
 
             // 4. Đổ dữ liệu lên giao diện
             // Chữ tiêu đề to trên ảnh

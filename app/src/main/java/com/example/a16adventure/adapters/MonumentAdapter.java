@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
 import com.example.a16adventure.activities.DetailActivity;
 import com.example.a16adventure.models.Monument;
+import com.example.a16adventure.util.AppConstants;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -66,12 +67,12 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentAdapter.Monume
         // 1. Chuyển trang khi bấm vào Ảnh/Nền thẻ
         holder.cardContainer.setOnClickListener(v -> {
             android.content.Intent intent = new android.content.Intent(context, DetailActivity.class);
-            intent.putExtra("EXTRA_NAME", monument.getName());
-            intent.putExtra("EXTRA_DISTRICT", monument.getDistrict());
-            intent.putExtra("EXTRA_DESC", monument.getDescription());
-            intent.putExtra("EXTRA_IMAGE", monument.getImageUrl());
-            intent.putExtra("EXTRA_LAT", monument.getLatitude());
-            intent.putExtra("EXTRA_LNG", monument.getLongitude());
+            intent.putExtra(AppConstants.Extras.MONUMENT_NAME, monument.getName());
+            intent.putExtra(AppConstants.Extras.MONUMENT_DISTRICT, monument.getDistrict());
+            intent.putExtra(AppConstants.Extras.MONUMENT_DESC, monument.getDescription());
+            intent.putExtra(AppConstants.Extras.MONUMENT_IMAGE, monument.getImageUrl());
+            intent.putExtra(AppConstants.Extras.MONUMENT_LAT, monument.getLatitude());
+            intent.putExtra(AppConstants.Extras.MONUMENT_LNG, monument.getLongitude());
             context.startActivity(intent);
         });
 
@@ -141,9 +142,9 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentAdapter.Monume
 
             // --- ĐỒNG BỘ LÊN FIREBASE REALTIME DATABASE ---
             com.google.firebase.database.DatabaseReference savedRef = com.google.firebase.database.FirebaseDatabase.getInstance()
-                    .getReference("users")
+                    .getReference(AppConstants.FirebasePaths.USERS)
                     .child(uid)
-                    .child("saved_ids")
+                    .child(AppConstants.FirebasePaths.SAVED_IDS)
                     .child(monumentId);
 
             if (newSavedState) {

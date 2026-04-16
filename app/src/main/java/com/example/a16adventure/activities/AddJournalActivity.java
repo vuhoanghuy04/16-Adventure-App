@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a16adventure.R;
 import com.example.a16adventure.models.JournalEntry;
+import com.example.a16adventure.util.AppConstants;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,7 +72,7 @@ public class AddJournalActivity extends AppCompatActivity {
             existingJournalId = intent.getStringExtra("JOURNAL_ID");
             etMonumentName.setText(intent.getStringExtra("MONUMENT_NAME"));
             etNote.setText(intent.getStringExtra("NOTE"));
-            existingImageUrl = intent.getStringExtra("IMAGE_URL");
+            existingImageUrl = intent.getStringExtra(AppConstants.Extras.IMAGE_URL);
             long timestamp = intent.getLongExtra("TIMESTAMP", System.currentTimeMillis());
             calendar.setTimeInMillis(timestamp);
             updateDateLabel();
