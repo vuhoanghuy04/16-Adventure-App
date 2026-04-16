@@ -29,17 +29,19 @@ public class ExploreActivity extends BaseActivity {
             });
         }
 
-        // 2. Thư viện Đa phương tiện (Sẽ làm sau)
+        // 2. Thư viện Đa phương tiện
         if (btnMedia != null) {
             btnMedia.setOnClickListener(v -> {
-                android.widget.Toast.makeText(this, "Tính năng Thư viện Đa phương tiện đang phát triển", android.widget.Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ExploreActivity.this, MediaLibraryActivity.class);
+                startActivity(intent);
             });
         }
 
-        // 3. Lễ hội và Sự kiện (Sẽ làm sau)
+        // 3. Lễ hội và Sự kiện
         if (btnFestival != null) {
             btnFestival.setOnClickListener(v -> {
-                android.widget.Toast.makeText(this, "Tính năng Lễ hội và Sự kiện đang phát triển", android.widget.Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ExploreActivity.this, EventListActivity.class);
+                startActivity(intent);
             });
         }
     }

@@ -56,6 +56,12 @@
         <activity android:name=".activities.OfflineMapActivity" />
         <activity android:name=".activities.JournalListActivity" />
         <activity android:name=".activities.AddJournalActivity" />
+        <activity android:name=".activities.EventDetailActivity" />
+        <activity android:name=".activities.EventListActivity" />
+        <activity android:name=".activities.LandmarkGalleryActivity" />
+        <activity android:name=".activities.MediaLibraryActivity" />
+        <activity android:name=".activities.PhotoViewerActivity" />
+        <activity android:name=".activities.VideoPlayerActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

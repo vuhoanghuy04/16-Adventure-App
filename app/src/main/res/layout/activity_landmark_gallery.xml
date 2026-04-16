@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Toolbar (Nút Back) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
+                
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="8dp"
+                    android:src="?attr/homeAsUpIndicator"
+                    app:tint="@color/black"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true" />
+            </LinearLayout>
+
+            <!-- ===== THÔNG TIN DI TÍCH ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="20dp"
+                android:background="@color/white">
+
+                <!-- Badge Quận/Huyện -->
+                <TextView
+                    android:id="@+id/tvDistrict"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_district"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:text="Quận Hồng Bàng"
+                    android:textColor="#FFB300"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <!-- Tên di tích -->
+                <TextView
+                    android:id="@+id/tvLandmarkName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Tên di tích"
+                    android:textColor="@color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:lineSpacingExtra="2dp" />
+
+                <!-- Divider vàng -->
+                <View
+                    android:layout_width="48dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="14dp"
+                    android:background="#FFB300"
+                    android:backgroundTint="@null" />
+
+                <!-- Mô tả -->
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mô tả về di tích này..."
+                    android:textColor="#4A4A4A"
+                    android:textSize="15sp"
+                    android:lineSpacingExtra="4dp" />
+            </LinearLayout>
+
+            <!-- ===== ẢNH GIỚI THIỆU ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:layout_marginTop="10dp">
+                
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="22dp"
+                        android:background="#FFB300"
+                        android:backgroundTint="@null"
+                        android:layout_marginEnd="10dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Ảnh giới thiệu"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:clipToPadding="false">
+                    
+                    <LinearLayout
+                        android:id="@+id/layoutPhotoGallery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <!-- Dynamic images will be added here via Java -->
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <!-- ===== PHẦN VIDEO (chỉ hiện nếu có video) ===== -->
+            <LinearLayout
+                android:id="@+id/layoutVideoSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp"
+                android:layout_marginTop="28dp"
+                android:visibility="gone">
+
+                <!-- Tiêu đề phần video -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="14dp">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="22dp"
+                        android:background="#FFB300"
+                        android:backgroundTint="@null"
+                        android:layout_marginEnd="10dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Video giới thiệu"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Card Video: thumbnail + play button → click mở VideoPlayerActivity -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="0dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <!-- Thumbnail -->
+                        <ImageView
+                            android:id="@+id/imgVideoThumbnail"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/bg_weather_default" />
+
+                        <!-- Gradient overlay -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/gradient_bottom_overlay" />
+
+                        <!-- Nút Play -->
+                        <FrameLayout
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/bg_play_button"
+                            android:clickable="false"
+                            android:focusable="false">
+
+                            <ImageView
+                                android:layout_width="28dp"
+                                android:layout_height="28dp"
+                                android:layout_gravity="center"
+                                android:src="@android:drawable/ic_media_play"
+                                app:tint="@color/white" />
+                        </FrameLayout>
+
+                        <!-- Thanh info dưới cùng -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="bottom"
+                            android:background="#BB000000"
+                            android:padding="14dp"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@android:drawable/ic_media_play"
+                                app:tint="#FFB300"
+                                android:layout_marginEnd="10dp" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/tvVideoTitle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Video giới thiệu"
+                                    android:textColor="@color/white"
+                                    android:textSize="13sp"
+                                    android:textStyle="bold"
+                                    android:maxLines="1"
+                                    android:ellipsize="end" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Chạm để phát video"
+                                    android:textColor="#99FFFFFF"
+                                    android:textSize="11sp"
+                                    android:layout_marginTop="2dp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📺  Video phát toàn màn hình · Chất lượng cao"
+                    android:textColor="#66000000"
+                    android:textSize="11sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal" />
+
+            </LinearLayout>
+
+            <!-- Spacing cuối trang -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="48dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
