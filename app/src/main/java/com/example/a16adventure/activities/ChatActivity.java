@@ -245,7 +245,7 @@ public class ChatActivity extends AppCompatActivity {
         
         if (selectedBitmap != null) {
             if (mAuth.getCurrentUser() == null) {
-            Toast.makeText(this, "Hãy đăng nhập để có thể gửi ảnh!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_required_feature), Toast.LENGTH_SHORT).show();
                 return;
             }
             uploadImageToFirebase(selectedBitmap, userMsgContent);
