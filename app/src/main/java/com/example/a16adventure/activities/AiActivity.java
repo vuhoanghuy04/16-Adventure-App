@@ -12,5 +12,6 @@ public class AiActivity extends BaseActivity {
 
         // Kích hoạt thanh điều hướng, cho tab "Trợ lý AI" sáng màu
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_ai);
+
     }
 }
