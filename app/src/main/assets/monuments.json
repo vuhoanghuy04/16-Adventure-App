@@ -1,59 +1,515 @@
 [
-  { "id": "1", "name": "Nhà hát lớn Hải Phòng", "district": "Hồng Bàng", "description": "Một trong 3 nhà hát lớn nhất Việt Nam được Pháp xây dựng, mang đậm dấu ấn kiến trúc Baroque sang trọng.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nhahatlon.webp?alt=media&token=86953d44-f103-4fe7-a6a8-709e8eb0cfe3", "lat": 20.8601, "lng": 106.6823 },
-  { "id": "2", "name": "Ga Hải Phòng", "district": "Ngô Quyền", "description": "Nhà ga xe lửa cổ kính với kiến trúc tuyệt đẹp, điểm đầu của tuyến đường sắt Hải Phòng - Hà Nội lịch sử.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/gahaiphong.webp?alt=media&token=9958dadf-0331-488b-a8c9-9e9e719aa1a3", "lat": 20.8576, "lng": 106.6874 },
-  { "id": "3", "name": "Cầu Hoàng Văn Thụ", "district": "Hồng Bàng", "description": "Cây cầu vòm thép biểu tượng mới của thành phố, mang thiết kế hình cánh chim biển vươn mình đầy kiêu hãnh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cauhoangvanthu.webp?alt=media&token=670016d4-9136-462d-a685-6d2949f60be1", "lat": 20.8687, "lng": 106.6806 },
-  { "id": "4", "name": "Chợ Tam Bạc", "district": "Hồng Bàng", "description": "Khu chợ truyền thống sầm uất gắn liền với những thăng trầm lịch sử, nơi hội tụ văn hóa giao thương của Xứ Đông.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chotambac.webp?alt=media&token=46904d81-83e2-4f2e-b417-09dca753bae5", "lat": 20.8580, "lng": 106.6770 },
-  { "id": "5", "name": "Quần đảo Cát Bà", "district": "Cát Hải", "description": "Hòn ngọc xanh của Vịnh Bắc Bộ, khu dự trữ sinh quyển thế giới với thảm rừng nguyên sinh và hệ sinh thái biển phong phú.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/catba.webp?alt=media&token=af608b21-400c-420e-a3c0-045233798fa8", "lat": 20.7964, "lng": 107.0392 },
-  { "id": "6", "name": "Vịnh Lan Hạ", "district": "Cát Hải", "description": "Vịnh biển êm đềm với hàng trăm hòn đảo đá vôi nhô lên từ mặt nước xanh biếc, được ví như Vịnh Hạ Long thu nhỏ.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vinhlanha.webp?alt=media&token=9579d26d-b633-4434-a42f-e2c2cc122599", "lat": 20.7583, "lng": 107.0544 },
-  { "id": "7", "name": "Bãi biển Đồ Sơn", "district": "Đồ Sơn", "description": "Khu du lịch nghỉ mát nổi tiếng với phong cảnh sơn thủy hữu tình, rợp bóng phi lao và những câu chuyện truyền thuyết.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/doson.webp?alt=media&token=f61059fe-5a00-42af-abf4-1b496426bb72", "lat": 20.7095, "lng": 106.7865 },
-  { "id": "8", "name": "Hải đăng Hòn Dáu", "district": "Đồ Sơn", "description": "Ngọn hải đăng hơn trăm năm tuổi sừng sững giữa biển khơi, được mệnh danh là 'Mắt ngọc của Tổ quốc'.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/haidanghondau.webp?alt=media&token=37d3bc05-f182-446d-b045-36c9d12e1abf", "lat": 20.6669, "lng": 106.8159 },
-  { "id": "9", "name": "Bến Nghiêng", "district": "Đồ Sơn", "description": "Di tích lịch sử hào hùng, nơi chứng kiến những tên lính thực dân Pháp cuối cùng rút khỏi miền Bắc Việt Nam.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bennghieng.webp?alt=media&token=4329ad30-4e09-4f37-b53f-58a94b4f2cbe", "lat": 20.6722, "lng": 106.8115 },
-  { "id": "10", "name": "Biệt thự Bảo Đại", "district": "Đồ Sơn", "description": "Dinh thự nghỉ dưỡng xa hoa mang phong cách kiến trúc Pháp cổ điển của vị vua cuối cùng triều Nguyễn.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dinhbaodai.webp?alt=media&token=ebb5be61-b60a-4381-9f53-655f3bcdf101", "lat": 20.7042, "lng": 106.7972 },
-  { "id": "11", "name": "Đảo Bạch Long Vĩ", "district": "Bạch Long Vĩ", "description": "Hòn đảo tiền tiêu xa bờ nhất của Vịnh Bắc Bộ, có vai trò chiến lược trong bảo vệ chủ quyền và phát triển kinh tế biển.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bachlongvy.webp?alt=media&token=caa69189-69fd-42ff-b136-5658dfddf63a", "lat": 20.1328, "lng": 107.7275 },
-  { "id": "12", "name": "Đền Nghè", "district": "Lê Chân", "description": "Di tích tâm linh linh thiêng, nơi suy tôn nữ tướng Lê Chân - người có công lớn trong việc khai hoang lập nên thành phố.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dennghe.webp?alt=media&token=0c7e44ba-c7fd-40c4-9acf-fd1f2e2ab0f7", "lat": 20.8550, "lng": 106.6780 },
-  { "id": "13", "name": "Đình Hàng Kênh", "district": "Lê Chân", "description": "Tuyệt tác điêu khắc gỗ tinh xảo của nghệ thuật dân gian Việt Nam, nơi thờ vị anh hùng dân tộc Ngô Quyền.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dinhhangkenh.webp?alt=media&token=5b71288c-aa98-4488-af4b-371457013242", "lat": 20.8415, "lng": 106.6841 },
-  { "id": "14", "name": "Tháp Tường Long", "district": "Đồ Sơn", "description": "Bảo tháp Phật giáo linh thiêng được xây dựng từ triều Lý, tọa lạc uy nghi trên đỉnh núi Ngọc.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/thaptuonglong.webp?alt=media&token=f9d36fe3-1128-492d-b095-2a49dfb42772", "lat": 20.7226, "lng": 106.7869 },
-  { "id": "15", "name": "Chùa Dư Hàng", "district": "Lê Chân", "description": "Danh lam cổ tự ngàn năm tuổi, lưu giữ nhiều pho tượng Phật quý giá và những bảo vật văn hóa tâm linh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuaduhang.webp?alt=media&token=ea960694-c13d-44a9-9d8c-4ec88fff5e56", "lat": 20.8450, "lng": 106.6721 },
-  { "id": "16", "name": "Chùa Cao Linh", "district": "An Dương", "description": "Công trình kiến trúc Phật giáo đồ sộ, tráng lệ với vô số bức tượng Phật được điêu khắc vô cùng tinh xảo.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuacaolinh.webp?alt=media&token=78e502c6-993e-4965-9e77-44c75bfcf97b", "lat": 20.8652, "lng": 106.6025 },
-  { "id": "17", "name": "Bạch Đằng Giang", "district": "Thủy Nguyên", "description": "Khu di tích lịch sử quy mô hoành tráng, tái hiện lại 3 trận thủy chiến hào hùng trên dòng sông Bạch Đằng lịch sử.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bachdanggiang.webp?alt=media&token=481f2d52-4bae-4579-b1ba-961d7eb262f0", "lat": 20.9701, "lng": 106.7188 },
-  { "id": "18", "name": "Khu di tích Trạng Trình", "district": "Vĩnh Bảo", "description": "Nơi thờ cúng và tưởng nhớ danh nhân văn hóa, nhà tiên tri vĩ đại Nguyễn Bỉnh Khiêm với không gian thanh tịnh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/khuditichtrangtrinh.webp?alt=media&token=5a03878c-1703-4352-ba15-06e16f79844d", "lat": 20.6974, "lng": 106.4886 },
-  { "id": "19", "name": "Núi Voi", "district": "An Lão", "description": "Danh lam thắng cảnh gắn liền với những truyền thuyết dân gian và hệ thống hang động thạch nhũ kỳ ảo.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nuivoi.webp?alt=media&token=b41c6f2d-5e27-45ca-a618-8a7aa12e492a", "lat": 20.8256, "lng": 106.5683 },
-  { "id": "20", "name": "Tuyệt Tình Cốc", "district": "Thủy Nguyên", "description": "Hồ nước trong xanh màu ngọc bích phẳng lặng nằm lọt thỏm giữa những dãy núi đá vôi hoang sơ, đẹp như tranh vẽ.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/tuyettinhcoc.webp?alt=media&token=fd02edae-0bae-4377-b4be-a425e7a9f76e", "lat": 20.9388, "lng": 106.6385 },
-  { "id": "21", "name": "Bảo tàng Hải quân", "district": "Dương Kinh", "description": "Nơi lưu giữ những kỷ vật hào hùng của lực lượng hải quân nhân dân Việt Nam và con đường huyền thoại Hồ Chí Minh trên biển.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baotanghaiquan.webp?alt=media&token=ee5b3025-df09-40c8-bf62-224232dee73d", "lat": 20.8228, "lng": 106.7029 },
-  { "id": "22", "name": "Côn Sơn - Kiếp Bạc", "district": "Chí Linh", "description": "Quần thể di tích quốc gia đặc biệt, nơi in đậm dấu ấn lịch sử của các anh hùng dân tộc Trần Hưng Đạo và Nguyễn Trãi.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/consonkiepbac.webp?alt=media&token=9ee0ff02-9281-444e-b571-1ffa72be2bf5", "lat": 21.1352, "lng": 106.3980 },
-  { "id": "23", "name": "Văn Miếu Mao Điền", "district": "Cẩm Giàng", "description": "Biểu tượng truyền thống hiếu học của Xứ Đông xưa, từng là nơi tổ chức các kỳ thi Hương dưới triều đại phong kiến.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vanmieumaodien.webp?alt=media&token=85bb002b-8387-438f-bb42-83ad6e219937", "lat": 20.9416, "lng": 106.2081 },
-  { "id": "24", "name": "Đảo Cò Chi Lăng Nam", "district": "Thanh Miện", "description": "Khu du lịch sinh thái tuyệt đẹp giữa lòng hồ An Dương, nơi trú ngụ của hàng vạn cá thể cò, vạc trắng xóa mỗi buổi hoàng hôn.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/daocolangchinam.webp?alt=media&token=9309f89c-a89d-4a04-b66d-418f9403d36a", "lat": 20.7251, "lng": 106.2163 },
-  { "id": "25", "name": "Làng gốm Chu Đậu", "district": "Nam Sách", "description": "Nơi khai sinh dòng gốm hoa lam tinh xảo lừng danh thế giới, từng bị thất truyền gần 400 năm nay đã được hồi sinh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langgomchudau.webp?alt=media&token=585d4a7e-3a3e-41d8-9fad-d81f99f28286", "lat": 20.9760, "lng": 106.3421 },
-  { "id": "26", "name": "Đền thờ Chu Văn An", "district": "Chí Linh", "description": "Nằm tĩnh lặng trên núi Phượng Hoàng, đây là nơi tôn vinh người thầy giáo mẫu mực của muôn đời trong lịch sử Việt Nam.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denthochuvanan.webp?alt=media&token=36defb8a-fd85-4852-a600-10e2616e969c", "lat": 21.1685, "lng": 106.4172 },
-  { "id": "27", "name": "Động Kính Chủ", "district": "Kinh Môn", "description": "Được mệnh danh là 'Nam thiên đệ lục động', vách động lưu giữ nhiều bia ma nhai quý giá được tạc trực tiếp vào đá tự nhiên.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dongkinhchu.webp?alt=media&token=92c9cbf2-e3e4-4585-8b91-bbf81596905a", "lat": 21.0371, "lng": 106.5492 },
-  { "id": "28", "name": "Bảo tàng Hải Phòng", "district": "Hồng Bàng", "description": "Công trình kiến trúc Gothique rêu phong, nơi lưu giữ hàng vạn hiện vật về lịch sử và văn hóa đặc trưng của thành phố Cảng.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baotanghaiphong.webp?alt=media&token=e36061ac-9838-451a-9177-bf9bfb56fce3", "lat": 20.8592, "lng": 106.6811 },
-  { "id": "29", "name": "Nhà thờ Lớn Hải Phòng", "district": "Hồng Bàng", "description": "Ngôi thánh đường trung tâm mang kiến trúc uy nghi, tráng lệ với tháp chuông vươn cao tĩnh lặng giữa lòng thành phố.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nhatholonhaiphong.webp?alt=media&token=e3f390eb-b60f-4404-b412-60a6c2f71bb4", "lat": 20.8611, "lng": 106.6800 },
-  { "id": "30", "name": "Cầu Bính", "district": "Hồng Bàng", "description": "Cây cầu dây văng hiện đại đầu tiên của Hải Phòng bắc qua sông Cấm, tạo nên đường cong tuyệt đẹp trên bầu trời.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/caubinh.webp?alt=media&token=36898ba1-5a6e-4c5b-a73d-cd268a1676f7", "lat": 20.8710, "lng": 106.6660 },
-  { "id": "31", "name": "Quán Hoa", "district": "Hồng Bàng", "description": "Quần thể các ki-ốt bán hoa với kiến trúc phương Tây độc đáo, rực rỡ sắc màu nằm ngay dải trung tâm thành phố.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/quanhoa.webp?alt=media&token=b34280a3-abfc-4346-9c41-6a8c4ba756b6", "lat": 20.8585, "lng": 106.6815 },
-  { "id": "32", "name": "Hồ Tam Bạc", "district": "Hồng Bàng", "description": "Lá phổi xanh của thành phố với dải công viên rợp bóng mát, nơi đàn thiên nga trắng bơi lội êm đềm mỗi buổi chiều.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hotambac.webp?alt=media&token=7b20dd9b-0a14-4f8b-aa31-dbd17ef853de", "lat": 20.8560, "lng": 106.6740 },
-  { "id": "33", "name": "Chợ Sắt", "district": "Hồng Bàng", "description": "Trung tâm thương mại sầm uất từng mang tính biểu tượng một thời của Hải Phòng, nằm soi bóng bên bờ sông Tam Bạc.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chosat.webp?alt=media&token=e9568f1a-8ebd-49f0-8cb2-527aaa3918ee", "lat": 20.8588, "lng": 106.6732 },
-  { "id": "34", "name": "Phố Cầu Đất", "district": "Ngô Quyền", "description": "Con phố thương mại cổ kính, nổi tiếng mọi miền với các tiệm bánh mỳ cay và bánh trung thu truyền thống đậm vị.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/phocaudat.webp?alt=media&token=60be6c98-6dff-4077-8c04-0995f8c5927e", "lat": 20.8544, "lng": 106.6830 },
-  { "id": "35", "name": "Cung Văn hóa Việt Tiệp", "district": "Ngô Quyền", "description": "Khuôn viên biểu diễn nghệ thuật, tổ chức sự kiện quy mô lớn và là điểm hẹn giao lưu văn hóa quen thuộc của giới trẻ.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cungviettiep.webp?alt=media&token=77e4dc74-0b7b-428e-bc34-2a8f2f9d3194", "lat": 20.8490, "lng": 106.6890 },
-  { "id": "36", "name": "Chùa Đỏ", "district": "Ngô Quyền", "description": "Ngôi chùa cổ kính độc đáo với toàn bộ mảng kiến trúc bằng gỗ được sơn son thếp vàng rực rỡ và vô cùng tĩnh tại.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuado.webp?alt=media&token=9d98798e-55d2-4007-b4ce-7f659f96002c", "lat": 20.8510, "lng": 106.6850 },
-  { "id": "37", "name": "Chùa Phổ Chiếu", "district": "Lê Chân", "description": "Ngôi chùa linh thiêng, bề thế nổi bật với ngôi tháp cửu phẩm liên hoa soi bóng xuống mặt hồ tĩnh lặng.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuaphochieu.webp?alt=media&token=ceca74a4-8a94-4487-9e5f-3333c528b5a5", "lat": 20.8350, "lng": 106.6790 },
-  { "id": "38", "name": "Hồ An Biên", "district": "Lê Chân", "description": "Điểm hẹn thư giãn lý tưởng với không gian mở, đường dạo ven hồ thoáng đãng và làn nước trong xanh giữa lòng đô thị.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hoanbien.webp?alt=media&token=9d010f6e-1be3-4d96-aaa2-dbeedb6b66ed", "lat": 20.8420, "lng": 106.6800 },
-  { "id": "39", "name": "Cầu Rào", "district": "Lê Chân", "description": "Nút giao thông huyết mạch mang hình dáng cánh buồm vươn ra biển lớn, phát sáng rực rỡ mỗi khi đêm về.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/caurao.webp?alt=media&token=67164887-a2af-4bd8-83fe-d77391ce29e9", "lat": 20.8250, "lng": 106.6850 },
-  { "id": "40", "name": "Làng hoa Hạ Lũng", "district": "Hải An", "description": "Làng nghề trồng hoa truyền thống lâu đời nhất Hải Phòng, luôn rực rỡ sắc màu và tấp nập du khách mỗi dịp giáp Tết.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langhoahalung.webp?alt=media&token=26953a07-abb7-428a-898f-4adf0a5ec590", "lat": 20.8300, "lng": 106.7050 },
-  { "id": "41", "name": "Cây đa 13 gốc", "district": "Hải An", "description": "Cây cổ thụ hàng trăm năm tuổi khổng lồ với 13 gốc đan xen rễ cành, gắn liền với những câu chuyện tâm linh huyền bí.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cayda13goc.webp?alt=media&token=e2c68d18-41c3-4dc4-8686-2408e107009c", "lat": 20.8350, "lng": 106.7150 },
-  { "id": "42", "name": "Từ Lương Xâm", "district": "Hải An", "description": "Đại bản doanh cắm cự của Ngô Quyền năm xưa, được suy tôn là một trong ba 'linh từ' linh thiêng bậc nhất trấn giữ Hải Phòng.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/tuluongxam.webp?alt=media&token=d1af1666-b731-4323-9511-bcaf86a6067d", "lat": 20.8280, "lng": 106.7100 },
-  { "id": "43", "name": "Đền Phú Xá", "district": "Hải An", "description": "Khu di tích lịch sử oai hùng gắn liền với tên tuổi nữ tướng Bùi Thị Từ Nhiên và những đóng góp cho trận Bạch Đằng.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dtlq8.webp?alt=media&token=548fb391-5965-46af-972f-1f2a17d63e88", "lat": 20.8400, "lng": 106.7200 },
-  { "id": "44", "name": "Vườn Quốc gia Cát Bà", "district": "Cát Hải", "description": "Khu rừng nguyên sinh khổng lồ với thảm thực vật đa dạng, hang động kỳ thú và là ngôi nhà của loài voọc Cát Bà quý hiếm.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vuonquocgiacatba.webp?alt=media&token=8a87b10e-d021-497f-9ad4-256fedf5edd6", "lat": 20.7980, "lng": 107.0100 },
-  { "id": "45", "name": "Làng chài Cái Bèo", "district": "Cát Hải", "description": "Một trong những ngôi làng chài nổi cổ nhất Việt Nam với vẻ đẹp mộc mạc, bình yên lênh đênh trên sóng nước mặt vịnh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langchaicaibeo.webp?alt=media&token=987b6085-86d3-497d-ace1-4f98fc4e20e4", "lat": 20.7250, "lng": 107.0500 },
-  { "id": "46", "name": "Đảo Khỉ (Cát Dứa)", "district": "Cát Hải", "description": "Hòn đảo hoang sơ thu hút du khách với bãi tắm cát trắng mịn màng và bầy khỉ lanh lợi, thân thiện sống tự do trong tự nhiên.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/daokhicatba.jpg.webp?alt=media&token=f891b0cf-51ac-466a-9227-5195eb33e167", "lat": 20.7300, "lng": 107.0600 },
-  { "id": "47", "name": "Bãi tắm Cát Cò", "district": "Cát Hải", "description": "Cụm 3 bãi tắm tuyệt đẹp được nối liền bằng con đường đi bộ uốn lượn men theo vách núi ven biển, nước xanh tận đáy.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baitamcatco.webp?alt=media&token=451fa0e4-ded7-42e2-b0d6-6d525fe94f23", "lat": 20.7180, "lng": 107.0520 },
-  { "id": "48", "name": "Pháo đài Thần Công", "district": "Cát Hải", "description": "Khu di tích lịch sử quân sự nằm chót vót trên đỉnh núi, nơi có thể thu trọn toàn cảnh Vịnh Lan Hạ hùng vĩ vào tầm mắt.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/phaodaithancong.webp?alt=media&token=163c9e97-8354-45e9-9ef9-27fa783cffa4", "lat": 20.7200, "lng": 107.0450 },
-  { "id": "49", "name": "Khu du lịch Hòn Dáu", "district": "Đồ Sơn", "description": "Quần thể nghỉ dưỡng sinh thái rợp bóng cây xanh, được ví như 'Đà Lạt thu nhỏ' với hệ thống hồ bơi và rừng nguyên sinh.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hondau.webp?alt=media&token=3f161c10-1e49-4ba7-9a04-8dd7b36ac20e", "lat": 20.6750, "lng": 106.8000 },
-  { "id": "50", "name": "Đền Bà Đế", "district": "Đồ Sơn", "description": "Ngôi đền linh thiêng mang câu chuyện xót xa về nàng thị nữ tài sắc, nằm tĩnh lặng dưới chân núi Độc hướng ra biển khơi.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denbade.webp?alt=media&token=f0a089a6-f0bc-46a0-a1fa-160be0a2ca0a", "lat": 20.6900, "lng": 106.7900 },
-  { "id": "51", "name": "Bến tàu không số K15", "district": "Đồ Sơn", "description": "Di tích kiêu hùng, điểm xuất phát của những chuyến tàu không số huyền thoại trên tuyến đường Hồ Chí Minh trên biển.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bentaukhongso.webp?alt=media&token=79fc4891-f889-4384-94b7-fd6849775635", "lat": 20.6690, "lng": 106.8150 },
-  { "id": "52", "name": "Đồi Thiên Văn", "district": "Kiến An", "description": "Ngọn đồi xanh mát thông reo, nơi đặt trạm khí tượng và đài thiên văn dự báo thời tiết cổ nhất khu vực Đông Dương.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/doithienvan.webp?alt=media&token=c7f31f67-36d7-4373-a7b6-6cb24c256d2b", "lat": 20.8050, "lng": 106.6300 },
-  { "id": "53", "name": "Hồ Hạnh Phúc", "district": "Kiến An", "description": "Không gian xanh êm đềm nằm lọt thỏm giữa trung tâm quận Kiến An, là địa điểm lý tưởng để tản bộ ngắm hoàng hôn.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hohanhphuc.webp?alt=media&token=f9873606-4fed-467c-b595-7ce5bb33db62", "lat": 20.8000, "lng": 106.6350 },
-  { "id": "54", "name": "Vương triều Mạc", "district": "Kiến Thụy", "description": "Khu tưởng niệm mang kiến trúc cung đình bề thế, nơi ghi nhận công lao to lớn và tri ân các vị vua thời kỳ nhà Mạc.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vuongtrieuMac.webp?alt=media&token=8cffa5de-dad9-43ca-9b56-488c80b2d7c2", "lat": 20.7300, "lng": 106.6200 },
-  { "id": "55", "name": "Đền Mõ", "district": "Kiến Thụy", "description": "Di tích văn hóa thờ công chúa Quỳnh Trân triều Trần, nổi danh với cây gạo cổ thụ khổng lồ đã tồn tại hơn 700 năm tuổi.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denmo.webp?alt=media&token=c9975460-54d8-4b84-9cc3-ed6b88e4e673", "lat": 20.7500, "lng": 106.6500 },
-  { "id": "56", "name": "Suối khoáng Tiên Lãng", "district": "Tiên Lãng", "description": "Khu du lịch sinh thái sở hữu nguồn mạch nước khoáng ngầm tự nhiên, mang lại cảm giác thư thái và phục hồi sức khỏe.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/suoinuocnongtienlang.webp?alt=media&token=4f938918-02e8-409c-a01d-081236c3557b", "lat": 20.6500, "lng": 106.5600 },
-  { "id": "57", "name": "Bãi cọc Cao Quỳ", "district": "Thủy Nguyên", "description": "Bãi cọc gỗ lim vừa được khai quật, là minh chứng lịch sử chấn động cho trận thủy chiến trên sông Bạch Đằng năm 1288.", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baicoccaoquy.webp?alt=media&token=e4326ff4-e0fc-453a-a0a2-3d25a6aba636", "lat": 20.9700, "lng": 106.6500 }
+  {
+    "id": "1",
+    "name": "Nhà hát lớn Hải Phòng",
+    "district": "Hồng Bàng",
+    "description": "Một trong 3 nhà hát lớn nhất Việt Nam được Pháp xây dựng, mang đậm dấu ấn kiến trúc Baroque sang trọng.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nhahatlon.webp?alt=media&token=86953d44-f103-4fe7-a6a8-709e8eb0cfe3",
+    "lat": 20.857122,
+    "lng": 106.681811
+  },
+  {
+    "id": "2",
+    "name": "Ga Hải Phòng",
+    "district": "Ngô Quyền",
+    "description": "Nhà ga xe lửa cổ kính với kiến trúc tuyệt đẹp, điểm đầu của tuyến đường sắt Hải Phòng - Hà Nội lịch sử.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/gahaiphong.webp?alt=media&token=9958dadf-0331-488b-a8c9-9e9e719aa1a3",
+    "lat": 20.855957,
+    "lng": 106.68739
+  },
+  {
+    "id": "3",
+    "name": "Cầu Hoàng Văn Thụ",
+    "district": "Hồng Bàng",
+    "description": "Cây cầu vòm thép biểu tượng mới của thành phố, mang thiết kế hình cánh chim biển vươn mình đầy kiêu hãnh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cauhoangvanthu.webp?alt=media&token=670016d4-9136-462d-a685-6d2949f60be1",
+    "lat": 20.869387,
+    "lng": 106.681228
+  },
+  {
+    "id": "4",
+    "name": "Chợ Tam Bạc",
+    "district": "Hồng Bàng",
+    "description": "Khu chợ truyền thống sầm uất gắn liền với những thăng trầm lịch sử, nơi hội tụ văn hóa giao thương của Xứ Đông.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chotambac.webp?alt=media&token=46904d81-83e2-4f2e-b417-09dca753bae5",
+    "lat": 20.857063,
+    "lng": 106.672642
+  },
+  {
+    "id": "5",
+    "name": "Quần đảo Cát Bà",
+    "district": "Cát Hải",
+    "description": "Hòn ngọc xanh của Vịnh Bắc Bộ, khu dự trữ sinh quyển thế giới với thảm rừng nguyên sinh và hệ sinh thái biển phong phú.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/catba.webp?alt=media&token=af608b21-400c-420e-a3c0-045233798fa8",
+    "lat": 20.7964,
+    "lng": 107.0392
+  },
+  {
+    "id": "6",
+    "name": "Vịnh Lan Hạ",
+    "district": "Cát Hải",
+    "description": "Vịnh biển êm đềm với hàng trăm hòn đảo đá vôi nhô lên từ mặt nước xanh biếc, được ví như Vịnh Hạ Long thu nhỏ.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vinhlanha.webp?alt=media&token=9579d26d-b633-4434-a42f-e2c2cc122599",
+    "lat": 20.751572,
+    "lng": 107.104278
+  },
+  {
+    "id": "7",
+    "name": "Bãi biển Đồ Sơn",
+    "district": "Đồ Sơn",
+    "description": "Khu du lịch nghỉ mát nổi tiếng với phong cảnh sơn thủy hữu tình, rợp bóng phi lao và những câu chuyện truyền thuyết.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/doson.webp?alt=media&token=f61059fe-5a00-42af-abf4-1b496426bb72",
+    "lat": 20.685962,
+    "lng": 106.795401
+  },
+  {
+    "id": "8",
+    "name": "Hải đăng Hòn Dáu",
+    "district": "Đồ Sơn",
+    "description": "Ngọn hải đăng hơn trăm năm tuổi sừng sững giữa biển khơi, được mệnh danh là 'Mắt ngọc của Tổ quốc'.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/haidanghondau.webp?alt=media&token=37d3bc05-f182-446d-b045-36c9d12e1abf",
+    "lat": 20.666424,
+    "lng": 106.816392
+  },
+  {
+    "id": "9",
+    "name": "Bến Nghiêng",
+    "district": "Đồ Sơn",
+    "description": "Di tích lịch sử hào hùng, nơi chứng kiến những tên lính thực dân Pháp cuối cùng rút khỏi miền Bắc Việt Nam.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bennghieng.webp?alt=media&token=4329ad30-4e09-4f37-b53f-58a94b4f2cbe",
+    "lat": 20.68695,
+    "lng": 106.792894
+  },
+  {
+    "id": "10",
+    "name": "Biệt thự Bảo Đại",
+    "district": "Đồ Sơn",
+    "description": "Dinh thự nghỉ dưỡng xa hoa mang phong cách kiến trúc Pháp cổ điển của vị vua cuối cùng triều Nguyễn.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dinhbaodai.webp?alt=media&token=ebb5be61-b60a-4381-9f53-655f3bcdf101",
+    "lat": 20.7042,
+    "lng": 106.7972
+  },
+  {
+    "id": "11",
+    "name": "Đảo Bạch Long Vĩ",
+    "district": "Bạch Long Vĩ",
+    "description": "Hòn đảo tiền tiêu xa bờ nhất của Vịnh Bắc Bộ, có vai trò chiến lược trong bảo vệ chủ quyền và phát triển kinh tế biển.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bachlongvy.webp?alt=media&token=caa69189-69fd-42ff-b136-5658dfddf63a",
+    "lat": 20.135096,
+    "lng": 107.730106
+  },
+  {
+    "id": "12",
+    "name": "Đền Nghè",
+    "district": "Lê Chân",
+    "description": "Di tích tâm linh linh thiêng, nơi suy tôn nữ tướng Lê Chân - người có công lớn trong việc khai hoang lập nên thành phố.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dennghe.webp?alt=media&token=0c7e44ba-c7fd-40c4-9acf-fd1f2e2ab0f7",
+    "lat": 20.854603,
+    "lng": 106.680293
+  },
+  {
+    "id": "13",
+    "name": "Đình Hàng Kênh",
+    "district": "Lê Chân",
+    "description": "Tuyệt tác điêu khắc gỗ tinh xảo của nghệ thuật dân gian Việt Nam, nơi thờ vị anh hùng dân tộc Ngô Quyền.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dinhhangkenh.webp?alt=media&token=5b71288c-aa98-4488-af4b-371457013242",
+    "lat": 20.846255,
+    "lng": 106.684435
+  },
+  {
+    "id": "14",
+    "name": "Tháp Tường Long",
+    "district": "Đồ Sơn",
+    "description": "Bảo tháp Phật giáo linh thiêng được xây dựng từ triều Lý, tọa lạc uy nghi trên đỉnh núi Ngọc.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/thaptuonglong.webp?alt=media&token=f9d36fe3-1128-492d-b095-2a49dfb42772",
+    "lat": 20.71427,
+    "lng": 106.770396
+  },
+  {
+    "id": "15",
+    "name": "Chùa Dư Hàng",
+    "district": "Lê Chân",
+    "description": "Danh lam cổ tự ngàn năm tuổi, lưu giữ nhiều pho tượng Phật quý giá và những bảo vật văn hóa tâm linh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuaduhang.webp?alt=media&token=ea960694-c13d-44a9-9d8c-4ec88fff5e56",
+    "lat": 20.845154,
+    "lng": 106.676002
+  },
+  {
+    "id": "16",
+    "name": "Chùa Cao Linh",
+    "district": "An Dương",
+    "description": "Công trình kiến trúc Phật giáo đồ sộ, tráng lệ với vô số bức tượng Phật được điêu khắc vô cùng tinh xảo.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuacaolinh.webp?alt=media&token=78e502c6-993e-4965-9e77-44c75bfcf97b",
+    "lat": 20.8652,
+    "lng": 106.6025
+  },
+  {
+    "id": "17",
+    "name": "Bạch Đằng Giang",
+    "district": "Thủy Nguyên",
+    "description": "Khu di tích lịch sử quy mô hoành tráng, tái hiện lại 3 trận thủy chiến hào hùng trên dòng sông Bạch Đằng lịch sử.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bachdanggiang.webp?alt=media&token=481f2d52-4bae-4579-b1ba-961d7eb262f0",
+    "lat": 20.963681,
+    "lng": 106.764343
+  },
+  {
+    "id": "18",
+    "name": "Khu di tích Trạng Trình",
+    "district": "Vĩnh Bảo",
+    "description": "Nơi thờ cúng và tưởng nhớ danh nhân văn hóa, nhà tiên tri vĩ đại Nguyễn Bỉnh Khiêm với không gian thanh tịnh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/khuditichtrangtrinh.webp?alt=media&token=5a03878c-1703-4352-ba15-06e16f79844d",
+    "lat": 20.6974,
+    "lng": 106.4886
+  },
+  {
+    "id": "19",
+    "name": "Núi Voi",
+    "district": "An Lão",
+    "description": "Danh lam thắng cảnh gắn liền với những truyền thuyết dân gian và hệ thống hang động thạch nhũ kỳ ảo.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nuivoi.webp?alt=media&token=b41c6f2d-5e27-45ca-a618-8a7aa12e492a",
+    "lat": 20.839706,
+    "lng": 106.567777
+  },
+  {
+    "id": "20",
+    "name": "Tuyệt Tình Cốc",
+    "district": "Thủy Nguyên",
+    "description": "Hồ nước trong xanh màu ngọc bích phẳng lặng nằm lọt thỏm giữa những dãy núi đá vôi hoang sơ, đẹp như tranh vẽ.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/tuyettinhcoc.webp?alt=media&token=fd02edae-0bae-4377-b4be-a425e7a9f76e",
+    "lat": 21.000758,
+    "lng": 106.57156
+  },
+  {
+    "id": "21",
+    "name": "Bảo tàng Hải quân",
+    "district": "Dương Kinh",
+    "description": "Nơi lưu giữ những kỷ vật hào hùng của lực lượng hải quân nhân dân Việt Nam và con đường huyền thoại Hồ Chí Minh trên biển.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baotanghaiquan.webp?alt=media&token=ee5b3025-df09-40c8-bf62-224232dee73d",
+    "lat": 20.826035,
+    "lng": 106.70042
+  },
+  {
+    "id": "22",
+    "name": "Côn Sơn - Kiếp Bạc",
+    "district": "Chí Linh",
+    "description": "Quần thể di tích quốc gia đặc biệt, nơi in đậm dấu ấn lịch sử của các anh hùng dân tộc Trần Hưng Đạo và Nguyễn Trãi.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/consonkiepbac.webp?alt=media&token=9ee0ff02-9281-444e-b571-1ffa72be2bf5",
+    "lat": 21.145388,
+    "lng": 106.34044
+  },
+  {
+    "id": "23",
+    "name": "Văn Miếu Mao Điền",
+    "district": "Cẩm Giàng",
+    "description": "Biểu tượng truyền thống hiếu học của Xứ Đông xưa, từng là nơi tổ chức các kỳ thi Hương dưới triều đại phong kiến.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vanmieumaodien.webp?alt=media&token=85bb002b-8387-438f-bb42-83ad6e219937",
+    "lat": 20.9416,
+    "lng": 106.2081
+  },
+  {
+    "id": "24",
+    "name": "Đảo Cò Chi Lăng Nam",
+    "district": "Thanh Miện",
+    "description": "Khu du lịch sinh thái tuyệt đẹp giữa lòng hồ An Dương, nơi trú ngụ của hàng vạn cá thể cò, vạc trắng xóa mỗi buổi hoàng hôn.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/daocolangchinam.webp?alt=media&token=9309f89c-a89d-4a04-b66d-418f9403d36a",
+    "lat": 20.7251,
+    "lng": 106.2163
+  },
+  {
+    "id": "25",
+    "name": "Làng gốm Chu Đậu",
+    "district": "Nam Sách",
+    "description": "Nơi khai sinh dòng gốm hoa lam tinh xảo lừng danh thế giới, từng bị thất truyền gần 400 năm nay đã được hồi sinh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langgomchudau.webp?alt=media&token=585d4a7e-3a3e-41d8-9fad-d81f99f28286",
+    "lat": 20.976,
+    "lng": 106.3421
+  },
+  {
+    "id": "26",
+    "name": "Đền thờ Chu Văn An",
+    "district": "Chí Linh",
+    "description": "Nằm tĩnh lặng trên núi Phượng Hoàng, đây là nơi tôn vinh người thầy giáo mẫu mực của muôn đời trong lịch sử Việt Nam.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denthochuvanan.webp?alt=media&token=36defb8a-fd85-4852-a600-10e2616e969c",
+    "lat": 21.113002,
+    "lng": 106.355936
+  },
+  {
+    "id": "27",
+    "name": "Động Kính Chủ",
+    "district": "Kinh Môn",
+    "description": "Được mệnh danh là 'Nam thiên đệ lục động', vách động lưu giữ nhiều bia ma nhai quý giá được tạc trực tiếp vào đá tự nhiên.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dongkinhchu.webp?alt=media&token=92c9cbf2-e3e4-4585-8b91-bbf81596905a",
+    "lat": 21.0371,
+    "lng": 106.5492
+  },
+  {
+    "id": "28",
+    "name": "Bảo tàng Hải Phòng",
+    "district": "Hồng Bàng",
+    "description": "Công trình kiến trúc Gothique rêu phong, nơi lưu giữ hàng vạn hiện vật về lịch sử và văn hóa đặc trưng của thành phố Cảng.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baotanghaiphong.webp?alt=media&token=e36061ac-9838-451a-9177-bf9bfb56fce3",
+    "lat": 20.861966,
+    "lng": 106.682704
+  },
+  {
+    "id": "29",
+    "name": "Nhà thờ Lớn Hải Phòng",
+    "district": "Hồng Bàng",
+    "description": "Ngôi thánh đường trung tâm mang kiến trúc uy nghi, tráng lệ với tháp chuông vươn cao tĩnh lặng giữa lòng thành phố.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/nhatholonhaiphong.webp?alt=media&token=e3f390eb-b60f-4404-b412-60a6c2f71bb4",
+    "lat": 20.8611,
+    "lng": 106.68
+  },
+  {
+    "id": "30",
+    "name": "Cầu Bính",
+    "district": "Hồng Bàng",
+    "description": "Cây cầu dây văng hiện đại đầu tiên của Hải Phòng bắc qua sông Cấm, tạo nên đường cong tuyệt đẹp trên bầu trời.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/caubinh.webp?alt=media&token=36898ba1-5a6e-4c5b-a73d-cd268a1676f7",
+    "lat": 20.875129,
+    "lng": 106.667556
+  },
+  {
+    "id": "31",
+    "name": "Quán Hoa",
+    "district": "Hồng Bàng",
+    "description": "Quần thể các ki-ốt bán hoa với kiến trúc phương Tây độc đáo, rực rỡ sắc màu nằm ngay dải trung tâm thành phố.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/quanhoa.webp?alt=media&token=b34280a3-abfc-4346-9c41-6a8c4ba756b6",
+    "lat": 20.85637,
+    "lng": 106.681386
+  },
+  {
+    "id": "32",
+    "name": "Hồ Tam Bạc",
+    "district": "Hồng Bàng",
+    "description": "Lá phổi xanh của thành phố với dải công viên rợp bóng mát, nơi đàn thiên nga trắng bơi lội êm đềm mỗi buổi chiều.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hotambac.webp?alt=media&token=7b20dd9b-0a14-4f8b-aa31-dbd17ef853de",
+    "lat": 20.855087,
+    "lng": 106.67463
+  },
+  {
+    "id": "33",
+    "name": "Chợ Sắt",
+    "district": "Hồng Bàng",
+    "description": "Trung tâm thương mại sầm uất từng mang tính biểu tượng một thời của Hải Phòng, nằm soi bóng bên bờ sông Tam Bạc.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chosat.webp?alt=media&token=e9568f1a-8ebd-49f0-8cb2-527aaa3918ee",
+    "lat": 20.835796,
+    "lng": 106.662355
+  },
+  {
+    "id": "34",
+    "name": "Phố Cầu Đất",
+    "district": "Ngô Quyền",
+    "description": "Con phố thương mại cổ kính, nổi tiếng mọi miền với các tiệm bánh mỳ cay và bánh trung thu truyền thống đậm vị.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/phocaudat.webp?alt=media&token=60be6c98-6dff-4077-8c04-0995f8c5927e",
+    "lat": 20.85488,
+    "lng": 106.682701
+  },
+  {
+    "id": "35",
+    "name": "Cung Văn hóa Việt Tiệp",
+    "district": "Ngô Quyền",
+    "description": "Khuôn viên biểu diễn nghệ thuật, tổ chức sự kiện quy mô lớn và là điểm hẹn giao lưu văn hóa quen thuộc của giới trẻ.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cungviettiep.webp?alt=media&token=77e4dc74-0b7b-428e-bc34-2a8f2f9d3194",
+    "lat": 20.84746,
+    "lng": 106.690984
+  },
+  {
+    "id": "36",
+    "name": "Chùa Đỏ",
+    "district": "Ngô Quyền",
+    "description": "Ngôi chùa cổ kính độc đáo với toàn bộ mảng kiến trúc bằng gỗ được sơn son thếp vàng rực rỡ và vô cùng tĩnh tại.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuado.webp?alt=media&token=9d98798e-55d2-4007-b4ce-7f659f96002c",
+    "lat": 20.871005,
+    "lng": 106.702645
+  },
+  {
+    "id": "37",
+    "name": "Chùa Phổ Chiếu",
+    "district": "Lê Chân",
+    "description": "Ngôi chùa linh thiêng, bề thế nổi bật với ngôi tháp cửu phẩm liên hoa soi bóng xuống mặt hồ tĩnh lặng.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/chuaphochieu.webp?alt=media&token=ceca74a4-8a94-4487-9e5f-3333c528b5a5",
+    "lat": 20.842475,
+    "lng": 106.677306
+  },
+  {
+    "id": "38",
+    "name": "Hồ An Biên",
+    "district": "Lê Chân",
+    "description": "Điểm hẹn thư giãn lý tưởng với không gian mở, đường dạo ven hồ thoáng đãng và làn nước trong xanh giữa lòng đô thị.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hoanbien.webp?alt=media&token=9d010f6e-1be3-4d96-aaa2-dbeedb6b66ed",
+    "lat": 20.85019,
+    "lng": 106.693591
+  },
+  {
+    "id": "39",
+    "name": "Cầu Rào",
+    "district": "Lê Chân",
+    "description": "Nút giao thông huyết mạch mang hình dáng cánh buồm vươn ra biển lớn, phát sáng rực rỡ mỗi khi đêm về.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/caurao.webp?alt=media&token=67164887-a2af-4bd8-83fe-d77391ce29e9",
+    "lat": 20.828607,
+    "lng": 106.699331
+  },
+  {
+    "id": "40",
+    "name": "Làng hoa Hạ Lũng",
+    "district": "Hải An",
+    "description": "Làng nghề trồng hoa truyền thống lâu đời nhất Hải Phòng, luôn rực rỡ sắc màu và tấp nập du khách mỗi dịp giáp Tết.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langhoahalung.webp?alt=media&token=26953a07-abb7-428a-898f-4adf0a5ec590",
+    "lat": 20.83,
+    "lng": 106.705
+  },
+  {
+    "id": "41",
+    "name": "Cây đa 13 gốc",
+    "district": "Hải An",
+    "description": "Cây cổ thụ hàng trăm năm tuổi khổng lồ với 13 gốc đan xen rễ cành, gắn liền với những câu chuyện tâm linh huyền bí.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/cayda13goc.webp?alt=media&token=e2c68d18-41c3-4dc4-8686-2408e107009c",
+    "lat": 20.835,
+    "lng": 106.715
+  },
+  {
+    "id": "42",
+    "name": "Từ Lương Xâm",
+    "district": "Hải An",
+    "description": "Đại bản doanh cắm cự của Ngô Quyền năm xưa, được suy tôn là một trong ba 'linh từ' linh thiêng bậc nhất trấn giữ Hải Phòng.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/tuluongxam.webp?alt=media&token=d1af1666-b731-4323-9511-bcaf86a6067d",
+    "lat": 20.836143,
+    "lng": 106.736823
+  },
+  {
+    "id": "43",
+    "name": "Đền Phú Xá",
+    "district": "Hải An",
+    "description": "Khu di tích lịch sử oai hùng gắn liền với tên tuổi nữ tướng Bùi Thị Từ Nhiên và những đóng góp cho trận Bạch Đằng.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/dtlq8.webp?alt=media&token=548fb391-5965-46af-972f-1f2a17d63e88",
+    "lat": 20.85179,
+    "lng": 106.721426
+  },
+  {
+    "id": "44",
+    "name": "Vườn Quốc gia Cát Bà",
+    "district": "Cát Hải",
+    "description": "Khu rừng nguyên sinh khổng lồ với thảm thực vật đa dạng, hang động kỳ thú và là ngôi nhà của loài voọc Cát Bà quý hiếm.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vuonquocgiacatba.webp?alt=media&token=8a87b10e-d021-497f-9ad4-256fedf5edd6",
+    "lat": 20.798,
+    "lng": 107.01
+  },
+  {
+    "id": "45",
+    "name": "Làng chài Cái Bèo",
+    "district": "Cát Hải",
+    "description": "Một trong những ngôi làng chài nổi cổ nhất Việt Nam với vẻ đẹp mộc mạc, bình yên lênh đênh trên sóng nước mặt vịnh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/langchaicaibeo.webp?alt=media&token=987b6085-86d3-497d-ace1-4f98fc4e20e4",
+    "lat": 20.725,
+    "lng": 107.05
+  },
+  {
+    "id": "46",
+    "name": "Đảo Khỉ (Cát Dứa)",
+    "district": "Cát Hải",
+    "description": "Hòn đảo hoang sơ thu hút du khách với bãi tắm cát trắng mịn màng và bầy khỉ lanh lợi, thân thiện sống tự do trong tự nhiên.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/daokhicatba.jpg.webp?alt=media&token=f891b0cf-51ac-466a-9227-5195eb33e167",
+    "lat": 20.73,
+    "lng": 107.06
+  },
+  {
+    "id": "47",
+    "name": "Bãi tắm Cát Cò",
+    "district": "Cát Hải",
+    "description": "Cụm 3 bãi tắm tuyệt đẹp được nối liền bằng con đường đi bộ uốn lượn men theo vách núi ven biển, nước xanh tận đáy.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baitamcatco.webp?alt=media&token=451fa0e4-ded7-42e2-b0d6-6d525fe94f23",
+    "lat": 20.718,
+    "lng": 107.052
+  },
+  {
+    "id": "48",
+    "name": "Pháo đài Thần Công",
+    "district": "Cát Hải",
+    "description": "Khu di tích lịch sử quân sự nằm chót vót trên đỉnh núi, nơi có thể thu trọn toàn cảnh Vịnh Lan Hạ hùng vĩ vào tầm mắt.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/phaodaithancong.webp?alt=media&token=163c9e97-8354-45e9-9ef9-27fa783cffa4",
+    "lat": 20.72,
+    "lng": 107.045
+  },
+  {
+    "id": "49",
+    "name": "Khu du lịch Hòn Dáu",
+    "district": "Đồ Sơn",
+    "description": "Quần thể nghỉ dưỡng sinh thái rợp bóng cây xanh, được ví như 'Đà Lạt thu nhỏ' với hệ thống hồ bơi và rừng nguyên sinh.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hondau.webp?alt=media&token=3f161c10-1e49-4ba7-9a04-8dd7b36ac20e",
+    "lat": 20.675,
+    "lng": 106.8
+  },
+  {
+    "id": "50",
+    "name": "Đền Bà Đế",
+    "district": "Đồ Sơn",
+    "description": "Ngôi đền linh thiêng mang câu chuyện xót xa về nàng thị nữ tài sắc, nằm tĩnh lặng dưới chân núi Độc hướng ra biển khơi.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denbade.webp?alt=media&token=f0a089a6-f0bc-46a0-a1fa-160be0a2ca0a",
+    "lat": 20.69,
+    "lng": 106.79
+  },
+  {
+    "id": "51",
+    "name": "Bến tàu không số K15",
+    "district": "Đồ Sơn",
+    "description": "Di tích kiêu hùng, điểm xuất phát của những chuyến tàu không số huyền thoại trên tuyến đường Hồ Chí Minh trên biển.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/bentaukhongso.webp?alt=media&token=79fc4891-f889-4384-94b7-fd6849775635",
+    "lat": 20.669,
+    "lng": 106.815
+  },
+  {
+    "id": "52",
+    "name": "Đồi Thiên Văn",
+    "district": "Kiến An",
+    "description": "Ngọn đồi xanh mát thông reo, nơi đặt trạm khí tượng và đài thiên văn dự báo thời tiết cổ nhất khu vực Đông Dương.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/doithienvan.webp?alt=media&token=c7f31f67-36d7-4373-a7b6-6cb24c256d2b",
+    "lat": 20.805821,
+    "lng": 106.630171
+  },
+  {
+    "id": "53",
+    "name": "Hồ Hạnh Phúc",
+    "district": "Kiến An",
+    "description": "Không gian xanh êm đềm nằm lọt thỏm giữa trung tâm quận Kiến An, là địa điểm lý tưởng để tản bộ ngắm hoàng hôn.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/hohanhphuc.webp?alt=media&token=f9873606-4fed-467c-b595-7ce5bb33db62",
+    "lat": 20.806484,
+    "lng": 106.625219
+  },
+  {
+    "id": "54",
+    "name": "Vương triều Mạc",
+    "district": "Kiến Thụy",
+    "description": "Khu tưởng niệm mang kiến trúc cung đình bề thế, nơi ghi nhận công lao to lớn và tri ân các vị vua thời kỳ nhà Mạc.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/vuongtrieuMac.webp?alt=media&token=8cffa5de-dad9-43ca-9b56-488c80b2d7c2",
+    "lat": 20.715089,
+    "lng": 106.675635
+  },
+  {
+    "id": "55",
+    "name": "Đền Mõ",
+    "district": "Kiến Thụy",
+    "description": "Di tích văn hóa thờ công chúa Quỳnh Trân triều Trần, nổi danh với cây gạo cổ thụ khổng lồ đã tồn tại hơn 700 năm tuổi.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/denmo.webp?alt=media&token=c9975460-54d8-4b84-9cc3-ed6b88e4e673",
+    "lat": 20.75,
+    "lng": 106.65
+  },
+  {
+    "id": "56",
+    "name": "Suối khoáng Tiên Lãng",
+    "district": "Tiên Lãng",
+    "description": "Khu du lịch sinh thái sở hữu nguồn mạch nước khoáng ngầm tự nhiên, mang lại cảm giác thư thái và phục hồi sức khỏe.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/suoinuocnongtienlang.webp?alt=media&token=4f938918-02e8-409c-a01d-081236c3557b",
+    "lat": 20.709694,
+    "lng": 106.555182
+  },
+  {
+    "id": "57",
+    "name": "Bãi cọc Cao Quỳ",
+    "district": "Thủy Nguyên",
+    "description": "Bãi cọc gỗ lim vừa được khai quật, là minh chứng lịch sử chấn động cho trận thủy chiến trên sông Bạch Đằng năm 1288.",
+    "imageUrl": "https://firebasestorage.googleapis.com/v0/b/adventure-23ee9.firebasestorage.app/o/baicoccaoquy.webp?alt=media&token=e4326ff4-e0fc-453a-a0a2-3d25a6aba636",
+    "lat": 20.97,
+    "lng": 106.65
+  }
 ]

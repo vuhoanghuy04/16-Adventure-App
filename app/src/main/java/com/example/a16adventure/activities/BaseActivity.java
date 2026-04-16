@@ -8,24 +8,57 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.a16adventure.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import android.content.SharedPreferences;
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class BaseActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(android.os.Bundle savedInstanceState) {
+        // Áp dụng theme trước khi super.onCreate
+        applyTheme();
+        super.onCreate(savedInstanceState);
+    }
+
+    private void applyTheme() {
+        SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
+        int themeMode = prefs.getInt("ThemeMode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        AppCompatDelegate.setDefaultNightMode(themeMode);
+    }
 
     protected void setupBottomNavigation(int bottomNavId, int selectedItemId) {
         BottomNavigationView bottomNavigation = findViewById(bottomNavId);
         if (bottomNavigation == null) return;
 
-        // 1. Cấu hình màu sắc đỏ/xám
+        // 1. Cấu hình màu sắc
+        SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
+        int themeMode = prefs.getInt("ThemeMode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        
+        boolean isDark;
+        if (themeMode == AppCompatDelegate.MODE_NIGHT_YES) {
+            isDark = true;
+        } else if (themeMode == AppCompatDelegate.MODE_NIGHT_NO) {
+            isDark = false;
+        } else {
+            // Nếu là Follow System, kiểm tra cấu hình hiện tại của máy
+            int currentNightMode = getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+            isDark = currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+        }
+
         int[][] states = new int[][] {
                 new int[] { android.R.attr.state_checked},
                 new int[] {-android.R.attr.state_checked}
         };
         int[] colors = new int[] {
                 Color.parseColor("#FF4B4B"),
-                Color.parseColor("#808080")
+                isDark ? Color.parseColor("#B0B0B0") : Color.parseColor("#808080")
         };
         ColorStateList colorStateList = new ColorStateList(states, colors);
         bottomNavigation.setItemIconTintList(colorStateList);
-        bottomNavigation.setItemTextColor(colorStateList); // Thêm dòng này để đổi cả màu chữ
+        bottomNavigation.setItemTextColor(colorStateList);
+
+        // Đặt màu nền cho BottomNavigationView dựa trên chế độ tối
+        bottomNavigation.setBackgroundColor(isDark ? Color.parseColor("#1E1E1E") : Color.WHITE);
 
         // 2. Set tab đang được chọn
         if (selectedItemId != 0) {
@@ -55,12 +88,7 @@ public class BaseActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_ai) {
                 intent = new Intent(this, AiActivity.class);
             } else if (itemId == R.id.nav_profile) {
-                // Kiểm tra đăng nhập
-                if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    intent = new Intent(this, ProfileActivity.class);
-                } else {
-                    intent = new Intent(this, LoginActivity.class); // Thay đổi tên class Login của bạn nếu cần
-                }
+                intent = new Intent(this, ProfileActivity.class);
             }
 
             if (intent != null) {

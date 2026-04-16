@@ -47,6 +47,9 @@ public class KnowledgeActivity extends BaseActivity {
         setContentView(R.layout.activity_knowledge);
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_explore);
 
+        // Nút back
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+
         // Ánh xạ
         chipGroupCategories = findViewById(R.id.chipGroupCategories);
         chipAll = findViewById(R.id.chipAll);

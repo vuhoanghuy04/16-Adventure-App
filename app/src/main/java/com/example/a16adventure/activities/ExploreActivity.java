@@ -16,18 +16,30 @@ public class ExploreActivity extends BaseActivity {
         // Bật sáng icon Khám phá ở thanh điều hướng dưới cùng
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_explore);
 
-        // --- NỐI DÂY SANG TRANG KIẾN THỨC CỦA ĐỨC ---
-        // Đã cập nhật đúng ID: btnKnowledgeLibrary từ file XML của leader
-        View cardKnowledge = findViewById(R.id.btnKnowledgeLibrary);
+        // --- NỐI DÂY SANG CÁC PHÂN KHU KHÁM PHÁ ---
+        View btnKnowledge = findViewById(R.id.btnKnowledgeLibrary);
+        View btnMedia = findViewById(R.id.btnMediaLibrary);
+        View btnFestival = findViewById(R.id.btnFestivalEvents);
 
-        if (cardKnowledge != null) {
-            cardKnowledge.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Chuyển sang trang 12 bài viết của Đức
-                    Intent intent = new Intent(ExploreActivity.this, KnowledgeActivity.class);
-                    startActivity(intent);
-                }
+        // 1. Thư viện Kiến thức (Link như cũ)
+        if (btnKnowledge != null) {
+            btnKnowledge.setOnClickListener(v -> {
+                Intent intent = new Intent(ExploreActivity.this, KnowledgeActivity.class);
+                startActivity(intent);
+            });
+        }
+
+        // 2. Thư viện Đa phương tiện (Sẽ làm sau)
+        if (btnMedia != null) {
+            btnMedia.setOnClickListener(v -> {
+                android.widget.Toast.makeText(this, "Tính năng Thư viện Đa phương tiện đang phát triển", android.widget.Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        // 3. Lễ hội và Sự kiện (Sẽ làm sau)
+        if (btnFestival != null) {
+            btnFestival.setOnClickListener(v -> {
+                android.widget.Toast.makeText(this, "Tính năng Lễ hội và Sự kiện đang phát triển", android.widget.Toast.LENGTH_SHORT).show();
             });
         }
     }

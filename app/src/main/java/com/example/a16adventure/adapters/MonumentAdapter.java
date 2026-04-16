@@ -35,6 +35,19 @@ public class MonumentAdapter extends RecyclerView.Adapter<MonumentAdapter.Monume
     @Override
     public MonumentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_monument, parent, false);
+
+        // --- TỰ ĐỘNG CÂN CHỈNH KÍCH THƯỚC THEO THIẾT BỊ (RESPONSIVE) ---
+        // Lấy chiều rộng màn hình thực tế của thiết bị
+        int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        // Thiết lập chiều rộng mỗi thẻ chiếm 82% màn hình để tạo hiệu ứng "nhìn thấy một phần thẻ sau"
+        int itemWidth = (int) (screenWidth * 0.82);
+
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params != null) {
+            params.width = itemWidth;
+            view.setLayoutParams(params);
+        }
+
         return new MonumentViewHolder(view);
     }
 

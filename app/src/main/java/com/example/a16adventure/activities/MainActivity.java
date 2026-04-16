@@ -226,7 +226,12 @@ public class MainActivity extends BaseActivity {
         androidx.cardview.widget.CardView btnOpenQuizBanner = findViewById(R.id.btnOpenQuizBanner);
         if (btnOpenQuizBanner != null) {
             btnOpenQuizBanner.setOnClickListener(v -> {
-                startActivity(new Intent(MainActivity.this, QuizActivity.class));
+                if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    startActivity(new Intent(MainActivity.this, QuizActivity.class));
+                } else {
+                    Toast.makeText(this, "Vui lòng đăng nhập để tham gia Quiz!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
             });
         }
     }

@@ -5,84 +5,197 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="@color/background"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/cardBottomNav"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@android:drawable/ic_menu_camera"
-            android:background="#E0E0E0"
-            android:padding="24dp"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:id="@+id/tvProfileName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tên Người Dùng"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginBottom="8dp"/>
-
-        <TextView
-            android:id="@+id/tvProfileEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="email@example.com"
-            android:textSize="16sp"
-            android:textColor="#808080"
-            android:layout_marginBottom="24dp"/>
+        app:layout_constraintBottom_toTopOf="@+id/cardBottomNav">
 
         <LinearLayout
-            android:id="@+id/btnSavedMonuments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/btn_glass_option"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:padding="16dp">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@android:drawable/star_on"
-                app:tint="#2196F3" />
+            <!-- Profile Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:layout_marginBottom="24dp">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/surface"
+                    app:strokeWidth="0dp">
+                    <ImageView
+                        android:id="@+id/imgProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:background="@color/surface"/>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Tên Người Dùng"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textPrimary"/>
+
+                <TextView
+                    android:id="@+id/tvProfileEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="email@example.com"
+                    android:textSize="14sp"
+                    android:textColor="@color/textSecondary"/>
+            </LinearLayout>
+
+            <!-- Travel Stats Row -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardStats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface"
+                app:strokeWidth="0dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:baselineAligned="false">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvStatVisited"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#2196F3"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Đã lưu"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary"/>
+                    </LinearLayout>
+                    <View android:layout_width="1dp" android:layout_height="match_parent" android:background="#EEEEEE"/>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/tvStatQuizPoints"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#4CAF50"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Điểm Quiz"
+                            android:textSize="12sp"
+                            android:textColor="@color/textSecondary"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Group: Exploration Journal -->
+            <TextView
+                android:id="@+id/tvTitleJournal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhật ký hành trình"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="8dp"/>
+
+            <include layout="@layout/item_profile_button" android:id="@+id/btnSavedMonumentsItem"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnTravelJournal"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnOfflineMaps"/>
+
+            <!-- Group: Settings -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Địa danh đã lưu"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="16dp"
+                android:text="Cài đặt ứng dụng"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="8dp"/>
+
+            <include layout="@layout/item_profile_button" android:id="@+id/btnEditProfile"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnLanguage"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnDarkMode"/>
+
+            <!-- Group: Support -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Hỗ trợ &amp; Kết nối"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/textSecondary"
+                android:layout_marginBottom="8dp"/>
+
+            <include layout="@layout/item_profile_button" android:id="@+id/btnContactSupport"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnRateApp"/>
+            <include layout="@layout/item_profile_button" android:id="@+id/btnShareApp"/>
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Đăng nhập ngay"
+                android:backgroundTint="#4CAF50"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:cornerRadius="16dp"/>
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="16dp"
+                android:text="Đăng xuất"
+                android:backgroundTint="#FF4B4B"
+                android:textColor="@android:color/white"
+                app:cornerRadius="16dp"/>
+
         </LinearLayout>
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Đăng xuất"
-            android:backgroundTint="#FF4B4B"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp"/>
-
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardBottomNav"
@@ -102,7 +215,7 @@
             style="@style/Widget.MaterialComponents.BottomNavigationView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:background="@android:color/white"
+            android:background="@color/surface"
             app:itemIconSize="26dp"
             app:labelVisibilityMode="unlabeled"
             app:menu="@menu/bottom_nav_menu" />

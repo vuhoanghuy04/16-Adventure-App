@@ -21,14 +21,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat; // Thêm import mới
 
+import com.example.a16adventure.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.example.a16adventure.R;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,6 +61,9 @@ public class QuizActivity extends AppCompatActivity {
     private String correctAnswer = "";
     private boolean isClickable = false;
 
+    private DatabaseReference userScoreRef;
+    private FirebaseUser currentUser;
+
     private List<JSONObject> allQuizzes = new ArrayList<>();
 
     @Override
@@ -64,7 +77,57 @@ public class QuizActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz);
 
         initViews();
+        setupFirebase();
         loadQuizBankFromAssets();
+    }
+
+    private void setupFirebase() {
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            userScoreRef = FirebaseDatabase.getInstance().getReference("users")
+                    .child(currentUser.getUid()).child("quiz");
+            loadScoreFromFirebase();
+        }
+    }
+
+    private void loadScoreFromFirebase() {
+        userScoreRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    int lastResetWeek = snapshot.child("lastResetWeek").getValue(Integer.class) != null ? 
+                            snapshot.child("lastResetWeek").getValue(Integer.class) : -1;
+                    
+                    Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                    int currentWeek = calendar.get(Calendar.WEEK_OF_YEAR);
+
+                    if (currentWeek != lastResetWeek) {
+                        // Reset điểm mỗi tuần
+                        score = 0;
+                        updateScoreToFirebase(currentWeek);
+                    } else {
+                        score = snapshot.child("score").getValue(Integer.class) != null ? 
+                                snapshot.child("score").getValue(Integer.class) : 0;
+                    }
+                    tvScore.setText(String.valueOf(score));
+                } else {
+                    // Lần đầu chơi
+                    score = 0;
+                    tvScore.setText("0");
+                    updateScoreToFirebase(Calendar.getInstance().get(Calendar.WEEK_OF_YEAR));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {}
+        });
+    }
+
+    private void updateScoreToFirebase(int week) {
+        if (userScoreRef != null) {
+            userScoreRef.child("score").setValue(score);
+            userScoreRef.child("lastResetWeek").setValue(week);
+        }
     }
 
     private void initViews() {
@@ -191,6 +254,11 @@ public class QuizActivity extends AppCompatActivity {
             clickedBtn.setBackgroundTintList(android.content.res.ColorStateList.valueOf(colorSuccess));
             score += 10;
             tvScore.setText(String.valueOf(score));
+            
+            // Cập nhật lên Firebase
+            int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+            updateScoreToFirebase(currentWeek);
+
             message = "Tuyệt vời! +10đ";
             popupColor = colorSuccess;
         } else {
