@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
 import com.example.a16adventure.models.JournalEntry;
+import com.example.a16adventure.util.AppConstants;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -133,7 +134,7 @@ public class JournalListActivity extends BaseActivity {
                 intent.putExtra("JOURNAL_ID", entry.getId());
                 intent.putExtra("MONUMENT_NAME", entry.getMonumentName());
                 intent.putExtra("NOTE", entry.getNote());
-                intent.putExtra("IMAGE_URL", entry.getImageUrl());
+                intent.putExtra(AppConstants.Extras.IMAGE_URL, entry.getImageUrl());
                 intent.putExtra("TIMESTAMP", entry.getTimestamp());
                 startActivity(intent);
             });

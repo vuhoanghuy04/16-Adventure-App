@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">16 Adventure</string>
+    <string name="login_required_feature">Vui lòng đăng nhập để sử dụng tính năng này</string>
+    <string name="logout_success">Đã đăng xuất thành công!</string>
+    <string name="login_required_quiz">Vui lòng đăng nhập để tham gia Quiz!</string>
+    <string name="weather_error">Lỗi</string>
+    <string name="shuffle_success">Đã xáo trộn danh sách! 🎲</string>
+    <string name="all_filter">Tất cả</string>
 </resources>

@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
+import com.example.a16adventure.util.AppConstants;
 
 public class PhotoViewerActivity extends BaseActivity {
 
@@ -18,7 +19,7 @@ public class PhotoViewerActivity extends BaseActivity {
 
         btnBack.setOnClickListener(v -> finish());
 
-        String url = getIntent().getStringExtra("IMAGE_URL");
+        String url = getIntent().getStringExtra(AppConstants.Extras.IMAGE_URL);
         if (url != null) {
             int resId = getResources().getIdentifier(url, "drawable", getPackageName());
             if (resId != 0) {

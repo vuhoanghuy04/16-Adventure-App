@@ -13,6 +13,7 @@ import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.SavedMonumentAdapter;
 import com.example.a16adventure.models.Monument;
 import com.example.a16adventure.models.MonumentDataManager; // Fix lỗi MonumentDataManager
+import com.example.a16adventure.util.AppConstants;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +29,7 @@ public class SavedMonumentsActivity extends AppCompatActivity {
     private List<Monument> listDisplay = new ArrayList<>();
     private SavedMonumentAdapter adapter;
     private DatabaseReference userRef;
+    private ValueEventListener savedIdsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +42,15 @@ public class SavedMonumentsActivity extends AppCompatActivity {
         // Kiểm tra đăng nhập
         String uid = FirebaseAuth.getInstance().getUid();
         if (uid == null) {
-            Toast.makeText(this, "Vui lòng đăng nhập để sử dụng tính năng này", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.login_required_feature, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        userRef = FirebaseDatabase.getInstance().getReference("users").child(uid).child("saved_ids");
+        userRef = FirebaseDatabase.getInstance()
+                .getReference(AppConstants.FirebasePaths.USERS)
+                .child(uid)
+                .child(AppConstants.FirebasePaths.SAVED_IDS);
 
         RecyclerView rv = findViewById(R.id.rvSavedMonuments);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -65,7 +70,7 @@ public class SavedMonumentsActivity extends AppCompatActivity {
 
     // SavedMonumentsActivity.java
     private void loadSavedDataFromFirebase() {
-        userRef.addValueEventListener(new ValueEventListener() {
+        savedIdsListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listDisplay.clear();
@@ -88,6 +93,15 @@ public class SavedMonumentsActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
-        });
+        };
+        userRef.addValueEventListener(savedIdsListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userRef != null && savedIdsListener != null) {
+            userRef.removeEventListener(savedIdsListener);
+        }
     }
 }

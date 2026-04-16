@@ -88,7 +88,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
 
         // 1. Đúc Chip "Tất cả"
         Chip chipAll = (Chip) inflater.inflate(R.layout.item_chip_filter, chipGroupMap, false);
-        chipAll.setText("Tất cả");
+        chipAll.setText(getString(R.string.all_filter));
         chipAll.setId(View.generateViewId());
         chipAll.setChecked(true);
         chipGroupMap.addView(chipAll);
@@ -119,7 +119,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Map
             
             String selectedText = selectedChip.getText().toString();
 
-            if (selectedText.equals("Tất cả")) {
+            if (selectedText.equals(getString(R.string.all_filter))) {
                 filterByDistrict("All");
             } else {
                 filterByDistrict(selectedText);

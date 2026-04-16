@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide; // Thư viện tải ảnh thần thánh
 import com.example.a16adventure.R;
 import com.example.a16adventure.activities.ArticleDetailActivity;
 import com.example.a16adventure.models.Article;
+import com.example.a16adventure.util.AppConstants;
 
 import java.util.List;
 
@@ -58,11 +59,11 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleV
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
-                intent.putExtra("TITLE", article.getTitle());
-                intent.putExtra("CATEGORY", article.getCategory());
-                intent.putExtra("TIME_VIEWS", article.getTimeAndViews());
-                intent.putExtra("CONTENT", article.getContent());
-                intent.putExtra("IMAGE_URL", article.getImageUrl());
+                intent.putExtra(AppConstants.Extras.ARTICLE_TITLE, article.getTitle());
+                intent.putExtra(AppConstants.Extras.ARTICLE_CATEGORY, article.getCategory());
+                intent.putExtra(AppConstants.Extras.ARTICLE_TIME_VIEWS, article.getTimeAndViews());
+                intent.putExtra(AppConstants.Extras.ARTICLE_CONTENT, article.getContent());
+                intent.putExtra(AppConstants.Extras.IMAGE_URL, article.getImageUrl());
                 v.getContext().startActivity(intent);
             }
         });
