@@ -17,11 +17,13 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a16adventure.BuildConfig;
 import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.ChatAdapter;
 import com.example.a16adventure.models.Message;
@@ -51,9 +53,6 @@ import java.util.concurrent.Executors;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private static final int SPEECH_REQUEST_CODE = 100;
-    private static final int PICK_IMAGE_REQUEST_CODE = 101;
-
     private RecyclerView chatRecyclerView;
     private ChatAdapter chatAdapter;
     private List<Message> messageList;
@@ -71,6 +70,28 @@ public class ChatActivity extends AppCompatActivity {
     
     private FirebaseAuth mAuth;
     private String currentUserId = "guest";
+
+    private final ActivityResultLauncher<Intent> speechRecognizerLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                Intent data = result.getData();
+                if (result.getResultCode() == RESULT_OK && data != null) {
+                    ArrayList<String> textResult = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    if (textResult != null && !textResult.isEmpty()) {
+                        edtMessage.setText(textResult.get(0));
+                    }
+                }
+            });
+
+    private final ActivityResultLauncher<Intent> pickImageLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                Intent data = result.getData();
+                if (result.getResultCode() == RESULT_OK && data != null) {
+                    Uri imageUri = data.getData();
+                    if (imageUri != null) {
+                        showImagePreview(imageUri);
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +170,7 @@ public class ChatActivity extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Đang nghe...");
         try {
-            startActivityForResult(intent, SPEECH_REQUEST_CODE);
+            speechRecognizerLauncher.launch(intent);
         } catch (Exception e) {
             Toast.makeText(this, "Thiết bị không hỗ trợ nhận diện giọng nói", Toast.LENGTH_SHORT).show();
         }
@@ -157,30 +178,12 @@ public class ChatActivity extends AppCompatActivity {
 
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
+        pickImageLauncher.launch(intent);
     }
 
     private void removeSelectedImage() {
         selectedBitmap = null;
         layoutImagePreview.setVisibility(View.GONE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && data != null) {
-            if (requestCode == SPEECH_REQUEST_CODE) {
-                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                if (result != null && !result.isEmpty()) {
-                    edtMessage.setText(result.get(0));
-                }
-            } else if (requestCode == PICK_IMAGE_REQUEST_CODE) {
-                Uri imageUri = data.getData();
-                if (imageUri != null) {
-                    showImagePreview(imageUri);
-                }
-            }
-        }
     }
 
     private void showImagePreview(Uri imageUri) {
@@ -225,7 +228,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void setupGemini() {
-        String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
+        String apiKey = BuildConfig.GEMINI_API_KEY;
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            Toast.makeText(this, "Thiếu cấu hình GEMINI_API_KEY", Toast.LENGTH_LONG).show();
+            return;
+        }
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
@@ -288,6 +295,11 @@ public class ChatActivity extends AppCompatActivity {
         if (bitmapToSend != null) contentBuilder.addImage(bitmapToSend);
         
         Content content = contentBuilder.build();
+        if (model == null) {
+            messageList.get(aiLoadingPos).setContent("Thiếu cấu hình Gemini API key.");
+            chatAdapter.notifyItemChanged(aiLoadingPos);
+            return;
+        }
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
 
         Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {

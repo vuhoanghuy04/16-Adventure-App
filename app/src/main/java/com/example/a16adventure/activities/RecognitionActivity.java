@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a16adventure.BuildConfig;
 import com.example.a16adventure.R;
 import com.example.a16adventure.adapters.PhotoAdapter;
 import com.google.ai.client.generativeai.GenerativeModel;
@@ -78,8 +79,11 @@ public class RecognitionActivity extends AppCompatActivity {
     }
 
     private void setupGemini() {
-        // Sử dụng API Key của bạn
-        String apiKey = "AIzaSyCBziMGwz6k1sQeyNtS34JPwItNwJ96hQ4";
+        String apiKey = BuildConfig.GEMINI_API_KEY;
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            Toast.makeText(this, "Thiếu cấu hình GEMINI_API_KEY", Toast.LENGTH_LONG).show();
+            return;
+        }
         GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
@@ -185,6 +189,11 @@ public class RecognitionActivity extends AppCompatActivity {
                             "Lưu ý: Tuyệt đối không lời dẫn, không ký hiệu lạ.")
                     .build();
 
+            if (model == null) {
+                loadingLayout.setVisibility(View.GONE);
+                Toast.makeText(this, "Gemini chưa được cấu hình", Toast.LENGTH_SHORT).show();
+                return;
+            }
             ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
             Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                 @Override

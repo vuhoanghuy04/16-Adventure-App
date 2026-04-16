@@ -1,6 +1,21 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+}
+
+val localProperties = Properties().apply {
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        localPropsFile.inputStream().use { load(it) }
+    }
+}
+
+fun readSecret(name: String): String {
+    return localProperties.getProperty(name)
+        ?: System.getenv(name)
+        ?: ""
 }
 
 android {
@@ -15,6 +30,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GEMINI_API_KEY", "\"${readSecret("GEMINI_API_KEY")}\"")
+        manifestPlaceholders["MAPS_API_KEY"] = readSecret("MAPS_API_KEY")
     }
 
     buildTypes {
@@ -41,9 +58,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    // Ensure Material library is at least 1.12.0 for itemActiveIndicatorEnabled
-    implementation("com.google.android.material:material:1.12.0")
 
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
