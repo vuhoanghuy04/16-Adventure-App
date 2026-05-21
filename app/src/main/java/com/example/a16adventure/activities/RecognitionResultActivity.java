@@ -3,7 +3,6 @@ package com.example.a16adventure.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -14,10 +13,16 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 public class RecognitionResultActivity extends AppCompatActivity {
+
+    private static final String TAG = "RecognitionResult";
 
     private ViewPager2 viewPagerLandmark;
     private TabLayout tabIndicator;
@@ -27,6 +32,7 @@ public class RecognitionResultActivity extends AppCompatActivity {
     private TextView txtTag1, txtTag2, txtTag3;
     private TextView txtLandmarkRating, txtLandmarkHours, txtLandmarkVisits, txtLandmarkDistance;
     private FirebaseStorage storage;
+    private String selectedImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +41,8 @@ public class RecognitionResultActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
         initViews();
-        
+        selectedImageUri = getIntent().getStringExtra("IMAGE_URI");
+
         String resultText = getIntent().getStringExtra("RECOGNITION_RESULT");
 
         if (resultText != null) {
@@ -69,67 +76,165 @@ public class RecognitionResultActivity extends AppCompatActivity {
     }
 
     private void parseAndShowResult(String resultText) {
-        String cleanText = resultText.replace("**", "").trim();
-        String name = "Địa danh";
-        String code = "";
-        String description = "";
-
-        // Tách dữ liệu từ cấu trúc nâng cấp của AI
-        String[] lines = cleanText.split("\n");
-        for (String line : lines) {
-            if (line.toLowerCase().startsWith("tên:")) {
-                name = line.substring(line.indexOf(":") + 1).trim();
-            } else if (line.toLowerCase().startsWith("mã:")) {
-                code = line.substring(line.indexOf(":") + 1).trim();
-            } else if (line.toLowerCase().startsWith("mô tả:")) {
-                description = line.substring(line.indexOf(":") + 1).trim();
-            }
-        }
-
-        // Fallback nếu AI trả về định dạng cũ
-        if (code.isEmpty() && !cleanText.isEmpty()) {
-            String[] parts = cleanText.split("\n", 2);
-            name = parts[0].trim();
-            description = parts.length > 1 ? parts[1].trim() : "";
-        }
+        ParsedResult parsed = parseResultFields(resultText);
+        String name = parsed.name;
+        String description = parsed.description;
 
         txtLandmarkName.setText(name);
         txtLandmarkDesc.setText(description);
         
         updateLandmarkDetails(name);
-        
-        // Sử dụng Mã (code) để lấy ảnh chính xác từ Firebase Storage
-        if (!code.isEmpty()) {
-            fetchImageByCode(code);
-        } else {
-            fetchImageByCode(name); // Thử dùng tên nếu không có mã
+        showSelectedImageFirst();
+
+        LinkedHashSet<String> candidateSet = new LinkedHashSet<>();
+        String normalizedCode = normalizeLandmarkCode(parsed.code);
+        String normalizedName = normalizeLandmarkCode(parsed.name);
+        String normalizedFirstLine = normalizeLandmarkCode(parsed.firstLine);
+
+        if (!normalizedCode.isEmpty()) candidateSet.add(normalizedCode);
+        if (!normalizedName.isEmpty()) candidateSet.add(normalizedName);
+        if (!normalizedFirstLine.isEmpty()) candidateSet.add(normalizedFirstLine);
+
+        if (!candidateSet.isEmpty()) {
+            fetchImageByCandidates(new ArrayList<>(candidateSet), 0);
+        } else if (imageUrls == null || imageUrls.isEmpty()) {
+            imageUrls = new ArrayList<>();
+            imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
+            updateViewPager();
         }
     }
 
-    private void fetchImageByCode(String code) {
+    private void showSelectedImageFirst() {
+        if (selectedImageUri == null || selectedImageUri.trim().isEmpty()) return;
+
         imageUrls = new ArrayList<>();
-        
-        // Chuẩn hóa mã thành viết liền không dấu (nếu AI chưa làm chuẩn)
-        String fileName = code.toLowerCase().replaceAll("\\s+", "");
-        
+        imageUrls.add(selectedImageUri);
+        updateViewPager();
+    }
+
+    private void fetchImageByCandidates(List<String> candidates, int index) {
+        if (index >= candidates.size()) {
+            // Không tìm thấy trên Firebase: giữ ảnh người dùng nếu đã có.
+            if (imageUrls == null || imageUrls.isEmpty()) {
+                imageUrls = new ArrayList<>();
+                imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
+                updateViewPager();
+            }
+            return;
+        }
+
+        fetchImageByCode(candidates.get(index), candidates, index);
+    }
+
+    private void fetchImageByCode(String code, List<String> candidates, int currentIndex) {
+        if (imageUrls == null) {
+            imageUrls = new ArrayList<>();
+        }
+
+        String fileName = normalizeLandmarkCode(code);
+        if (fileName.isEmpty()) {
+            fetchImageByCandidates(candidates, currentIndex + 1);
+            return;
+        }
+
+        Log.d(TAG, "Thu image code: " + fileName);
+
         // Thử tìm file .webp trong Firebase Storage
         StorageReference storageRef = storage.getReference().child(fileName + ".webp");
 
         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            imageUrls.clear();
             imageUrls.add(uri.toString());
             updateViewPager();
         }).addOnFailureListener(e -> {
             Log.e("FirebaseError", "Không tìm thấy file: " + fileName + ".webp");
             // Thử tìm với định dạng .jpg nếu .webp không có
             storage.getReference().child(fileName + ".jpg").getDownloadUrl().addOnSuccessListener(uri -> {
+                imageUrls.clear();
                 imageUrls.add(uri.toString());
                 updateViewPager();
             }).addOnFailureListener(e2 -> {
-                // Nếu vẫn không có, dùng ảnh mặc định
-                imageUrls.add("https://bcp.cdnchinhphu.vn/Uploaded/hoangdien/2021_04_24/HP.jpg");
-                updateViewPager();
+                Log.e("FirebaseError", "Không tìm thấy file: " + fileName + ".jpg");
+                fetchImageByCandidates(candidates, currentIndex + 1);
             });
         });
+    }
+
+    private ParsedResult parseResultFields(String resultText) {
+        String cleanText = resultText == null ? "" : resultText.replace("**", "").trim();
+        String name = "Địa danh";
+        String code = "";
+        String description = "";
+        String firstLine = "";
+
+        String[] lines = cleanText.split("\\n");
+        for (String rawLine : lines) {
+            if (rawLine == null) continue;
+            String line = rawLine.trim();
+            if (line.isEmpty()) continue;
+            if (firstLine.isEmpty()) firstLine = line;
+
+            int separator = line.indexOf(':');
+            if (separator < 0) separator = line.indexOf('：');
+            if (separator < 0) continue;
+
+            String key = line.substring(0, separator).trim();
+            String value = line.substring(separator + 1).trim();
+            String normalizedKey = removeAccents(key).toLowerCase(Locale.ROOT).replaceAll("\\s+", "");
+
+            if (normalizedKey.startsWith("ten") && !value.isEmpty()) {
+                name = value;
+            } else if (normalizedKey.startsWith("ma") && !value.isEmpty()) {
+                code = value;
+            } else if (normalizedKey.startsWith("mota") && !value.isEmpty()) {
+                description = value;
+            }
+        }
+
+        if ((code.isEmpty() || description.isEmpty()) && !cleanText.isEmpty()) {
+            String[] parts = cleanText.split("\\n", 2);
+            if (!parts[0].trim().isEmpty()) {
+                name = parts[0].trim();
+            }
+            if (description.isEmpty() && parts.length > 1) {
+                description = parts[1].trim();
+            }
+        }
+
+        return new ParsedResult(name, code, description, firstLine);
+    }
+
+    private String normalizeLandmarkCode(String input) {
+        if (input == null) return "";
+        String normalized = removeAccents(input)
+                .toLowerCase(Locale.ROOT)
+                .trim()
+                .replaceAll("[^a-z0-9]", "");
+        return normalized;
+    }
+
+    private String removeAccents(String text) {
+        if (text == null) return "";
+        String temp = Normalizer.normalize(text, Normalizer.Form.NFD);
+        return Pattern.compile("\\p{InCombiningDiacriticalMarks}+")
+                .matcher(temp)
+                .replaceAll("")
+                .replace('đ', 'd')
+                .replace('Đ', 'D');
+    }
+
+    private static class ParsedResult {
+        final String name;
+        final String code;
+        final String description;
+        final String firstLine;
+
+        ParsedResult(String name, String code, String description, String firstLine) {
+            this.name = name;
+            this.code = code;
+            this.description = description;
+            this.firstLine = firstLine;
+        }
     }
 
     private void updateViewPager() {

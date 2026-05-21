@@ -233,7 +233,7 @@ public class ChatActivity extends AppCompatActivity {
             Toast.makeText(this, "Thiếu cấu hình GEMINI_API_KEY", Toast.LENGTH_LONG).show();
             return;
         }
-        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash", apiKey);
+        GenerativeModel gm = new GenerativeModel("gemini-2.5-flash-lite", apiKey);
         model = GenerativeModelFutures.from(gm);
     }
 

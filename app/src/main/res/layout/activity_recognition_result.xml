@@ -26,8 +26,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@android:color/transparent"
-                app:tabBackground="@drawable/ic_home"
-                app:tabIndicatorHeight="0dp"
+                app:tabIndicatorHeight="2dp"
+                app:tabIndicatorColor="#FFFFFF"
                 app:tabRippleColor="@null" />
 
             <androidx.appcompat.widget.Toolbar
