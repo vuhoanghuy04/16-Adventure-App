@@ -41,10 +41,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "AIzaSyARdPDDkD_muMH7glhayKil84kdHFDmlOw", "\"${project.findProperty("AIzaSyARdPDDkD_muMH7glhayKil84kdHFDmlOw") ?: ""}\"")
         }
         debug {
-            buildConfigField("String", "AIzaSyARdPDDkD_muMH7glhayKil84kdHFDmlOw", "\"${project.findProperty("AIzaSyARdPDDkD_muMH7glhayKil84kdHFDmlOw") ?: ""}\"")
         }
     }
     compileOptions {
