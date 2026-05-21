@@ -19,6 +19,7 @@ import com.example.a16adventure.activities.VideoPlayerActivity;
 import com.example.a16adventure.models.LandmarkGallery;
 import com.example.a16adventure.models.LandmarkGalleryDataManager;
 import com.example.a16adventure.models.MediaItem;
+import com.example.a16adventure.util.AppConstants;
 
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class MediaAdapter extends RecyclerView.Adapter<MediaAdapter.MediaViewHol
             } else {
                 // Item ảnh thường -> mở PhotoViewerActivity
                 Intent intent = new Intent(context, PhotoViewerActivity.class);
-                intent.putExtra("IMAGE_URL", item.getUrl());
+                intent.putExtra(AppConstants.Extras.IMAGE_URL, item.getUrl());
                 context.startActivity(intent);
             }
         });

@@ -1,6 +1,7 @@
 package com.example.a16adventure.models;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class MonumentRepository {
+    private static final String TAG = "MonumentRepository";
+
     private MonumentRepository() {}
 
     public static List<Monument> loadFromAssets(Context context) {
@@ -35,7 +38,8 @@ public final class MonumentRepository {
                         obj.getDouble("lng")
                 ));
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to load monuments from assets", e);
         }
         return monuments;
     }

@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide; // Import thêm Glide để tải ảnh
 import com.example.a16adventure.R;
 import com.example.a16adventure.activities.ArticleDetailActivity;
 import com.example.a16adventure.models.Article;
+import com.example.a16adventure.util.AppConstants;
 
 import java.util.List;
 
@@ -55,11 +56,11 @@ public class FeaturedAdapter extends RecyclerView.Adapter<FeaturedAdapter.Featur
                 Intent intent = new Intent(v.getContext(), ArticleDetailActivity.class);
 
                 // Gửi gắm toàn bộ dữ liệu lên xe
-                intent.putExtra("TITLE", article.getTitle());
-                intent.putExtra("CATEGORY", article.getCategory());
-                intent.putExtra("TIME_VIEWS", article.getTimeAndViews());
-                intent.putExtra("CONTENT", article.getContent());     // Bổ sung Nội dung
-                intent.putExtra("IMAGE_URL", article.getImageUrl());  // Bổ sung Link ảnh
+                intent.putExtra(AppConstants.Extras.ARTICLE_TITLE, article.getTitle());
+                intent.putExtra(AppConstants.Extras.ARTICLE_CATEGORY, article.getCategory());
+                intent.putExtra(AppConstants.Extras.ARTICLE_TIME_VIEWS, article.getTimeAndViews());
+                intent.putExtra(AppConstants.Extras.ARTICLE_CONTENT, article.getContent());     // Bổ sung Nội dung
+                intent.putExtra(AppConstants.Extras.IMAGE_URL, article.getImageUrl());  // Bổ sung Link ảnh
 
                 // Khởi hành!
                 v.getContext().startActivity(intent);

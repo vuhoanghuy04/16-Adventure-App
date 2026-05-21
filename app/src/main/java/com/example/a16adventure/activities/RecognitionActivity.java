@@ -36,7 +36,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RecognitionActivity extends AppCompatActivity {
@@ -49,7 +49,7 @@ public class RecognitionActivity extends AppCompatActivity {
     private Uri camUri;
     
     private GenerativeModelFutures model;
-    private final Executor executor = Executors.newSingleThreadExecutor();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -243,5 +243,11 @@ public class RecognitionActivity extends AppCompatActivity {
         intent.setData(imageUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executor.shutdownNow();
     }
 }

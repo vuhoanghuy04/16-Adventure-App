@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
 import com.example.a16adventure.models.LandmarkGallery;
+import com.example.a16adventure.util.AppConstants;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -116,7 +117,7 @@ public class LandmarkGalleryActivity extends BaseActivity {
 
     private void openPhoto(List<String> urls, int position) {
         Intent intent = new Intent(this, PhotoViewerActivity.class);
-        intent.putExtra("IMAGE_URL", urls.get(position));
+        intent.putExtra(AppConstants.Extras.IMAGE_URL, urls.get(position));
         startActivity(intent);
     }
 

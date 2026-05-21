@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.a16adventure.R;
+import com.example.a16adventure.util.AppConstants;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +39,8 @@ public class ProfileActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private FirebaseStorage storage;
     private DatabaseReference userRef;
+    private ValueEventListener quizListener;
+    private ValueEventListener savedIdsListener;
     
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
@@ -79,7 +82,7 @@ public class ProfileActivity extends BaseActivity {
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
                 mAuth.signOut();
-                Toast.makeText(this, "Đã đăng xuất thành công!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.logout_success, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -261,7 +264,9 @@ public class ProfileActivity extends BaseActivity {
             }
 
             // Load Stats from Firebase
-            userRef = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
+            userRef = FirebaseDatabase.getInstance()
+                    .getReference(AppConstants.FirebasePaths.USERS)
+                    .child(user.getUid());
             loadUserStats();
             
             // Hiện đầy đủ tính năng
@@ -300,7 +305,7 @@ public class ProfileActivity extends BaseActivity {
 
     private void loadUserStats() {
         // 1. Load Quiz Score
-        userRef.child("quiz").addValueEventListener(new ValueEventListener() {
+        quizListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.hasChild("score")) {
@@ -310,10 +315,11 @@ public class ProfileActivity extends BaseActivity {
             }
             @Override
             public void onCancelled(DatabaseError error) {}
-        });
+        };
+        userRef.child(AppConstants.FirebasePaths.QUIZ).addValueEventListener(quizListener);
 
         // 2. Load Saved/Visited (Dựa trên số lượng địa danh đã lưu)
-        userRef.child("saved").addValueEventListener(new ValueEventListener() {
+        savedIdsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 long count = snapshot.getChildrenCount();
@@ -321,6 +327,20 @@ public class ProfileActivity extends BaseActivity {
             }
             @Override
             public void onCancelled(DatabaseError error) {}
-        });
+        };
+        userRef.child(AppConstants.FirebasePaths.SAVED_IDS).addValueEventListener(savedIdsListener);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userRef != null) {
+            if (quizListener != null) {
+                userRef.child(AppConstants.FirebasePaths.QUIZ).removeEventListener(quizListener);
+            }
+            if (savedIdsListener != null) {
+                userRef.child(AppConstants.FirebasePaths.SAVED_IDS).removeEventListener(savedIdsListener);
+            }
+        }
     }
 }

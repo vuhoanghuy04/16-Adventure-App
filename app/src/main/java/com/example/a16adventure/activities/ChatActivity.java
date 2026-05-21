@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ChatActivity extends AppCompatActivity {
@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity {
     private Bitmap selectedBitmap = null;
 
     private GenerativeModelFutures model;
-    private final Executor chatExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService chatExecutor = Executors.newSingleThreadExecutor();
     
     private FirebaseAuth mAuth;
     private String currentUserId = "guest";
@@ -245,7 +245,7 @@ public class ChatActivity extends AppCompatActivity {
         
         if (selectedBitmap != null) {
             if (mAuth.getCurrentUser() == null) {
-                Toast.makeText(this, "Hãy đăng nhập để có thể gửi ảnh!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.login_required_feature), Toast.LENGTH_SHORT).show();
                 return;
             }
             uploadImageToFirebase(selectedBitmap, userMsgContent);
@@ -334,5 +334,11 @@ public class ChatActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         saveChatHistory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chatExecutor.shutdownNow();
     }
 }

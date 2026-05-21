@@ -226,14 +226,14 @@ public class MainActivity extends BaseActivity {
         androidx.cardview.widget.CardView btnOpenQuizBanner = findViewById(R.id.btnOpenQuizBanner);
         if (btnOpenQuizBanner != null) {
             btnOpenQuizBanner.setOnClickListener(v -> {
-                if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    startActivity(new Intent(MainActivity.this, QuizActivity.class));
-                } else {
-                    Toast.makeText(this, "Vui lòng đăng nhập để tham gia Quiz!", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
-                }
-            });
-        }
+                    if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        startActivity(new Intent(MainActivity.this, QuizActivity.class));
+                    } else {
+                        Toast.makeText(this, getString(R.string.login_required_quiz), Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    }
+                });
+            }
     }
 
     // --- HÀM GỌI API THỜI TIẾT ---
@@ -269,7 +269,7 @@ public class MainActivity extends BaseActivity {
                 e.printStackTrace();
                 runOnUiThread(() -> {
                     if (tvCurrentTemp != null) {
-                        tvCurrentTemp.setText("Lỗi");
+                        tvCurrentTemp.setText(getString(R.string.weather_error));
                     }
                 });
             }
@@ -316,7 +316,7 @@ public class MainActivity extends BaseActivity {
         // 1. Tạo Chip "Tất cả" bằng cách đúc từ khuôn item_chip_filter
         com.google.android.material.chip.Chip chipAll = (com.google.android.material.chip.Chip)
                 inflater.inflate(R.layout.item_chip_filter, chipGroupDistricts, false);
-        chipAll.setText("Tất cả");
+        chipAll.setText(getString(R.string.all_filter));
         chipAll.setChecked(true); // Chọn sẵn
         chipGroupDistricts.addView(chipAll);
 
@@ -344,7 +344,7 @@ public class MainActivity extends BaseActivity {
 
             displayList.clear();
 
-            if (selectedText.equals("Tất cả")) {
+            if (selectedText.equals(getString(R.string.all_filter))) {
                 displayList.addAll(fullMonumentList);
             } else {
                 filterByDistrict(selectedText);
@@ -441,7 +441,7 @@ public class MainActivity extends BaseActivity {
             Collections.shuffle(displayList);
             adapter.notifyDataSetChanged();
             recyclerView.scrollToPosition(0);
-            Toast.makeText(this, "Đã xáo trộn danh sách! 🎲", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.shuffle_success), Toast.LENGTH_SHORT).show();
         }, 150); // Trễ một chút để cảm nhận độ nảy
     }
 

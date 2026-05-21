@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.a16adventure.R;
+import com.example.a16adventure.util.AppConstants;
 
 public class ArticleDetailActivity extends AppCompatActivity {
 
@@ -24,11 +25,11 @@ public class ArticleDetailActivity extends AppCompatActivity {
         ImageView btnBack = findViewById(R.id.btnBack);
 
         // 2. Nhận gói hàng dữ liệu từ Adapter gửi sang
-        String title = getIntent().getStringExtra("TITLE");
-        String category = getIntent().getStringExtra("CATEGORY");
-        String timeViews = getIntent().getStringExtra("TIME_VIEWS");
-        String content = getIntent().getStringExtra("CONTENT");
-        String imageUrl = getIntent().getStringExtra("IMAGE_URL");
+        String title = getIntent().getStringExtra(AppConstants.Extras.ARTICLE_TITLE);
+        String category = getIntent().getStringExtra(AppConstants.Extras.ARTICLE_CATEGORY);
+        String timeViews = getIntent().getStringExtra(AppConstants.Extras.ARTICLE_TIME_VIEWS);
+        String content = getIntent().getStringExtra(AppConstants.Extras.ARTICLE_CONTENT);
+        String imageUrl = getIntent().getStringExtra(AppConstants.Extras.IMAGE_URL);
 
         // 3. Hiển thị chữ lên màn hình
         if (title != null) tvDetailTitle.setText(title);
