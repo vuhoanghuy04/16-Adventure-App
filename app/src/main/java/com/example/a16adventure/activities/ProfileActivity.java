@@ -56,7 +56,6 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        // 1. Khởi tạo Firebase Auth, Storage và Ánh xạ View
         mAuth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
         tvProfileName = findViewById(R.id.tvProfileName);
@@ -65,8 +64,6 @@ public class ProfileActivity extends BaseActivity {
         tvStatQuizPoints = findViewById(R.id.tvStatQuizPoints);
         btnLogout = findViewById(R.id.btnLogout);
         imgProfile = findViewById(R.id.imgProfile);
-        
-        // --- KHỞI TẠO BỘ CHỌN ẢNH ---
         setupImagePicker();
 
         if (imgProfile != null) {
@@ -75,17 +72,12 @@ public class ProfileActivity extends BaseActivity {
                 pickImageLauncher.launch(intent);
             });
         }
-        
-        // --- ÁNH XẠ VÀ THIẾT LẬP CÁC NÚT MỚI ---
         setupProfileButtons();
 
-        // 2. Cấu hình Bottom Navigation
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_profile);
 
-        // 3. LẤY DỮ LIỆU NGƯỜI DÙNG TỪ FIREBASE
         loadUserData();
 
-        // 4. XỬ LÝ ĐĂNG XUẤT
         if (btnLogout != null) {
             btnLogout.setOnClickListener(v -> {
                 mAuth.signOut();
@@ -162,36 +154,30 @@ public class ProfileActivity extends BaseActivity {
      * Cấu hình giao diện và hành vi các nút chức năng trong hồ sơ.
      */
     private void setupProfileButtons() {
-        // 1. Địa danh đã lưu
         View btnSaved = findViewById(R.id.btnSavedMonumentsItem);
         updateButtonUI(btnSaved, android.R.drawable.star_on, "Địa danh đã lưu", "#2196F3");
         if (btnSaved != null) {
             btnSaved.setOnClickListener(v -> startActivity(new Intent(this, SavedMonumentsActivity.class)));
         }
 
-        // 2. Nhật ký hành trình
         View btnJournal = findViewById(R.id.btnTravelJournal);
         updateButtonUI(btnJournal, android.R.drawable.ic_menu_camera, "Nhật ký hành trình", "#9C27B0");
         if (btnJournal != null) {
             btnJournal.setOnClickListener(v -> startActivity(new Intent(this, JournalListActivity.class)));
         }
 
-        // 3. Bản đồ ngoại tuyến
         View btnOffline = findViewById(R.id.btnOfflineMaps);
         updateButtonUI(btnOffline, android.R.drawable.ic_menu_mapmode, "Bản đồ ngoại tuyến", "#4CAF50");
         if (btnOffline != null) {
             btnOffline.setOnClickListener(v -> startActivity(new Intent(this, OfflineMapActivity.class)));
         }
 
-        // 4. Chỉnh sửa hồ sơ
         View btnEdit = findViewById(R.id.btnEditProfile);
         updateButtonUI(btnEdit, android.R.drawable.ic_menu_edit, "Chỉnh sửa hồ sơ", "#FF9800");
 
-        // 5. Ngôn ngữ
         View btnLang = findViewById(R.id.btnLanguage);
         updateButtonUI(btnLang, android.R.drawable.ic_menu_sort_alphabetically, "Ngôn ngữ", "#607D8B");
 
-        // 6. Chế độ tối
         View btnDark = findViewById(R.id.btnDarkMode);
         SharedPreferences prefs = getSharedPreferences("Settings", MODE_PRIVATE);
         int currentMode = prefs.getInt("ThemeMode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -205,7 +191,7 @@ public class ProfileActivity extends BaseActivity {
         if (btnDark != null) {
             btnDark.setOnClickListener(v -> {
                 String[] options = {"Chế độ sáng", "Chế độ tối", "Theo máy"};
-                int checkedItem = 2; // Default to "Follow System"
+                int checkedItem = 2;
                 if (currentMode == AppCompatDelegate.MODE_NIGHT_NO) checkedItem = 0;
                 else if (currentMode == AppCompatDelegate.MODE_NIGHT_YES) checkedItem = 1;
 
@@ -219,10 +205,9 @@ public class ProfileActivity extends BaseActivity {
 
                             prefs.edit().putInt("ThemeMode", newMode).apply();
                             AppCompatDelegate.setDefaultNightMode(newMode);
-                            
                             dialog.dismiss();
-                            
-                            // Restart để áp dụng thay đổi toàn diện
+                            dialog.dismiss();
+
                             Intent intent = new Intent(this, ProfileActivity.class);
                             startActivity(intent);
                             finish();
@@ -232,15 +217,12 @@ public class ProfileActivity extends BaseActivity {
             });
         }
 
-        // 7. Liên hệ hỗ trợ
         View btnSupport = findViewById(R.id.btnContactSupport);
         updateButtonUI(btnSupport, android.R.drawable.ic_menu_call, "Liên hệ hỗ trợ", "#F44336");
 
-        // 8. Đánh giá ứng dụng
         View btnRate = findViewById(R.id.btnRateApp);
         updateButtonUI(btnRate, android.R.drawable.btn_star_big_on, "Đánh giá ứng dụng", "#FFC107");
 
-        // 9. Chia sẻ ứng dụng
         View btnShare = findViewById(R.id.btnShareApp);
         updateButtonUI(btnShare, android.R.drawable.ic_menu_share, "Chia sẻ ứng dụng", "#00BCD4");
     }
@@ -295,13 +277,11 @@ public class ProfileActivity extends BaseActivity {
                 Glide.with(this).load(photoUri).into(imgProfile);
             }
 
-            // Load Stats from Firebase
             userRef = FirebaseDatabase.getInstance()
                     .getReference(AppConstants.FirebasePaths.USERS)
                     .child(user.getUid());
             loadUserStats();
-            
-            // Hiện đầy đủ tính năng
+
             if (cardStats != null) cardStats.setVisibility(View.VISIBLE);
             if (tvTitleJournal != null) tvTitleJournal.setVisibility(View.VISIBLE);
             if (btnSaved != null) btnSaved.setVisibility(View.VISIBLE);
@@ -311,12 +291,10 @@ public class ProfileActivity extends BaseActivity {
             if (btnLogout != null) btnLogout.setVisibility(View.VISIBLE);
             if (btnLogin != null) btnLogin.setVisibility(View.GONE);
         } else {
-            // TRẠNG THÁI CHƯA ĐĂNG NHẬP
             if (tvProfileName != null) tvProfileName.setText("Khách");
             if (tvProfileEmail != null) tvProfileEmail.setText("Đăng nhập để lưu hành trình");
             if (imgProfile != null) imgProfile.setImageResource(R.drawable.ic_profile);
 
-            // Ẩn các tính năng cá nhân
             if (cardStats != null) cardStats.setVisibility(View.GONE);
             if (tvTitleJournal != null) tvTitleJournal.setVisibility(View.GONE);
             if (btnSaved != null) btnSaved.setVisibility(View.GONE);
@@ -324,8 +302,7 @@ public class ProfileActivity extends BaseActivity {
             if (btnOffline != null) btnOffline.setVisibility(View.GONE);
             if (btnEdit != null) btnEdit.setVisibility(View.GONE);
             if (btnLogout != null) btnLogout.setVisibility(View.GONE);
-            
-            // Hiện nút Đăng nhập
+
             if (btnLogin != null) {
                 btnLogin.setVisibility(View.VISIBLE);
                 btnLogin.setOnClickListener(v -> {
@@ -340,7 +317,6 @@ public class ProfileActivity extends BaseActivity {
      * API ngoài: Firebase Realtime Database ValueEventListener.
      */
     private void loadUserStats() {
-        // 1. Load Quiz Score
         quizListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -355,7 +331,6 @@ public class ProfileActivity extends BaseActivity {
         // API Realtime Database: theo dõi users/{uid}/quiz.
         userRef.child(AppConstants.FirebasePaths.QUIZ).addValueEventListener(quizListener);
 
-        // 2. Load Saved/Visited (Dựa trên số lượng địa danh đã lưu)
         savedIdsListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {

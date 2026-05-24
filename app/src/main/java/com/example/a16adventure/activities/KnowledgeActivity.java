@@ -55,10 +55,8 @@ public class KnowledgeActivity extends BaseActivity {
         setContentView(R.layout.activity_knowledge);
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_explore);
 
-        // Nút back
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Ánh xạ
         chipGroupCategories = findViewById(R.id.chipGroupCategories);
         chipAll = findViewById(R.id.chipAll);
         chipCustoms = findViewById(R.id.chipCustoms);
@@ -79,11 +77,9 @@ public class KnowledgeActivity extends BaseActivity {
         rvFeaturedArticles.setAdapter(featuredAdapter);
         rvFeaturedArticles.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Khởi tạo Firebase và gọi hàm tải dữ liệu
         db = FirebaseFirestore.getInstance();
         fetchArticlesFromFirebase();
 
-        // Tính năng lọc
         chipGroupCategories.setOnCheckedChangeListener((group, checkedId) -> {
             List<Article> filteredList = new ArrayList<>();
             if (checkedId == R.id.chipAll || checkedId == -1) {
@@ -98,7 +94,6 @@ public class KnowledgeActivity extends BaseActivity {
             articleAdapter.updateData(filteredList);
         });
 
-        // Tính năng tìm kiếm không dấu
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -134,11 +129,9 @@ public class KnowledgeActivity extends BaseActivity {
                         featuredList.clear();
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Biến dữ liệu mạng thành đối tượng Article
                             Article article = document.toObject(Article.class);
                             articleList.add(article);
 
-                            // Lọc thông minh: Chỉ những bài viết có isFeatured = true mới được vào mục Nổi bật
                             Boolean isFeatured = document.getBoolean("isFeatured");
                             if (isFeatured != null && isFeatured == true) {
                                 featuredList.add(article);

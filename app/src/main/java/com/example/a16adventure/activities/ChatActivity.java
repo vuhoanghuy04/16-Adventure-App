@@ -125,8 +125,6 @@ public class ChatActivity extends AppCompatActivity {
             openGallery();
         });
         btnRemoveImage.setOnClickListener(v -> removeSelectedImage());
-        
-        // Nút tròn (More) bên phải phía trên
         btnMore.setOnClickListener(this::showPopupMenu);
     }
 
@@ -168,16 +166,10 @@ public class ChatActivity extends AppCompatActivity {
      * Xóa lịch sử chat hiện tại và khởi tạo phiên chat mới.
      */
     private void startNewChat() {
-        // 1. Xóa danh sách hiện tại
         messageList.clear();
         messageList.add(new Message("model", "Chào bạn! Một cuộc trò chuyện mới đã bắt đầu. Tôi có thể giúp gì cho bạn?"));
-        
-        // 2. Cập nhật giao diện
         chatAdapter.notifyDataSetChanged();
-        
-        // 3. Xóa lịch sử trong SharedPreferences
         saveChatHistory();
-        
         Toast.makeText(this, "Đã bắt đầu cuộc trò chuyện mới", Toast.LENGTH_SHORT).show();
     }
 

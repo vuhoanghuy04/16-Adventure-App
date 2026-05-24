@@ -209,7 +209,6 @@ public class RecognitionActivity extends AppCompatActivity {
 
             Bitmap resizedBitmap = scaleBitmap(originalBitmap, 1024);
 
-            // Nâng cấp Prompt: Yêu cầu AI trả về Mã định danh ngắn gọn để khớp với tên file Firebase
             Content content = new Content.Builder()
                     .addImage(resizedBitmap)
                     .addText("Xác định địa danh trong ảnh tại Hải Phòng. Trả về kết quả theo đúng định dạng sau:\n" +
