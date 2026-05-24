@@ -39,6 +39,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Màn hình nhận diện địa danh từ ảnh.
+ * Người dùng có thể chọn ảnh/chụp ảnh và gửi ảnh tới Gemini để suy luận địa danh.
+ */
 public class RecognitionActivity extends AppCompatActivity {
 
     private RecyclerView rvPhotos;
@@ -51,6 +55,9 @@ public class RecognitionActivity extends AppCompatActivity {
     private GenerativeModelFutures model;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    /**
+     * Khởi tạo giao diện nhận diện và các thao tác chính.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,18 +73,28 @@ public class RecognitionActivity extends AppCompatActivity {
         btnCamera.setOnClickListener(v -> checkCameraPermissionAndTakePhoto());
     }
 
+    /**
+     * Ánh xạ view từ layout.
+     */
     private void initViews() {
         rvPhotos = findViewById(R.id.rvPhotos);
         loadingLayout = findViewById(R.id.loadingLayout);
         btnCamera = findViewById(R.id.btnCamera);
     }
 
+    /**
+     * Thiết lập recycler để hiển thị danh sách ảnh đã chọn.
+     */
     private void setupRecyclerView() {
         photoAdapter = new PhotoAdapter(photoUris, this::pickImages);
         rvPhotos.setLayoutManager(new GridLayoutManager(this, 3));
         rvPhotos.setAdapter(photoAdapter);
     }
 
+    /**
+     * Khởi tạo Gemini model từ cấu hình local.
+     * API ngoài: Google Generative AI SDK.
+     */
     private void setupGemini() {
         String apiKey = BuildConfig.GEMINI_API_KEY;
         if (apiKey == null || apiKey.trim().isEmpty()) {
@@ -88,6 +105,9 @@ public class RecognitionActivity extends AppCompatActivity {
         model = GenerativeModelFutures.from(gm);
     }
 
+    /**
+     * Kiểm tra quyền camera trước khi mở camera.
+     */
     private void checkCameraPermissionAndTakePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             takePhoto();
@@ -107,6 +127,9 @@ public class RecognitionActivity extends AppCompatActivity {
             }
     );
 
+    /**
+     * Mở ứng dụng camera hệ thống để chụp ảnh.
+     */
     private void takePhoto() {
         try {
             ContentValues values = new ContentValues();
@@ -134,6 +157,9 @@ public class RecognitionActivity extends AppCompatActivity {
             }
     );
 
+    /**
+     * Mở picker để chọn một hoặc nhiều ảnh từ thư viện.
+     */
     private void pickImages() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -158,6 +184,10 @@ public class RecognitionActivity extends AppCompatActivity {
             }
     );
 
+    /**
+     * Thực hiện nhận diện: đọc ảnh đầu vào, scale và gửi cho Gemini.
+     * API ngoài: Gemini generateContent.
+     */
     private void startRecognition() {
         if (photoUris.isEmpty()) {
             Toast.makeText(this, "Vui lòng chọn ít nhất một ảnh", Toast.LENGTH_SHORT).show();
@@ -194,6 +224,7 @@ public class RecognitionActivity extends AppCompatActivity {
                 Toast.makeText(this, "Gemini chưa được cấu hình", Toast.LENGTH_SHORT).show();
                 return;
             }
+            // API Gemini: gửi prompt + ảnh để AI trả về tên/mã/mô tả địa danh.
             ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
             Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
                 @Override
@@ -221,6 +252,9 @@ public class RecognitionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Co ảnh về kích thước tối đa để giảm tải khi gọi AI.
+     */
     private Bitmap scaleBitmap(Bitmap bm, int maxDimension) {
         int width = bm.getWidth();
         int height = bm.getHeight();
@@ -236,6 +270,9 @@ public class RecognitionActivity extends AppCompatActivity {
         return Bitmap.createScaledBitmap(bm, width, height, true);
     }
 
+    /**
+     * Điều hướng sang màn hình kết quả và truyền dữ liệu nhận diện.
+     */
     private void showResult(String info, Uri imageUri) {
         Intent intent = new Intent(this, RecognitionResultActivity.class);
         intent.putExtra("RECOGNITION_RESULT", info);
@@ -245,6 +282,9 @@ public class RecognitionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Giải phóng thread xử lý callback AI.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

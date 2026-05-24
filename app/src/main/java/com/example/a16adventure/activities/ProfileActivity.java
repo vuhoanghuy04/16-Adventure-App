@@ -30,6 +30,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+/**
+ * Màn hình hồ sơ người dùng.
+ * Quản lý thông tin cá nhân, thống kê và ảnh đại diện thông qua Firebase Auth/Database/Storage.
+ */
 public class ProfileActivity extends BaseActivity {
 
     private TextView tvProfileName, tvProfileEmail;
@@ -44,6 +48,9 @@ public class ProfileActivity extends BaseActivity {
     
     private ActivityResultLauncher<Intent> pickImageLauncher;
 
+    /**
+     * Khởi tạo giao diện hồ sơ, nút chức năng và nạp dữ liệu người dùng.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +99,9 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Khởi tạo launcher chọn ảnh từ thư viện cho ảnh đại diện.
+     */
     private void setupImagePicker() {
         pickImageLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -104,6 +114,10 @@ public class ProfileActivity extends BaseActivity {
         );
     }
 
+    /**
+     * Tải ảnh đại diện mới lên Firebase Storage.
+     * API ngoài: Firebase Storage putFile/getDownloadUrl.
+     */
     private void uploadImageToFirebase(Uri imageUri) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) return;
@@ -114,6 +128,7 @@ public class ProfileActivity extends BaseActivity {
                 .child("profile_images")
                 .child(user.getUid() + ".jpg");
 
+        // API Storage: upload ảnh profile vào profile_images/{uid}.jpg.
         fileRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
             fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 updateProfilePicture(uri);
@@ -123,6 +138,10 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Cập nhật photoUrl của user trên Firebase Auth và phản chiếu lên UI.
+     * API ngoài: Firebase Auth updateProfile.
+     */
     private void updateProfilePicture(Uri uri) {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user == null) return;
@@ -139,6 +158,9 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Cấu hình giao diện và hành vi các nút chức năng trong hồ sơ.
+     */
     private void setupProfileButtons() {
         // 1. Địa danh đã lưu
         View btnSaved = findViewById(R.id.btnSavedMonumentsItem);
@@ -223,6 +245,9 @@ public class ProfileActivity extends BaseActivity {
         updateButtonUI(btnShare, android.R.drawable.ic_menu_share, "Chia sẻ ứng dụng", "#00BCD4");
     }
 
+    /**
+     * Cập nhật icon, text và màu cho từng nút trong danh sách tiện ích.
+     */
     private void updateButtonUI(View view, int iconRes, String text, String colorHex) {
         if (view == null) return;
         ImageView icon = view.findViewById(R.id.btnIcon);
@@ -234,10 +259,17 @@ public class ProfileActivity extends BaseActivity {
         if (tv != null) tv.setText(text);
     }
 
+    /**
+     * Hiển thị thông báo tính năng đang phát triển.
+     */
     private void showUnderDevToast(String featureName) {
         Toast.makeText(this, featureName + " đang được phát triển", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Nạp thông tin hiển thị theo trạng thái đăng nhập hiện tại.
+     * API ngoài: Firebase Auth + Realtime Database.
+     */
     private void loadUserData() {
         FirebaseUser user = mAuth.getCurrentUser();
         View cardStats = findViewById(R.id.cardStats);
@@ -303,6 +335,10 @@ public class ProfileActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Đăng ký listener để lấy điểm quiz và số địa danh đã lưu.
+     * API ngoài: Firebase Realtime Database ValueEventListener.
+     */
     private void loadUserStats() {
         // 1. Load Quiz Score
         quizListener = new ValueEventListener() {
@@ -316,6 +352,7 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onCancelled(DatabaseError error) {}
         };
+        // API Realtime Database: theo dõi users/{uid}/quiz.
         userRef.child(AppConstants.FirebasePaths.QUIZ).addValueEventListener(quizListener);
 
         // 2. Load Saved/Visited (Dựa trên số lượng địa danh đã lưu)
@@ -328,9 +365,13 @@ public class ProfileActivity extends BaseActivity {
             @Override
             public void onCancelled(DatabaseError error) {}
         };
+        // API Realtime Database: theo dõi users/{uid}/saved_ids.
         userRef.child(AppConstants.FirebasePaths.SAVED_IDS).addValueEventListener(savedIdsListener);
     }
 
+    /**
+     * Hủy các listener Firebase khi màn hình bị destroy để tránh rò rỉ tài nguyên.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

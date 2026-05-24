@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Màn hình kiến thức du lịch.
+ * Hiển thị danh sách bài viết, bài nổi bật và cho phép lọc/tìm kiếm theo danh mục.
+ * Dữ liệu được lấy trực tiếp từ Firestore collection "articles".
+ */
 public class KnowledgeActivity extends BaseActivity {
 
     private RecyclerView rvAllArticles;
@@ -41,6 +46,9 @@ public class KnowledgeActivity extends BaseActivity {
 
     private FirebaseFirestore db;
 
+    /**
+     * Khởi tạo giao diện, adapter và thiết lập các listener lọc/tìm kiếm.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +120,12 @@ public class KnowledgeActivity extends BaseActivity {
         });
     }
 
-    // --- HÀM TẢI DỮ LIỆU TỪ FIREBASE ---
+    /**
+     * Gọi Firestore để tải danh sách bài viết.
+     * API ngoài: Firebase Firestore -> collection "articles".
+     */
     private void fetchArticlesFromFirebase() {
+        // API Firestore: đọc toàn bộ bài viết từ collection articles.
         db.collection("articles")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -143,6 +155,9 @@ public class KnowledgeActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * Loại bỏ dấu tiếng Việt để hỗ trợ tìm kiếm không dấu.
+     */
     public static String removeAccents(String str) {
         if (str == null) return "";
         try {
@@ -154,6 +169,9 @@ public class KnowledgeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Đếm số lượng bài viết theo từng danh mục và cập nhật text cho Chip.
+     */
     private void countAndUpdateChips() {
         int countCustoms = 0, countFood = 0, countHistory = 0;
         for (Article article : articleList) {

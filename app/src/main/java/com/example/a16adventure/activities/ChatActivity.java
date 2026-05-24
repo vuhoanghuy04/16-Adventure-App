@@ -51,6 +51,11 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Màn hình AI Chat.
+ * Hỗ trợ chat văn bản/giọng nói/hình ảnh với Gemini và lưu lịch sử theo người dùng.
+ * Có tích hợp Firebase Storage khi người dùng gửi ảnh.
+ */
 public class ChatActivity extends AppCompatActivity {
 
     private RecyclerView chatRecyclerView;
@@ -93,6 +98,9 @@ public class ChatActivity extends AppCompatActivity {
                 }
             });
 
+    /**
+     * Khởi tạo màn hình chat, nạp lịch sử và thiết lập các hành động người dùng.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,6 +130,9 @@ public class ChatActivity extends AppCompatActivity {
         btnMore.setOnClickListener(this::showPopupMenu);
     }
 
+    /**
+     * Ánh xạ toàn bộ view trên layout chat.
+     */
     private void initViews() {
         chatRecyclerView = findViewById(R.id.chatRecyclerView);
         edtMessage = findViewById(R.id.edtMessage);
@@ -136,6 +147,9 @@ public class ChatActivity extends AppCompatActivity {
         btnRemoveImage = findViewById(R.id.btnRemoveImage);
     }
 
+    /**
+     * Hiển thị menu thao tác bổ sung của phòng chat.
+     */
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenu().add("Cuộc trò chuyện mới");
@@ -150,6 +164,9 @@ public class ChatActivity extends AppCompatActivity {
         popupMenu.show();
     }
 
+    /**
+     * Xóa lịch sử chat hiện tại và khởi tạo phiên chat mới.
+     */
     private void startNewChat() {
         // 1. Xóa danh sách hiện tại
         messageList.clear();
@@ -164,6 +181,9 @@ public class ChatActivity extends AppCompatActivity {
         Toast.makeText(this, "Đã bắt đầu cuộc trò chuyện mới", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Mở tính năng nhập liệu bằng giọng nói của Android.
+     */
     private void startSpeechToText() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -176,16 +196,25 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Mở thư viện ảnh để người dùng chọn ảnh gửi kèm.
+     */
     private void openGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         pickImageLauncher.launch(intent);
     }
 
+    /**
+     * Xóa ảnh đã chọn khỏi vùng preview.
+     */
     private void removeSelectedImage() {
         selectedBitmap = null;
         layoutImagePreview.setVisibility(View.GONE);
     }
 
+    /**
+     * Đọc ảnh từ URI và hiển thị preview trước khi gửi.
+     */
     private void showImagePreview(Uri imageUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(imageUri);
@@ -199,6 +228,9 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Nạp lịch sử hội thoại từ SharedPreferences theo user hiện tại.
+     */
     private void loadChatHistory() {
         SharedPreferences prefs = getSharedPreferences("ChatHistory_" + currentUserId, MODE_PRIVATE);
         String json = prefs.getString("messages", null);
@@ -218,6 +250,9 @@ public class ChatActivity extends AppCompatActivity {
         chatRecyclerView.scrollToPosition(messageList.size() - 1);
     }
 
+    /**
+     * Lưu lịch sử hội thoại hiện tại vào SharedPreferences.
+     */
     private void saveChatHistory() {
         SharedPreferences prefs = getSharedPreferences("ChatHistory_" + currentUserId, MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -227,6 +262,10 @@ public class ChatActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    /**
+     * Khởi tạo Gemini model từ API key trong BuildConfig.
+     * API ngoài: Google Generative AI SDK.
+     */
     private void setupGemini() {
         String apiKey = BuildConfig.GEMINI_API_KEY;
         if (apiKey == null || apiKey.trim().isEmpty()) {
@@ -237,6 +276,9 @@ public class ChatActivity extends AppCompatActivity {
         model = GenerativeModelFutures.from(gm);
     }
 
+    /**
+     * Kiểm tra dữ liệu đầu vào và điều hướng luồng gửi text/ảnh.
+     */
     private void sendMessage() {
         String query = edtMessage.getText().toString().trim();
         if (query.isEmpty() && selectedBitmap == null) return;
@@ -254,7 +296,12 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tải ảnh lên Firebase Storage rồi gửi cùng nội dung chat.
+     * API ngoài: Firebase Storage.
+     */
     private void uploadImageToFirebase(Bitmap bitmap, String text) {
+        // API Firebase Storage: upload ảnh chat của user theo thư mục riêng.
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference().child("users/" + currentUserId + "/chat_images/" + UUID.randomUUID().toString() + ".jpg");
 
@@ -272,6 +319,10 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Đẩy tin nhắn lên UI và gọi Gemini để lấy phản hồi AI.
+     * API ngoài: Gemini generateContent.
+     */
     private void executeSendMessage(String text, String imageUrl, Bitmap bitmapForAi) {
         Message userMessage = new Message("user", text);
         if (imageUrl != null) userMessage.setImageUrl(imageUrl);
@@ -300,6 +351,7 @@ public class ChatActivity extends AppCompatActivity {
             chatAdapter.notifyItemChanged(aiLoadingPos);
             return;
         }
+        // API Gemini: gửi content văn bản/ảnh để sinh phản hồi.
         ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
 
         Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
@@ -330,12 +382,18 @@ public class ChatActivity extends AppCompatActivity {
         }, chatExecutor);
     }
 
+    /**
+     * Tự động lưu lịch sử khi app chuyển nền.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         saveChatHistory();
     }
 
+    /**
+     * Giải phóng thread xử lý callback AI khi màn hình bị hủy.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
