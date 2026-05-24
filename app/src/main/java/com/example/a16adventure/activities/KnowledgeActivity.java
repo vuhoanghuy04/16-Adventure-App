@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Màn hình kiến thức du lịch.
+ * Hiển thị danh sách bài viết, bài nổi bật và cho phép lọc/tìm kiếm theo danh mục.
+ * Dữ liệu được lấy trực tiếp từ Firestore collection "articles".
+ */
 public class KnowledgeActivity extends BaseActivity {
 
     private RecyclerView rvAllArticles;
@@ -41,16 +46,17 @@ public class KnowledgeActivity extends BaseActivity {
 
     private FirebaseFirestore db;
 
+    /**
+     * Khởi tạo giao diện, adapter và thiết lập các listener lọc/tìm kiếm.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_knowledge);
         setupBottomNavigation(R.id.bottomNavigation, R.id.nav_explore);
 
-        // Nút back
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
-        // Ánh xạ
         chipGroupCategories = findViewById(R.id.chipGroupCategories);
         chipAll = findViewById(R.id.chipAll);
         chipCustoms = findViewById(R.id.chipCustoms);
@@ -71,11 +77,9 @@ public class KnowledgeActivity extends BaseActivity {
         rvFeaturedArticles.setAdapter(featuredAdapter);
         rvFeaturedArticles.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        // Khởi tạo Firebase và gọi hàm tải dữ liệu
         db = FirebaseFirestore.getInstance();
         fetchArticlesFromFirebase();
 
-        // Tính năng lọc
         chipGroupCategories.setOnCheckedChangeListener((group, checkedId) -> {
             List<Article> filteredList = new ArrayList<>();
             if (checkedId == R.id.chipAll || checkedId == -1) {
@@ -90,7 +94,6 @@ public class KnowledgeActivity extends BaseActivity {
             articleAdapter.updateData(filteredList);
         });
 
-        // Tính năng tìm kiếm không dấu
         edtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -112,8 +115,12 @@ public class KnowledgeActivity extends BaseActivity {
         });
     }
 
-    // --- HÀM TẢI DỮ LIỆU TỪ FIREBASE ---
+    /**
+     * Gọi Firestore để tải danh sách bài viết.
+     * API ngoài: Firebase Firestore -> collection "articles".
+     */
     private void fetchArticlesFromFirebase() {
+        // API Firestore: đọc toàn bộ bài viết từ collection articles.
         db.collection("articles")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -122,11 +129,9 @@ public class KnowledgeActivity extends BaseActivity {
                         featuredList.clear();
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            // Biến dữ liệu mạng thành đối tượng Article
                             Article article = document.toObject(Article.class);
                             articleList.add(article);
 
-                            // Lọc thông minh: Chỉ những bài viết có isFeatured = true mới được vào mục Nổi bật
                             Boolean isFeatured = document.getBoolean("isFeatured");
                             if (isFeatured != null && isFeatured == true) {
                                 featuredList.add(article);
@@ -143,6 +148,9 @@ public class KnowledgeActivity extends BaseActivity {
                 });
     }
 
+    /**
+     * Loại bỏ dấu tiếng Việt để hỗ trợ tìm kiếm không dấu.
+     */
     public static String removeAccents(String str) {
         if (str == null) return "";
         try {
@@ -154,6 +162,9 @@ public class KnowledgeActivity extends BaseActivity {
         }
     }
 
+    /**
+     * Đếm số lượng bài viết theo từng danh mục và cập nhật text cho Chip.
+     */
     private void countAndUpdateChips() {
         int countCustoms = 0, countFood = 0, countHistory = 0;
         for (Article article : articleList) {

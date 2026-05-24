@@ -33,6 +33,10 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 
+/**
+ * Màn hình thêm/sửa nhật ký hành trình.
+ * Dữ liệu nhật ký được lưu ở Firebase Realtime Database và ảnh được tải lên Firebase Storage.
+ */
 public class AddJournalActivity extends AppCompatActivity {
 
     private ImageView ivSelectedImage, btnBack;
@@ -55,6 +59,9 @@ public class AddJournalActivity extends AppCompatActivity {
     private Calendar calendar;
     private SimpleDateFormat dateFormat;
 
+    /**
+     * Khởi tạo giao diện và trạng thái Firebase cho luồng tạo/chỉnh sửa nhật ký.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +73,9 @@ public class AddJournalActivity extends AppCompatActivity {
         setupImagePicker();
     }
 
+    /**
+     * Nếu có dữ liệu truyền vào, chuyển màn hình sang chế độ chỉnh sửa nhật ký cũ.
+     */
     private void checkEditMode() {
         Intent intent = getIntent();
         if (intent.hasExtra("JOURNAL_ID")) {
@@ -88,6 +98,9 @@ public class AddJournalActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Ánh xạ các view và listener tương tác trên form.
+     */
     private void initViews() {
         ivSelectedImage = findViewById(R.id.ivSelectedImage);
         btnBack = findViewById(R.id.btnBack);
@@ -116,6 +129,9 @@ public class AddJournalActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> saveJournal());
     }
 
+    /**
+     * Hiển thị DatePicker để chọn ngày đi.
+     */
     private void showDatePicker() {
         new DatePickerDialog(this, (view, year, month, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
@@ -125,15 +141,24 @@ public class AddJournalActivity extends AppCompatActivity {
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
+    /**
+     * Cập nhật nhãn ngày theo giá trị hiện tại của Calendar.
+     */
     private void updateDateLabel() {
         tvSelectedDate.setText("Ngày đi: " + dateFormat.format(calendar.getTime()));
     }
 
+    /**
+     * Khởi tạo reference Firebase theo user hiện tại.
+     * API ngoài: Firebase Auth, Realtime Database, Storage.
+     */
     private void setupFirebase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
+            // API Realtime Database: lưu nhật ký tại users/{uid}/journals.
             journalRef = FirebaseDatabase.getInstance().getReference("users")
                     .child(user.getUid()).child("journals");
+            // API Storage: lưu ảnh nhật ký tại journals/{uid}.
             storageRef = FirebaseStorage.getInstance().getReference("journals")
                     .child(user.getUid());
         } else {
@@ -141,6 +166,9 @@ public class AddJournalActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Khởi tạo launcher chọn ảnh từ thư viện.
+     */
     private void setupImagePicker() {
         pickImageLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -155,6 +183,9 @@ public class AddJournalActivity extends AppCompatActivity {
         );
     }
 
+    /**
+     * Validate dữ liệu và điều hướng luồng lưu có/không có ảnh.
+     */
     private void saveJournal() {
         String name = etMonumentName.getText().toString().trim();
         String note = etNote.getText().toString().trim();
@@ -174,10 +205,15 @@ public class AddJournalActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tải ảnh lên Firebase Storage rồi lưu URL xuống database.
+     * API ngoài: Firebase Storage putFile/getDownloadUrl.
+     */
     private void uploadImageAndSave(String name, String note) {
         String fileName = UUID.randomUUID().toString() + ".jpg";
         StorageReference fileRef = storageRef.child(fileName);
 
+        // API Storage: upload ảnh người dùng chọn.
         fileRef.putFile(selectedImageUri)
                 .addOnSuccessListener(taskSnapshot -> fileRef.getDownloadUrl()
                         .addOnSuccessListener(uri -> saveToDatabase(name, note, uri.toString())))
@@ -188,6 +224,10 @@ public class AddJournalActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Lưu đối tượng JournalEntry vào Realtime Database.
+     * API ngoài: Firebase Realtime Database setValue.
+     */
     private void saveToDatabase(String name, String note, String imageUrl) {
         String id = (existingJournalId != null) ? existingJournalId : journalRef.push().getKey();
         
@@ -197,6 +237,7 @@ public class AddJournalActivity extends AppCompatActivity {
         JournalEntry entry = new JournalEntry(id, name, note, finalImageUrl, calendar.getTimeInMillis(), "");
 
         if (id != null) {
+            // API Realtime Database: ghi mới/cập nhật journal theo id.
             journalRef.child(id).setValue(entry)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, existingJournalId != null ? "Đã cập nhật!" : "Đã lưu kỷ niệm!", Toast.LENGTH_SHORT).show();
